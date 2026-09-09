@@ -1,0 +1,377 @@
+<!DOCTYPE html><html lang="ko" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title class="">LAEL LAB - 중요한 순간, 제대로 말할 수 있도록</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary-fixed": "#e4dfff",
+                        "outline": "#787586",
+                        "on-secondary-fixed": "#191b29",
+                        "on-tertiary-fixed-variant": "#8d1600",
+                        "background": "#faf9f7",
+                        "surface-container-low": "#f4f3f1",
+                        "on-secondary-fixed-variant": "#444656",
+                        "error": "#ba1a1a",
+                        "on-tertiary-fixed": "#3e0500",
+                        "on-primary-container": "#f1ecff",
+                        "tertiary": "#a0240a",
+                        "on-error-container": "#93000a",
+                        "on-primary-fixed-variant": "#3e25c2",
+                        "on-error": "#ffffff",
+                        "on-surface": "#1a1c1b",
+                        "on-secondary-container": "#606172",
+                        "inverse-on-surface": "#f1f1ef",
+                        "tertiary-fixed": "#ffdad3",
+                        "surface-container-highest": "#e3e2e0",
+                        "secondary-fixed-dim": "#c5c5d8",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "surface-variant": "#e3e2e0",
+                        "surface-bright": "#faf9f7",
+                        "secondary-container": "#dedef2",
+                        "on-primary": "#ffffff",
+                        "surface-container": "#efeeec",
+                        "primary-fixed-dim": "#c6bfff",
+                        "on-surface-variant": "#474555",
+                        "on-background": "#1a1c1b",
+                        "on-tertiary-container": "#ffeae5",
+                        "secondary": "#5c5d6e",
+                        "surface": "#faf9f7",
+                        "secondary-fixed": "#e1e1f5",
+                        "inverse-primary": "#c6bfff",
+                        "tertiary-container": "#c33c22",
+                        "surface-dim": "#dadad8",
+                        "tertiary-fixed-dim": "#ffb4a4",
+                        "surface-container-high": "#e9e8e6",
+                        "on-primary-fixed": "#160066",
+                        "outline-variant": "#c8c4d7",
+                        "inverse-surface": "#2f3130",
+                        "primary-container": "#6554e8",
+                        "error-container": "#ffdad6",
+                        "surface-tint": "#5744da",
+                        "primary": "#4c37ce",
+                        "on-secondary": "#ffffff"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    spacing: {
+                        "margin-mobile": "20px",
+                        "margin-desktop": "64px",
+                        "section-padding": "120px",
+                        "gutter": "24px",
+                        "container-max": "1280px"
+                    },
+                    fontFamily: {
+                        "headline-lg": ["Hanken Grotesk"],
+                        "label-sm": ["Hanken Grotesk"],
+                        "headline-lg-mobile": ["Hanken Grotesk"],
+                        "body-lg": ["Hanken Grotesk"],
+                        "display-lg": ["Hanken Grotesk"],
+                        "body-md": ["Hanken Grotesk"],
+                        "title-md": ["Hanken Grotesk"]
+                    },
+                    fontSize: {
+                        "headline-lg": ["32px", { lineHeight: "1.2", letterSpacing: "-0.03em", fontWeight: "700" }],
+                        "label-sm": ["12px", { lineHeight: "1", letterSpacing: "0.05em", fontWeight: "600" }],
+                        "headline-lg-mobile": ["28px", { lineHeight: "1.2", letterSpacing: "-0.02em", fontWeight: "700" }],
+                        "body-lg": ["18px", { lineHeight: "1.6", letterSpacing: "0", fontWeight: "400" }],
+                        "display-lg": ["48px", { lineHeight: "1.1", letterSpacing: "-0.04em", fontWeight: "800" }],
+                        "body-md": ["16px", { lineHeight: "1.6", letterSpacing: "0", fontWeight: "400" }],
+                        "title-md": ["20px", { lineHeight: "1.4", letterSpacing: "-0.01em", fontWeight: "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Hanken Grotesk', sans-serif; background-color: #faf9f7; }
+        .glass-panel { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.3); }
+        .ambient-shadow { box-shadow: 0 10px 40px rgba(23, 25, 39, 0.05); }
+    </style>
+</head>
+<body class="bg-background text-on-surface antialiased overflow-x-hidden">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 bg-surface/80 dark:bg-surface-dim/80 backdrop-blur-md border-b border-outline-variant/30 dark:border-outline/20 shadow-sm">
+<div class="flex justify-between items-center h-20 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+<a class="font-display-lg text-[24px] md:text-[32px] font-extrabold text-on-surface tracking-tighter" href="#">LAEL LAB</a>
+<nav class="hidden md:flex gap-8">
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-200 font-label-sm text-label-sm" href="#">Program</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-200 font-label-sm text-label-sm" href="#">Interview</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-200 font-label-sm text-label-sm" href="#">Free Materials</a>
+<a class="text-primary font-bold border-b-2 border-primary pb-1 font-label-sm text-label-sm" href="#">LAEL LAB</a>
+</nav>
+<button class="bg-primary-container text-on-primary-container px-6 py-2.5 rounded-full font-label-sm text-label-sm hover:brightness-110 transition-all scale-100 hover:scale-[0.98] active:scale-95 duration-150 shadow-md">
+                Start College Interview
+            </button>
+</div>
+</header>
+<main class="pt-24 pb-section-padding">
+<!-- Hero Section -->
+<section class="relative px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto py-12 md:py-24 flex flex-col md:flex-row items-center gap-12">
+<!-- Decorative Background Element -->
+<div class="absolute top-0 right-0 w-full md:w-1/2 h-full bg-gradient-to-bl from-primary/10 to-transparent rounded-bl-[100px] -z-10 blur-3xl opacity-50"></div>
+<div class="flex-1 space-y-6 z-10">
+<span class="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary font-label-sm text-label-sm tracking-widest uppercase">Premium Speech Coaching</span>
+<h1 class="font-display-lg text-display-lg md:text-[64px] text-on-surface leading-[1.1] tracking-tight">
+                    중요한 순간,<br>
+<span class="text-primary-container">제대로 말할 수 <br class="">있도록</span>
+</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-lg">
+                    면접, 프레젠테이션, 그리고 일상의 대화까지. 당신의 진심이 오해 없이, 가장 효과적으로 전달되도록 돕습니다. 전문가의 1:1 맞춤형 솔루션으로 자신감을 되찾으세요.
+                </p>
+<div class="pt-4 flex flex-wrap gap-4">
+<button class="bg-primary-container text-on-primary-container px-8 py-4 rounded-full font-title-md text-title-md hover:brightness-110 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5">
+                        대입면접 시작하기
+                    </button>
+<button class="bg-transparent border-2 border-primary-container text-primary-container px-8 py-4 rounded-full font-title-md text-title-md hover:bg-primary/5 transition-all">
+                        프로그램 알아보기
+                    </button>
+</div>
+</div>
+<div class="flex-1 relative">
+<div class="relative w-full aspect-[4/5] rounded-[32px] overflow-hidden shadow-2xl md:aspect-[3/4]">
+<img alt="Professional Speech Coach Profile" class="w-full h-full object-contain object-center" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC2YnyFQ7L3o27PiUkmNStexgkCYXLSYKE67gCeIHFZQPQxCRyh8vTj_woDvkupWTQv9znjOqY0UDIr38fNtEh0twTty_GqmG2hbBQfP1obF0YCAVgBG2YR7J8px0TibE8HisDlQCSDyFTBom6FUoARGiisa1qn1h0q5sej_byXR5oRRXsYpq7KghMcMi1_hjCNj2qjfiSWob-edCq3vv1k7RXIZtGQ5lPLz5UdctcCaThj4X8QnOp2">
+
+</div>
+<!-- Floating Badge -->
+<div class="absolute bottom-8 -left-8 glass-panel px-6 py-4 rounded-2xl shadow-xl flex items-center gap-4 border border-white/40">
+<div class="w-12 h-12 rounded-full bg-primary-container text-white flex items-center justify-center">
+<span class="material-symbols-outlined text-3xl">verified</span>
+</div>
+<div>
+<p class="font-bold text-sm text-on-surface">10+ Years Experience</p>
+<p class="text-xs text-on-surface-variant">Top-tier Communication Expert</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Category Grid -->
+<section class="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto py-section-padding">
+<div class="text-center mb-12">
+<h2 class="font-headline-lg text-headline-lg md:text-[40px] text-on-surface">어떤 상황을 준비하고 계신가요?</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-4">당신의 필요에 딱 맞는 맞춤형 클래스를 찾아보세요.</p>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+<!-- Card 1 -->
+<div class="bg-surface-container-lowest rounded-[24px] p-6 flex flex-col items-center justify-center text-center gap-4 ambient-shadow border border-outline-variant/30 hover:border-primary/50 hover:shadow-lg transition-all cursor-pointer group">
+<div class="w-16 h-16 rounded-full bg-surface-container flex items-center justify-center group-hover:bg-primary/10 transition-colors">
+<span class="text-3xl">🎤</span>
+</div>
+<span class="font-title-md text-[18px] text-on-surface group-hover:text-primary transition-colors">발성/발음</span>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container-lowest rounded-[24px] p-6 flex flex-col items-center justify-center text-center gap-4 ambient-shadow border border-outline-variant/30 hover:border-primary/50 hover:shadow-lg transition-all cursor-pointer group">
+<div class="w-16 h-16 rounded-full bg-surface-container flex items-center justify-center group-hover:bg-primary/10 transition-colors">
+<span class="text-3xl">🎙️</span>
+</div>
+<span class="font-title-md text-[18px] text-on-surface group-hover:text-primary transition-colors">발표</span>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-container-lowest rounded-[24px] p-6 flex flex-col items-center justify-center text-center gap-4 ambient-shadow border border-outline-variant/30 hover:border-primary/50 hover:shadow-lg transition-all cursor-pointer group">
+<div class="w-16 h-16 rounded-full bg-surface-container flex items-center justify-center group-hover:bg-primary/10 transition-colors">
+<span class="text-3xl">💬</span>
+</div>
+<span class="font-title-md text-[18px] text-on-surface group-hover:text-primary transition-colors">일상 대화</span>
+</div>
+<!-- Card 4 -->
+<div class="bg-surface-container-lowest rounded-[24px] p-6 flex flex-col items-center justify-center text-center gap-4 ambient-shadow border border-outline-variant/30 hover:border-primary/50 hover:shadow-lg transition-all cursor-pointer group">
+<div class="w-16 h-16 rounded-full bg-surface-container flex items-center justify-center group-hover:bg-primary/10 transition-colors">
+<span class="text-3xl">👩‍👧</span>
+</div>
+<span class="font-title-md text-[18px] text-on-surface group-hover:text-primary transition-colors">부모</span>
+</div>
+<!-- Card 5 -->
+<div class="bg-surface-container-lowest rounded-[24px] p-6 flex flex-col items-center justify-center text-center gap-4 ambient-shadow border border-outline-variant/30 hover:border-primary/50 hover:shadow-lg transition-all cursor-pointer group">
+<div class="w-16 h-16 rounded-full bg-surface-container flex items-center justify-center group-hover:bg-primary/10 transition-colors">
+<span class="text-3xl">🧒</span>
+</div>
+<span class="font-title-md text-[18px] text-on-surface group-hover:text-primary transition-colors">키즈 스피치</span>
+</div>
+<!-- Card 6 -->
+<div class="bg-surface-container-lowest rounded-[24px] p-6 flex flex-col items-center justify-center text-center gap-4 ambient-shadow border border-primary-container ring-2 ring-primary/20 shadow-lg cursor-pointer group relative overflow-hidden">
+<div class="absolute inset-0 bg-primary/5 pointer-events-none"></div>
+<div class="w-16 h-16 rounded-full bg-primary text-white flex items-center justify-center shadow-md">
+<span class="text-3xl">🎓</span>
+</div>
+<span class="font-title-md text-[18px] text-primary font-bold">면접 준비</span>
+</div>
+</div>
+</section>
+<!-- Now Open: 2027 College Interview -->
+<section class="bg-on-secondary-fixed text-white py-section-padding relative overflow-hidden">
+<!-- Deep Background Element -->
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary-container/20 rounded-full blur-[120px] pointer-events-none"></div>
+<div class="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto relative z-10">
+<div class="flex flex-col md:flex-row items-center gap-12">
+<div class="flex-1 space-y-6">
+<div class="inline-flex items-center gap-2 bg-[#ff6748] text-white px-4 py-1.5 rounded-full font-label-sm text-[14px] uppercase tracking-wider font-bold">
+<span class="w-2 h-2 bg-white rounded-full animate-pulse"></span>
+                            NOW OPEN
+                        </div>
+<h2 class="font-display-lg text-display-lg md:text-[56px] text-white leading-tight">
+                            2027 대입 면접<br>
+<span class="text-primary-fixed-dim">패키지 오픈</span>
+</h2>
+<p class="font-body-lg text-body-lg text-outline-variant max-w-md">
+                            체계적인 커리큘럼과 실전 모의 면접으로 합격의 가능성을 높이세요. 얼리버드 혜택이 적용된 가격입니다.
+                        </p>
+<div class="bg-white/10 backdrop-blur-md rounded-[24px] p-8 border border-white/20 mt-8">
+<ul class="space-y-4 mb-8"><li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary-fixed">check_circle</span>
+<span class="font-body-md text-white">대입 면접이 쉬워지는 스피치 공식 전자책</span>
+</li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary-fixed">check_circle</span>
+<span class="font-body-md text-white">실전 면접 워크지</span>
+</li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary-fixed">check_circle</span>
+<span class="font-body-md text-white">라엘 전용 모의 면접 챗봇</span>
+</li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary-fixed">check_circle</span>
+<span class="font-body-md text-white">전문가 일대일 맞춤 피드백 제공</span>
+</li></ul>
+<div class="flex items-end justify-between border-t border-white/20 pt-6">
+<div>
+<p class="text-outline-variant text-sm line-through mb-1">정가 150,000원</p>
+<p class="font-headline-lg text-[32px] font-bold text-white">99,000원 <span class="text-lg font-normal text-outline-variant">/ 월</span></p>
+</div>
+<button class="bg-primary-container text-white px-8 py-3 rounded-full font-title-md hover:bg-primary transition-colors">
+                                    수강 신청
+                                </button>
+</div>
+</div>
+</div>
+<div class="flex-1 relative w-full aspect-video md:aspect-square">
+<!-- Bento Grid style placeholder for package features -->
+<div class="grid grid-cols-2 gap-4 h-full">
+<div class="bg-white/5 rounded-3xl p-6 border border-white/10 flex flex-col justify-end"><span class="material-symbols-outlined text-4xl text-primary-fixed mb-4">groups</span><h3 class="font-title-md text-white">오프라인 면접 특강</h3><p class="text-sm text-outline-variant mt-2">현장에서 직접 배우는 실전 스킬</p></div>
+<div class="bg-white/5 rounded-3xl p-6 border border-white/10 flex flex-col justify-end"><span class="material-symbols-outlined text-4xl text-primary-fixed mb-4">videocam</span><h3 class="font-title-md text-white">온라인 면접 특강</h3><p class="text-sm text-outline-variant mt-2">어디서나 참여하는 실시간 강의</p></div>
+<div class="col-span-2 bg-gradient-to-br from-primary-container/40 to-primary/20 rounded-3xl p-6 border border-primary/30 flex items-center justify-between"><div><h3 class="font-title-md text-white text-xl">면접 무료 자료</h3><p class="text-sm text-primary-fixed-dim mt-2">합격률을 높이는 핵심 비법 자료</p></div><span class="material-symbols-outlined text-5xl text-white/50">description</span></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Real Class Gallery -->
+<section class="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto py-section-padding">
+<div class="text-center mb-16">
+<h2 class="font-headline-lg text-headline-lg md:text-[40px] text-on-surface">생생한 클래스 현장</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-4">이론을 넘어 실전처럼, 집중도 높은 강의 현장을 확인하세요.</p>
+</div>
+<div class="grid md:grid-cols-2 gap-8">
+<div class="group relative rounded-[32px] overflow-hidden aspect-[4/3] shadow-lg">
+<img alt="Group Speech Training Session" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="A brightly lit modern classroom where a female instructor stands at the front, presenting a slide deck to a small group of attentive young adult students seated at desks. The environment is professional, clean, and educational." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCuLMSAxY772C5hneZ7cPCN6wWWgI0UYLhWzARiVBVQYoi2iiaJSjMxMbw3thDReVz1IkWXfuFKK6_vZn85YWdT8Fb3bVxRszeJW4NFFAO-pm4_CghQuov99r5nGUlqfa6uE7NKbCMAeY4erSgBwP2Dm4vTcgRmwone_9pn06T41ldYJQ7IyICSpZ3L9v05jGSNiSHFLmTcn6IKvVhoAAe0rj8sL6Y1QxCeaTs_9PDxd4VK7Dg5pabmer5-Y_Hn1snnJg">
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-8">
+<h3 class="text-white font-title-md text-xl">소수 정예 그룹 코칭</h3>
+<p class="text-white/80 mt-2">서로 피드백을 주고받으며 성장하는 시너지 효과</p>
+</div>
+</div>
+<div class="group relative rounded-[32px] overflow-hidden aspect-[4/3] shadow-lg">
+<img alt="Presentation Skills Workshop" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="A large presentation screen displaying a software interface or recording, with a female instructor standing next to it explaining the content. Several students are seated facing the screen, participating in a modern, tech-enabled workshop setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAL_QBgiMIRYw-RrRx7u_aMHFWnPcQnXjoPMrEsJV4mw4abn0JB0AP45oabMOkpp8r3A7SPZtISQCH5n5X83f5hWz4-b_v7VRfLDcrrGnFlZIh33491D05A5E40npNzXSgnC1fc59cYEq6fl1Ta1sEU4WUYlkgrB6qme5UP-gHoftqjrMJAF-cKYUysg234gdg0gsQOJQEe-i7sWma2nmo7bfybNvmvi7gA13-n5pED_kdKw0zU0dGQoWtkGiVIieC8xg">
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-8">
+<h3 class="text-white font-title-md text-xl">실전 프레젠테이션 실습</h3>
+<p class="text-white/80 mt-2">카메라 테스트 및 모니터링을 통한 객관적 분석</p>
+</div>
+</div>
+</div>
+</section><section class="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto py-section-padding bg-surface-container-low/30">
+<div class="text-center mb-16">
+<h2 class="font-headline-lg text-headline-lg md:text-[40px] text-on-surface">수강생이 증명하는 LAEL LAB</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-4">실제 수업을 들은 수강생들의 생생한 변화와 진심 어린 후기입니다.</p>
+</div>
+<div class="grid md:grid-cols-3 gap-8">
+<!-- Testimonial 1 -->
+<div class="bg-surface-container-lowest p-8 rounded-[32px] shadow-sm border border-outline-variant/30 flex flex-col gap-6">
+<div class="flex gap-1">
+<span class="material-symbols-outlined text-primary-container fill-1">star</span>
+<span class="material-symbols-outlined text-primary-container fill-1">star</span>
+<span class="material-symbols-outlined text-primary-container fill-1">star</span>
+<span class="material-symbols-outlined text-primary-container fill-1">star</span>
+<span class="material-symbols-outlined text-primary-container fill-1">star</span>
+</div>
+<p class="font-body-md text-on-surface italic flex-1">"면접에 대한 막연한 두려움이 사라졌어요. 제 경험을 어떻게 말로 풀어내야 할지 정확히 배웠습니다."</p>
+<div>
+<p class="font-bold text-on-surface">김OO 수강생</p>
+<p class="text-sm text-on-surface-variant">대입면접</p>
+</div>
+</div>
+<!-- Testimonial 2 -->
+<div class="bg-surface-container-lowest p-8 rounded-[32px] shadow-sm border border-outline-variant/30 flex flex-col gap-6">
+<div class="flex gap-1">
+<span class="material-symbols-outlined text-primary-container fill-1">star</span>
+<span class="material-symbols-outlined text-primary-container fill-1">star</span>
+<span class="material-symbols-outlined text-primary-container fill-1">star</span>
+<span class="material-symbols-outlined text-primary-container fill-1">star</span>
+<span class="material-symbols-outlined text-primary-container fill-1">star</span>
+</div>
+<p class="font-body-md text-on-surface italic flex-1">"발성부터 논리까지, 30일 만에 제 목소리에 자신감이 생겼습니다. 강력 추천해요!"</p>
+<div>
+<p class="font-bold text-on-surface">이OO 수강생</p>
+<p class="text-sm text-on-surface-variant">보이스 피트니스</p>
+</div>
+</div>
+<!-- Testimonial 3 -->
+<div class="bg-surface-container-lowest p-8 rounded-[32px] shadow-sm border border-outline-variant/30 flex flex-col gap-6">
+<div class="flex gap-1">
+<span class="material-symbols-outlined text-primary-container fill-1">star</span>
+<span class="material-symbols-outlined text-primary-container fill-1">star</span>
+<span class="material-symbols-outlined text-primary-container fill-1">star</span>
+<span class="material-symbols-outlined text-primary-container fill-1">star</span>
+<span class="material-symbols-outlined text-primary-container fill-1">star</span>
+</div>
+<p class="font-body-md text-on-surface italic flex-1">"아이의 발표 태도가 몰라보게 달라졌어요. 단순히 말하기 기술이 아니라 자신감을 키워주는 수업입니다."</p>
+<div>
+<p class="font-bold text-on-surface">박OO 학부모</p>
+<p class="text-sm text-on-surface-variant">키즈 스피치</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<div class="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-md rounded-full z-50 shadow-xl bg-primary-container dark:bg-primary">
+<button class="flex items-center justify-between w-full px-6 py-4 text-on-primary-container font-bold font-label-sm text-label-sm hover:brightness-110 transition-all active:scale-[0.98]">
+<span class="">2027 College Interview Package</span>
+<span class="material-symbols-outlined">shopping_cart</span>
+</button>
+</div>
+<!-- Footer -->
+<footer class="bg-surface-container-lowest dark:bg-on-secondary-fixed py-section-padding border-t border-outline-variant dark:border-outline/10">
+<div class="flex flex-col md:flex-row justify-between items-center px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto gap-gutter">
+<div class="text-center md:text-left">
+<div class="font-headline-lg text-headline-lg text-primary font-bold mb-4">LAEL LAB</div>
+<p class="font-body-md text-body-md text-on-surface-variant dark:text-outline">© 2024 LAEL LAB. All rights reserved.</p>
+</div>
+<div class="flex gap-6 mt-6 md:mt-0">
+<a class="font-label-sm text-label-sm text-on-surface-variant dark:text-outline hover:text-primary transition-colors" href="#">About</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant dark:text-outline hover:text-primary transition-colors" href="#">Terms of Service</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant dark:text-outline hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant dark:text-outline hover:text-primary transition-colors" href="#">Contact</a>
+</div>
+</div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+</body></html>

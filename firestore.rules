@@ -1,0 +1,23 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── users 컬렉션: 본인만 읽기/쓰기 ───────────────────────
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // ── purchases 컬렉션: 본인만 읽기 / 서버에서만 쓰기 ──────
+    // 실제 상용 서비스에서는 Cloud Functions에서만 write 허용
+    match /purchases/{userId} {
+      allow read: if request.auth != null && request.auth.uid == userId;
+      // 테스트 모드: 클라이언트 write 허용 (상용 시 false로 변경 후 Cloud Functions 사용)
+      allow write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // 나머지 모든 접근 차단
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
