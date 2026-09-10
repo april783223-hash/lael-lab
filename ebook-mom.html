@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LAEL LAB 전자책 - 엄마와 함께 하는 단단한 말하기</title>
+  <meta name="description" content="LAEL LAB 엄마와 함께 하는 단단한 말하기 전자책 열람실">
+  <link rel="canonical" href="https://laellab.com/ebook-mom.html">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%234c37ce'/%3E%3Cstop offset='100%25' stop-color='%23ff6748'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='8' fill='url(%23g)'/%3E%3Ctext x='16' y='22' font-family='sans-serif' font-size='18' font-weight='900' fill='white' text-anchor='middle'%3EL%3C/text%3E%3C/svg%3E">
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="firebase-config.js"></script>
+
+  <!-- Google Fonts & Icons -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background: #f4f3f1;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+    .reader-header {
+      height: 56px;
+      background: #fff;
+      border-bottom: 1px solid #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      flex-shrink: 0;
+      box-shadow: 0 1px 4px rgba(0,0,0,.06);
+      z-index: 10;
+    }
+    .reader-header .left { display: flex; align-items: center; gap: 10px; }
+    .reader-header .right { display: flex; align-items: center; gap: 8px; }
+    .back-btn {
+      display: flex; align-items: center; gap: 4px;
+      font-size: 13px; font-weight: 700; color: #555;
+      text-decoration: none;
+    }
+    .back-btn:hover { color: #ff6748; }
+    .book-title {
+      font-size: 14px; font-weight: 700; color: #111;
+      max-width: 260px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .divider { color: #ddd; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: #ff6748; flex-shrink: 0; }
+    .btn-dl {
+      display: flex; align-items: center; gap: 4px;
+      background: #16a34a; color: #fff;
+      padding: 6px 14px; border-radius: 8px;
+      font-size: 12px; font-weight: 700; text-decoration: none;
+      transition: background .2s;
+    }
+    .btn-dl:hover { background: #15803d; }
+    .btn-print {
+      display: flex; align-items: center; gap: 4px;
+      background: #ff6748; color: #fff;
+      padding: 6px 14px; border-radius: 8px;
+      font-size: 12px; font-weight: 700; border: none; cursor: pointer;
+      transition: background .2s;
+    }
+    .btn-print:hover { background: #e5533a; }
+    .pdf-container { flex: 1; display: flex; flex-direction: column; }
+    .pdf-container iframe { flex: 1; width: 100%; border: none; background: #525659; }
+    #authGate {
+      position: fixed; inset: 0; z-index: 50;
+      background: #f4f3f1;
+      display: flex; align-items: center; justify-content: center; padding: 24px;
+    }
+    .gate-loading { text-align: center; }
+    .spinner {
+      width: 44px; height: 44px;
+      border: 4px solid #ff6748; border-top-color: transparent;
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+      margin: 0 auto 12px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .gate-card {
+      background: #fff; border-radius: 24px; padding: 36px;
+      text-align: center; max-width: 360px; width: 100%;
+      box-shadow: 0 20px 60px rgba(0,0,0,.12);
+    }
+    .lock-icon {
+      width: 64px; height: 64px; border-radius: 18px;
+      background: #fff2ef;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 16px; font-size: 28px;
+    }
+    .gate-card h2 { font-size: 20px; font-weight: 900; color: #111; margin-bottom: 8px; }
+    .gate-card p { font-size: 14px; color: #666; line-height: 1.6; margin-bottom: 24px; }
+    .btn-primary {
+      display: block; width: 100%;
+      background: #ff6748; color: #fff;
+      padding: 14px; border-radius: 50px;
+      font-size: 14px; font-weight: 700; text-decoration: none;
+      margin-bottom: 10px; transition: background .2s;
+    }
+    .btn-primary:hover { background: #e5533a; }
+    .btn-secondary {
+      display: block; width: 100%;
+      background: #f3f4f6; color: #444;
+      padding: 14px; border-radius: 50px;
+      font-size: 14px; font-weight: 700; text-decoration: none;
+      transition: background .2s;
+    }
+    .btn-secondary:hover { background: #e5e7eb; }
+    .login-hint { font-size: 12px; color: #999; margin-top: 14px; }
+    .login-hint a { color: #ff6748; text-decoration: underline; }
+    .hidden { display: none !important; }
+
+    @media (max-width: 480px) {
+      .book-title { max-width: 140px; }
+      .btn-dl span.label, .btn-print span.label { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 구매자 확인 오버레이 -->
+  <div id="authGate">
+    <div id="gateLoading" class="gate-loading">
+      <div class="spinner"></div>
+      <p style="color:#888; font-size:13px;">열람 권한을 확인하는 중...</p>
+    </div>
+    <div id="gateBlocked" class="gate-card hidden">
+      <div class="lock-icon">🔒</div>
+      <h2>구매자 전용 콘텐츠</h2>
+      <p>이 전자책은 <strong>엄마와 함께 하는 단단한 말하기 패키지</strong> 구매자에게만 제공됩니다.</p>
+      <a href="index.html#packageSection" class="btn-primary">패키지 구매하기</a>
+      <a href="index.html" class="btn-secondary">홈으로 돌아가기</a>
+      <p class="login-hint">이미 구매하셨나요? <a href="index.html">로그인하기</a></p>
+    </div>
+  </div>
+
+  <!-- 상단 헤더 -->
+  <header class="reader-header">
+    <div class="left">
+      <a href="index.html" class="back-btn">
+        <span class="material-symbols-outlined" style="font-size:18px">arrow_back</span>
+        <span>홈으로</span>
+      </a>
+      <span class="divider">|</span>
+      <div class="dot"></div>
+      <span class="book-title">[전자책] 엄마와 함께 하는 단단한 말하기</span>
+    </div>
+    <div class="right">
+      <a id="pdfDownloadBtn"
+         href="ebooks/pdf/lael-mom-speech-ebook.pdf"
+         download="엄마와 함께 하는 단단한 말하기.pdf"
+         class="btn-dl hidden">
+        <span class="material-symbols-outlined" style="font-size:16px">download</span>
+        <span class="label">PDF 저장</span>
+      </a>
+      <button onclick="window.print()" class="btn-print">
+        <span class="material-symbols-outlined" style="font-size:16px">print</span>
+        <span class="label">인쇄</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- PDF 뷰어 -->
+  <div class="pdf-container">
+    <iframe
+      id="pdfViewer"
+      src=""
+      title="엄마와 함께 하는 단단한 말하기 전자책">
+    </iframe>
+  </div>
+
+  <script>
+    const PDF_PATH    = 'ebooks/pdf/lael-mom-speech-ebook.pdf';
+    const ADMIN_EMAILS = ['april783223@gmail.com'];
+    // Firestore에서 이 상품 구매 여부를 확인할 필드명
+    // purchases/{uid}.paidMomSpeech === true
+    const PURCHASE_FIELD = 'paidMomSpeech';
+
+    const gate        = document.getElementById('authGate');
+    const gateLoading = document.getElementById('gateLoading');
+    const gateBlocked = document.getElementById('gateBlocked');
+    const pdfViewer   = document.getElementById('pdfViewer');
+    const pdfDlBtn    = document.getElementById('pdfDownloadBtn');
+
+    function allowAccess() {
+      gate.style.display = 'none';
+      pdfViewer.src = PDF_PATH;
+      pdfDlBtn.classList.remove('hidden');
+    }
+
+    function denyAccess() {
+      gateLoading.classList.add('hidden');
+      gateBlocked.classList.remove('hidden');
+    }
+
+    async function checkMomPurchase(uid) {
+      if (!db || !uid) return false;
+      try {
+        const snap = await db.collection('purchases').doc(uid).get();
+        if (!snap.exists) return false;
+        const data = snap.data();
+        // paidMomSpeech 필드가 true이면 구매 완료
+        return data[PURCHASE_FIELD] === true;
+      } catch (e) {
+        console.warn('구매 확인 오류:', e.message);
+        return false;
+      }
+    }
+
+    const timer = setInterval(() => {
+      if (typeof auth === 'undefined' || auth === null) return;
+      clearInterval(timer);
+
+      auth.onAuthStateChanged(async (user) => {
+        if (!user) { denyAccess(); return; }
+
+        // ✅ 관리자 이메일 즉시 통과
+        if (ADMIN_EMAILS.includes(user.email)) {
+          allowAccess(); return;
+        }
+
+        // 이 상품 구매 여부 확인
+        const paid = await checkMomPurchase(user.uid);
+        paid ? allowAccess() : denyAccess();
+      });
+    }, 200);
+
+    setTimeout(() => {
+      if (gate.style.display !== 'none') denyAccess();
+    }, 6000);
+  </script>
+
+</body>
+</html>
