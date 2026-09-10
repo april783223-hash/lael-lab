@@ -590,6 +590,12 @@
             denyAccess();
             return;
           }
+          // ✅ 관리자 이메일은 바로 통과
+          const ADMIN_EMAILS = ['april783223@gmail.com'];
+          if (ADMIN_EMAILS.includes(user.email)) {
+            allowAccess();
+            return;
+          }
           // 결제 여부 확인
           const paid = await checkPurchaseStatus(user.uid);
           if (paid) {
