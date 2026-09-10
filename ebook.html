@@ -18,6 +18,12 @@
   <meta property="og:url" content="https://laellab.com/ebook.html">
   <meta property="og:image" content="https://laellab.com/assets/images/coach-profile.png">
 
+  <!-- Firebase SDK (Compat v10) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="firebase-config.js"></script>
+
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
   <script>
@@ -68,6 +74,34 @@
 </head>
 <body class="bg-[#f8f7f4] text-[#222222] antialiased flex flex-col h-screen overflow-hidden">
 
+  <!-- ── 구매자 확인 오버레이 (기본: 전체 화면 차단) ─────────── -->
+  <div id="authGate" class="fixed inset-0 z-50 bg-[#f8f7f4] flex items-center justify-center p-6">
+    <!-- 로딩 상태 -->
+    <div id="gateLoading" class="text-center space-y-4">
+      <div class="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto"></div>
+      <p class="text-gray-500 text-sm">열람 권한을 확인하는 중입니다...</p>
+    </div>
+    <!-- 미구매 / 미로그인 안내 -->
+    <div id="gateBlocked" class="hidden max-w-sm w-full bg-white rounded-3xl shadow-2xl p-8 text-center border border-gray-100">
+      <div class="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+        <span class="material-symbols-outlined text-3xl text-primary">lock</span>
+      </div>
+      <h2 class="text-xl font-black text-gray-900 mb-2">구매자 전용 콘텐츠</h2>
+      <p class="text-sm text-gray-500 mb-6 leading-relaxed">이 전자책은 <strong>2027 대입 면접 올인원 패키지</strong> 구매자에게만 제공됩니다.</p>
+      <div class="space-y-3">
+        <a href="index.html#packageSection"
+           class="block w-full bg-primary hover:bg-primary-container text-white py-3 rounded-full font-bold text-sm transition-all active:scale-95">
+          패키지 구매하기
+        </a>
+        <a href="index.html"
+           class="block w-full bg-gray-100 hover:bg-gray-200 text-gray-700 py-3 rounded-full font-bold text-sm transition-all">
+          홈으로 돌아가기
+        </a>
+      </div>
+      <p class="text-xs text-gray-400 mt-4">이미 구매하셨나요? <a href="index.html" onclick="sessionStorage.setItem('openAuth','1')" class="text-primary underline">로그인하기</a></p>
+    </div>
+  </div>
+
   <!-- Top Reader Bar -->
   <header class="h-16 bg-white border-b border-gray-200 px-4 md:px-8 flex items-center justify-between z-30 shrink-0 shadow-sm">
     <div class="flex items-center gap-3">
@@ -97,10 +131,16 @@
         <span class="material-symbols-outlined text-xl">menu_book</span>
       </button>
 
+      <!-- PDF 다운로드 (구매자 전용) -->
+      <a id="pdfDownloadBtn" href="ebooks/pdf/대입면접전자책.pdf" download="대입면접이 쉬워지는 스피치 공식.pdf"
+         class="hidden sm:flex items-center gap-1 px-3 py-1.5 rounded-lg bg-green-600 text-white text-xs font-bold hover:bg-green-700 transition shadow-sm">
+        <span class="material-symbols-outlined text-sm">download</span>
+        PDF 저장
+      </a>
       <!-- Print Button -->
       <button onclick="window.print()" class="hidden sm:flex items-center gap-1 px-3 py-1.5 rounded-lg bg-primary text-white text-xs font-bold hover:bg-primary-container transition shadow-sm">
         <span class="material-symbols-outlined text-sm">print</span>
-        인쇄 / PDF 저장
+        인쇄
       </button>
     </div>
   </header>
@@ -522,6 +562,49 @@
         toggleSidebar();
       }
     }
+
+    // ── 구매자 인증 게이트 ────────────────────────────────────
+    (function initAuthGate() {
+      const gate        = document.getElementById('authGate');
+      const gateLoading = document.getElementById('gateLoading');
+      const gateBlocked = document.getElementById('gateBlocked');
+      const pdfBtn      = document.getElementById('pdfDownloadBtn');
+
+      function allowAccess() {
+        gate.style.display = 'none';
+        if (pdfBtn) pdfBtn.classList.remove('hidden');
+      }
+
+      function denyAccess() {
+        gateLoading.classList.add('hidden');
+        gateBlocked.classList.remove('hidden');
+      }
+
+      // Firebase가 준비될 때까지 대기
+      const waitForFirebase = setInterval(() => {
+        if (typeof auth === 'undefined' || auth === null) return;
+        clearInterval(waitForFirebase);
+
+        auth.onAuthStateChanged(async (user) => {
+          if (!user) {
+            denyAccess();
+            return;
+          }
+          // 결제 여부 확인
+          const paid = await checkPurchaseStatus(user.uid);
+          if (paid) {
+            allowAccess();
+          } else {
+            denyAccess();
+          }
+        });
+      }, 200);
+
+      // 5초 이상 로딩 시 Firebase 연결 실패로 간주
+      setTimeout(() => {
+        if (gate.style.display !== 'none') denyAccess();
+      }, 5000);
+    })();
   </script>
 </body>
 </html>
