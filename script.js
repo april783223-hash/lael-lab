@@ -77,6 +77,15 @@ function openEbookModal() {
   openModal('ebookModal');
 }
 
+function openEbookMomModal() {
+  if (!currentUser) {
+    showToast('로그인이 필요합니다', '전자책을 보려면 먼저 로그인해주세요.');
+    openModal('authModal');
+    return;
+  }
+  openModal('ebookMomModal');
+}
+
 function openLectureModal() {
   if (!currentUser) {
     showToast('로그인이 필요합니다', '강의실을 이용하려면 먼저 로그인해주세요.');
