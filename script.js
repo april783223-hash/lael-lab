@@ -74,7 +74,7 @@ function openEbookModal() {
     openModal('authModal');
     return;
   }
-  openModal('ebookModal');
+  openModal('ebookStoreModal');
 }
 
 function openEbookMomModal() {
@@ -83,7 +83,14 @@ function openEbookMomModal() {
     openModal('authModal');
     return;
   }
-  openModal('ebookMomModal');
+  openModal('ebookStoreModal');
+}
+
+// 전자책 상세 모달 열기 (interview | mom)
+function openEbookDetail(type) {
+  closeModal('ebookStoreModal');
+  // 역할별 콘텐츠 전환 (todo: mom 타입 지원 확장)
+  openModal('ebookDetailModal');
 }
 
 function openLectureModal() {
