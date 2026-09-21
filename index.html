@@ -149,24 +149,38 @@
               <span class="text-2xl">📖</span>
               <div>
                 <div class="text-sm font-bold text-gray-900">대입면접이 쉬워지는 스피치 공식</div>
-                <div class="text-xs text-gray-400">2027 대입 패키지 전용</div>
+
               </div>
             </button>
             <button onclick="openEbookMomModal()" class="w-full text-left px-4 py-3.5 hover:bg-accent-coral/5 transition flex items-center gap-3">
               <span class="text-2xl">👩‍👧</span>
               <div>
                 <div class="text-sm font-bold text-gray-900">친구에게 휘둘리지 않는 단단한 말하기</div>
-                <div class="text-xs text-gray-400">스피치 패키지 전용</div>
+
               </div>
             </button>
           </div>
         </div>
-        <button onclick="openLectureModal()" class="text-on-surface-variant hover:text-primary transition-colors duration-200 text-sm font-semibold py-2 flex items-center gap-1">
-          <span class="material-symbols-outlined text-base text-primary">play_circle</span>
-          동영상 강의실
-        </button>
+        <!-- 동영상 강의실 드롭다운 -->
+        <div class="relative group">
+          <button class="text-on-surface-variant hover:text-primary transition-colors duration-200 text-sm font-semibold py-2 flex items-center gap-1">
+            <span class="material-symbols-outlined text-base text-primary">play_circle</span>
+            동영상 강의실
+            <span class="material-symbols-outlined text-sm">expand_more</span>
+          </button>
+          <!-- 드롭다운 메뉴 -->
+          <div class="absolute top-full left-0 mt-1 w-72 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+            <button onclick="openVodStoreModal()" class="w-full text-left px-4 py-3.5 hover:bg-primary/5 transition flex items-center gap-3">
+              <span class="text-2xl">🎬</span>
+              <div>
+                <div class="text-sm font-bold text-gray-900">대입면접이 쉬워지는 스피치 공식</div>
+                <div class="text-xs text-primary font-bold mt-0.5">VOD 12강 · 149,000원</div>
+              </div>
+            </button>
+          </div>
+        </div>
         <a class="text-on-surface-variant hover:text-primary transition-colors duration-200 text-sm font-semibold py-2" href="#categories">클래스 분야</a>
-        <a class="text-on-surface-variant hover:text-primary transition-colors duration-200 text-sm font-semibold py-2" href="#packageSection">2027 대입 패키지</a>
+        <a class="text-on-surface-variant hover:text-primary transition-colors duration-200 text-sm font-semibold py-2" href="#packageSection">패키지</a>
         <a class="text-on-surface-variant hover:text-primary transition-colors duration-200 text-sm font-semibold py-2" href="#gallerySection">클래스 현장</a>
         <a class="text-on-surface-variant hover:text-primary transition-colors duration-200 text-sm font-semibold py-2" href="#testimonialsSection">수강생 후기</a>
         <button onclick="openAIChatbot()" class="text-on-surface-variant hover:text-primary transition-colors duration-200 text-sm font-semibold py-2 flex items-center gap-1">
@@ -218,12 +232,12 @@
         <span class="material-symbols-outlined text-xl">auto_stories</span>
         👩‍👧 친구에게 휘둘리지 않는 단단한 말하기
       </button>
-      <button onclick="closeMobileMenu(); openLectureModal()" class="block w-full text-left text-primary font-bold text-base py-1 flex items-center gap-2">
+      <button onclick="closeMobileMenu(); openVodStoreModal()" class="block w-full text-left text-primary font-bold text-base py-1 flex items-center gap-2">
         <span class="material-symbols-outlined text-xl">play_circle</span>
-        🎥 동영상 강의실 바로가기
+        🎬 동영상 강의실
       </button>
       <a class="block text-on-surface-variant hover:text-primary font-semibold text-base py-1" href="#categories" onclick="closeMobileMenu()">클래스 분야</a>
-      <a class="block text-on-surface-variant hover:text-primary font-semibold text-base py-1" href="#packageSection" onclick="closeMobileMenu()">2027 대입 패키지</a>
+      <a class="block text-on-surface-variant hover:text-primary font-semibold text-base py-1" href="#packageSection" onclick="closeMobileMenu()">패키지</a>
       <a class="block text-on-surface-variant hover:text-primary font-semibold text-base py-1" href="#gallerySection" onclick="closeMobileMenu()">클래스 현장</a>
       <a class="block text-on-surface-variant hover:text-primary font-semibold text-base py-1" href="#testimonialsSection" onclick="closeMobileMenu()">수강생 후기</a>
       <button onclick="closeMobileMenu(); openAIChatbot()" class="block w-full text-left font-bold text-base py-1 flex items-center gap-2 text-accent-coral">
@@ -421,21 +435,17 @@
                 </li>
                 <li class="flex items-start gap-3">
                   <span class="material-symbols-outlined text-primary-fixed text-2xl shrink-0">check_circle</span>
-                  <span class="text-base text-white">라엘 전용 24시간 실전 모의 면접 AI 챗봇 2개월 이용권 <span class="text-primary-fixed font-bold">정가 467,000원</span></span>
-                </li>
-                <li class="flex items-start gap-3">
-                  <span class="material-symbols-outlined text-primary-fixed text-2xl shrink-0">check_circle</span>
-                  <span class="text-base text-white">전문가 1:1 맞춤형 음성 및 영상 피드백 3회권</span>
+                  <span class="text-base text-white">라엘 전용 24시간 실전 모의 면접 AI 챗봇 2개월 이용권</span>
                 </li>
               </ul>
 
               <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-t border-white/20 pt-6">
                 <div>
-                  <p class="text-outline-variant text-sm line-through mb-1">정가 450,000원</p>
+
                   <p class="text-4xl sm:text-5xl font-black text-white leading-tight">
                     299,000원
                   </p>
-                  <p class="text-sm text-accent-coral font-bold mt-1">🔥 오픈 특가 · 9월 한달</p>
+                  <p class="text-sm text-accent-coral font-bold mt-1">🔥 오픈 특가 · 10월 한달</p>
                 </div>
                 <!-- Main Package CTA: "구매" Button (User explicit request) -->
                 <button onclick="openPurchaseModal('2027 대입 면접 올인원 패키지', 299000)" 
@@ -668,31 +678,53 @@
   </div>
 
   <!-- Footer -->
-  <footer class="bg-surface-container-lowest py-16 border-t border-outline-variant/30">
-    <div class="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
-      <div>
-        <div class="text-2xl font-black text-primary flex items-center gap-2 mb-2">
-          <span class="w-3 h-3 rounded-full bg-primary inline-block"></span>
-          LAEL LAB
-        </div>
-        <p class="text-xs text-on-surface-variant">프리미엄 스피치 & 커뮤니케이션 연구소 | 중요한 순간, 제대로 말할 수 있도록</p>
-        <p class="text-xs text-outline mt-3">© 2026 LAEL LAB. All rights reserved.</p>
+  <footer class="bg-gray-50 border-t border-gray-200 pt-8 pb-16">
+    <div class="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+
+      <!-- 정책 링크 행 -->
+      <div class="flex flex-wrap items-center gap-x-8 gap-y-2 mb-6">
+        <a href="#" onclick="alert('공지사항 준비 중입니다.'); return false;"
+           class="text-sm text-gray-600 hover:text-primary transition-colors font-medium">공지사항</a>
+        <a href="#" onclick="alert('이용약관 준비 중입니다.'); return false;"
+           class="text-sm text-gray-600 hover:text-primary transition-colors font-medium">이용약관</a>
+        <a href="#" onclick="alert('환불정책 준비 중입니다.'); return false;"
+           class="text-sm text-gray-600 hover:text-primary transition-colors font-medium">환불정책</a>
+        <a href="#" onclick="alert('후기정책 준비 중입니다.'); return false;"
+           class="text-sm text-gray-600 hover:text-primary transition-colors font-medium">후기정책</a>
+        <a href="#" onclick="alert('개인정보처리방침 준비 중입니다.'); return false;"
+           class="text-sm text-gray-800 hover:text-primary transition-colors font-bold">개인정보처리방침</a>
+        <a href="#" onclick="alert('자주묻는질문 준비 중입니다.'); return false;"
+           class="text-sm text-gray-600 hover:text-primary transition-colors font-medium">자주묻는질문</a>
       </div>
 
-      <div class="flex flex-wrap gap-6 text-xs text-on-surface-variant font-medium">
-        <a class="hover:text-primary transition-colors" href="#hero">소개 (About)</a>
-        <a class="hover:text-primary transition-colors" href="#categories">클래스 안내</a>
-        <a class="hover:text-primary transition-colors" href="#" onclick="alert('이용약관 페이지 준비 중입니다.'); return false;">이용약관</a>
-        <a class="hover:text-primary transition-colors" href="#" onclick="alert('개인정보처리방침 페이지 준비 중입니다.'); return false;">개인정보처리방침</a>
-        <a class="hover:text-primary transition-colors" href="#" onclick="openModal('freeResourceModal'); return false;">문의하기</a>
+      <!-- 구분선 -->
+      <hr class="border-gray-200 mb-5">
+
+      <!-- 사업자 정보 -->
+      <div class="space-y-1.5 text-xs text-gray-500 leading-relaxed">
+        <p>
+          <span class="font-semibold text-gray-700">라엘랩 (LAEL LAB)</span>
+          &nbsp;|&nbsp; 대표 박정우 · 최윤정
+          &nbsp;|&nbsp; 사업자 등록번호 : 818-14-02601
+        </p>
+        <p>
+          주소 : 서울특별시 양천구 목동동로 12길 50 4층 467호 (신정동, 동성빌딩)
+        </p>
+        <p>
+          고객센터 : <a href="tel:010-5904-5207" class="hover:text-primary transition-colors">010-5904-5207</a>
+          &nbsp;|&nbsp;
+          이메일 : <a href="mailto:april7743@naver.com" class="hover:text-primary transition-colors">april7743@naver.com</a>
+        </p>
+        <p class="pt-2 text-gray-400">&copy; 2026 LAEL LAB. All rights reserved.</p>
       </div>
+
     </div>
   </footer>
 
   <!-- ==================== MODALS ==================== -->
 
   <!-- Modal 1: 2027 Package Purchase Modal ("구매" 모달) -->
-  <div id="purchaseModal" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+  <div id="purchaseModal" class="modal-overlay fixed inset-0 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" style="z-index:9999">
     <div class="modal-container bg-surface rounded-[32px] max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-outline-variant/30 relative">
       <button onclick="closeModal('purchaseModal')" class="absolute top-6 right-6 text-on-surface-variant hover:text-on-surface p-2 rounded-full hover:bg-surface-container transition-colors">
         <span class="material-symbols-outlined">close</span>
@@ -860,9 +892,159 @@
     </div>
   </div>
 
+
+  <!-- ========================================================= -->
+  <!-- VOD 강의 스토어 모달 (카드 그리드) -->
+  <!-- ========================================================= -->
+  <div id="vodStoreModal" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/70 backdrop-blur-md">
+    <div class="modal-container bg-white rounded-[28px] w-full max-w-4xl h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+      <!-- Header -->
+      <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between shrink-0">
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined text-primary text-2xl">play_circle</span>
+          <div>
+            <p class="text-[11px] text-gray-400 font-semibold uppercase tracking-widest">LAEL LAB</p>
+            <h2 class="text-lg font-black text-gray-900">동영상 강의</h2>
+          </div>
+        </div>
+        <button onclick="closeModal('vodStoreModal')" class="p-2 rounded-full hover:bg-gray-100 text-gray-400 hover:text-gray-700 transition">
+          <span class="material-symbols-outlined text-xl">close</span>
+        </button>
+      </div>
+      <!-- Tab bar -->
+      <div class="px-6 py-3 border-b border-gray-100 flex items-center gap-4 text-sm font-semibold shrink-0">
+        <button class="text-gray-900 border-b-2 border-gray-900 pb-1">추천순</button>
+        <button class="text-gray-400 pb-1 hover:text-gray-600 transition">최신순</button>
+      </div>
+      <!-- VOD Grid -->
+      <div class="flex-1 overflow-y-auto p-6">
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-6">
+          <!-- 대입면접 VOD 강의 -->
+          <div onclick="openVodDetail('interview')" class="cursor-pointer group">
+            <div class="relative rounded-2xl overflow-hidden bg-gray-100 aspect-video shadow-sm">
+              <img src="대입vod/썸네일.png" alt="대입면접이 쉬워지는 스피치 공식 VOD 썸네일"
+                   class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              <div class="absolute top-2 left-2 flex items-center gap-1">
+                <span class="bg-primary text-white text-[10px] font-bold px-2 py-0.5 rounded-full">VOD 12강</span>
+              </div>
+            </div>
+            <div class="mt-3 px-1">
+              <p class="text-[11px] text-gray-400 font-medium">LAEL LAB</p>
+              <p class="font-bold text-gray-900 text-sm leading-snug mt-0.5 group-hover:text-primary transition-colors">대입면접이 쉬워지는 스피치 공식</p>
+              <p class="text-primary font-black text-base mt-1.5">149,000원</p>
+              <div class="flex items-center gap-1.5 mt-1.5">
+                <span class="bg-primary/10 text-primary text-[10px] font-bold px-2 py-0.5 rounded-full">동영상</span>
+                <span class="bg-accent-coral/10 text-accent-coral text-[10px] font-bold px-2 py-0.5 rounded-full">NEW</span>
+              </div>
+            </div>
+          </div>
+          <!-- 준비중 slot -->
+          <div class="opacity-40">
+            <div class="rounded-2xl overflow-hidden bg-gray-50 aspect-video shadow-sm flex flex-col items-center justify-center border-2 border-dashed border-gray-200">
+              <span class="material-symbols-outlined text-gray-300 text-4xl">add_circle</span>
+              <p class="text-xs text-gray-300 mt-2 font-medium">준비중</p>
+            </div>
+            <div class="mt-3 px-1">
+              <p class="text-[11px] text-gray-300 font-medium">LAEL LAB</p>
+              <p class="font-bold text-gray-300 text-sm">곧 출시 예정</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================= -->
+  <!-- VOD 상세 모달 (대입면접 — 썸네일 + 상세 이미지 + 구매버튼) -->
+  <!-- ========================================================= -->
+  <div id="vodDetailModal" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/75 backdrop-blur-md">
+    <div class="modal-container bg-white rounded-[28px] w-full max-w-5xl h-[92vh] flex flex-col shadow-2xl overflow-hidden">
+      <!-- Header -->
+      <div class="px-5 py-3.5 border-b border-gray-100 flex items-center gap-3 shrink-0">
+        <button onclick="closeModal('vodDetailModal'); openModal('vodStoreModal')"
+                class="flex items-center gap-1 text-sm font-semibold text-gray-500 hover:text-primary transition px-2 py-1 rounded-lg hover:bg-gray-100">
+          <span class="material-symbols-outlined text-lg">arrow_back</span>
+          <span class="hidden sm:inline">강의 목록</span>
+        </button>
+        <div class="flex-1"></div>
+        <button onclick="closeModal('vodDetailModal')" class="p-2 rounded-full hover:bg-gray-100 text-gray-400 hover:text-gray-700 transition">
+          <span class="material-symbols-outlined text-xl">close</span>
+        </button>
+      </div>
+      <!-- Content -->
+      <div class="flex-1 overflow-y-auto">
+        <!-- Hero: 썸네일 + 구매 사이드바 -->
+        <div class="flex flex-col lg:flex-row">
+          <!-- 왼쪽: 썸네일 -->
+          <div class="lg:w-[55%] p-6 pb-0 lg:pb-6">
+            <img src="대입vod/썸네일.png" alt="대입면접이 쉬워지는 스피치 공식 VOD"
+                 class="w-full rounded-2xl shadow-xl">
+          </div>
+          <!-- 오른쪽: 강의 정보 + 구매 -->
+          <div class="lg:w-[45%] p-6 lg:sticky lg:top-0 lg:self-start">
+            <p class="text-xs text-gray-400 font-semibold uppercase tracking-widest mb-2">LAEL LAB · 동영상 강의</p>
+            <h2 class="text-xl sm:text-2xl font-black text-gray-900 leading-snug">
+              대입면접이 쉬워지는<br>스피치 공식
+            </h2>
+            <p class="text-xs text-gray-500 mt-2 leading-relaxed">VOD 12강 · 전자책 200P · 실전 워크북 · AI 모의면접</p>
+            <div class="mt-5 pb-5 border-b border-gray-100">
+              <p class="text-sm text-gray-400 line-through">정가 450,000원</p>
+              <p class="text-4xl font-black text-primary mt-0.5">149,000<span class="text-2xl font-bold">원</span></p>
+              <p class="text-xs text-accent-coral font-bold mt-1">🔥 오픈 특가 · 한정 수량</p>
+            </div>
+            <div class="mt-5 space-y-3">
+              <button onclick="openPurchaseModal('대입면접이 쉬워지는 스피치 공식 VOD 강의', 149000)"
+                      class="w-full bg-primary hover:bg-primary-container text-white py-4 rounded-2xl font-black text-base shadow-lg hover:shadow-primary/30 transition-all active:scale-[.98] flex items-center justify-center gap-2">
+                <span class="material-symbols-outlined text-xl">shopping_cart</span>
+                구매하기 — 149,000원
+              </button>
+              <button onclick="openLectureModal()"
+                 class="w-full flex items-center justify-center gap-2 border border-gray-200 text-gray-600 hover:border-primary hover:text-primary py-3.5 rounded-2xl font-bold text-sm transition">
+                <span class="material-symbols-outlined text-lg">play_circle</span>
+                강의실 바로가기 (구매자 전용)
+              </button>
+            </div>
+            <ul class="mt-5 space-y-2 text-xs text-gray-500">
+              <li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-500 text-base">check_circle</span>VOD 12강 즉시 수강</li>
+              <li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-500 text-base">check_circle</span>전자책 200P 포함</li>
+              <li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-500 text-base">check_circle</span>실전 워크북 포함</li>
+              <li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-500 text-base">check_circle</span>AI 모의면접 챗봇 이용권</li>
+              <li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-500 text-base">check_circle</span>구매 후 영구 소장</li>
+            </ul>
+          </div>
+        </div>
+        <!-- 상세 소개 이미지 7장 -->
+        <div class="px-6 pb-10 mt-2">
+          <div class="border-t border-gray-100 pt-6 mb-4">
+            <h3 class="text-base font-black text-gray-800">🎬 강의 상세 소개</h3>
+          </div>
+          <div class="space-y-3">
+            <img src="대입vod/대입 1번.png" alt="강의 소개 1" class="w-full rounded-xl shadow-sm" loading="lazy">
+            <img src="대입vod/대입 2번.png" alt="강의 소개 2" class="w-full rounded-xl shadow-sm" loading="lazy">
+            <img src="대입vod/대입 3번.png" alt="강의 소개 3" class="w-full rounded-xl shadow-sm" loading="lazy">
+            <img src="대입vod/대입 4번.png" alt="강의 소개 4" class="w-full rounded-xl shadow-sm" loading="lazy">
+            <img src="대입vod/대입 5번.png" alt="강의 소개 5" class="w-full rounded-xl shadow-sm" loading="lazy">
+            <img src="대입vod/대입 6번.png" alt="강의 소개 6" class="w-full rounded-xl shadow-sm" loading="lazy">
+            <img src="대입vod/대입 7번.png" alt="강의 소개 7" class="w-full rounded-xl shadow-sm" loading="lazy">
+          </div>
+          <!-- 하단 구매 CTA -->
+          <div class="pt-6 border-t border-gray-100 mt-4">
+            <button onclick="openPurchaseModal('대입면접이 쉬워지는 스피치 공식 VOD 강의', 149000)"
+                    class="w-full bg-primary hover:bg-primary-container text-white py-4 rounded-2xl font-black text-base shadow-lg hover:shadow-primary/30 transition-all active:scale-[.98] flex items-center justify-center gap-2">
+              <span class="material-symbols-outlined text-xl">shopping_cart</span>
+              지금 구매하기 — 149,000원
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- 전자책 스토어 모달 (카드 그리드) -->
   <div id="ebookStoreModal" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/70 backdrop-blur-md">
     <div class="modal-container bg-white rounded-[28px] w-full max-w-4xl h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+
       <!-- Header -->
       <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between shrink-0">
         <div class="flex items-center gap-3">
@@ -965,9 +1147,9 @@
               대입면접이 쉬워지는<br>스피치 공식
             </h2>
             <div class="mt-5 pb-5 border-b border-gray-100">
-              <p class="text-sm text-gray-400 line-through">정가 450,000원</p>
+              <p class="text-sm text-gray-400 line-through">정가 467,000원</p>
               <p class="text-4xl font-black text-primary mt-0.5">79,000<span class="text-2xl font-bold">원</span></p>
-              <p class="text-xs text-accent-coral font-bold mt-1">🔥 오픈 특가 · 9월 한달</p>
+              <p class="text-xs text-accent-coral font-bold mt-1">🔥 오픈 특가 · 10월 한달</p>
             </div>
             <div class="mt-5 space-y-3">
               <button onclick="openPurchaseModal('대입면접이 쉬워지는 스피치 공식 전자책', 79000)"
@@ -1055,7 +1237,7 @@
           </div>
 
           <!-- Video Sub-bar: Quick URL changer for testing -->
-          <div class="p-4 bg-gray-900 border-t border-gray-800 flex flex-wrap items-center justify-between gap-3 text-xs">
+          <div class="p-4 bg-gray-900 border-t border-gray-800 flex flex-wrap items-center justify-between gap-3 text-xs hidden">
             <div class="flex items-center gap-2 flex-1 min-w-[280px]">
               <span class="text-primary-fixed font-semibold shrink-0">🔗 비메오(Vimeo) 링크 입력:</span>
               <input type="text" id="customVideoInput" placeholder="비메오 링크 또는 ID 입력 (예: https://vimeo.com/76979871)" class="flex-1 bg-gray-800 border border-gray-700 text-white px-3 py-1.5 rounded-lg text-xs outline-none focus:border-primary">
@@ -1093,7 +1275,7 @@
 
           <div class="p-2 space-y-1.5 text-xs font-medium">
             <!-- Lecture 1 -->
-            <div onclick="playLecture('1강. 면접이란 무엇인가?', 'https://player.vimeo.com/video/1226882558')">
+            <div onclick="playLectureByIndex(0)"
                  class="lecture-item active p-3 rounded-xl bg-primary/20 border border-primary/40 cursor-pointer flex items-start gap-2.5 transition">
               <span class="material-symbols-outlined text-primary text-base shrink-0 mt-0.5">play_circle</span>
               <div>
@@ -1103,7 +1285,7 @@
             </div>
 
             <!-- Lecture 2 -->
-            <div onclick="playLecture('2강. 대입면접, 무엇부터 준비해야 할까요?', 'https://player.vimeo.com/video/347119375')"
+            <div onclick="playLectureByIndex(1)"
                  class="lecture-item p-3 rounded-xl bg-gray-800/60 hover:bg-gray-800 border border-transparent cursor-pointer flex items-start gap-2.5 transition">
               <span class="material-symbols-outlined text-gray-400 text-base shrink-0 mt-0.5">play_circle</span>
               <div>
@@ -1113,7 +1295,7 @@
             </div>
 
             <!-- Lecture 3 -->
-            <div onclick="playLecture('3강. 학생부에서 대표 스토리 10개 뽑는 법', 'https://player.vimeo.com/video/59777392')"
+            <div onclick="playLectureByIndex(2)"
                  class="lecture-item p-3 rounded-xl bg-gray-800/60 hover:bg-gray-800 border border-transparent cursor-pointer flex items-start gap-2.5 transition">
               <span class="material-symbols-outlined text-gray-400 text-base shrink-0 mt-0.5">play_circle</span>
               <div>
@@ -1123,7 +1305,7 @@
             </div>
 
             <!-- Lecture 4 -->
-            <div onclick="playLecture('4강. 직접 경험은 SERAR로 답해요', 'https://player.vimeo.com/video/76979871')"
+            <div onclick="playLectureByIndex(3)"
                  class="lecture-item p-3 rounded-xl bg-gray-800/60 hover:bg-gray-800 border border-transparent cursor-pointer flex items-start gap-2.5 transition">
               <span class="material-symbols-outlined text-gray-400 text-base shrink-0 mt-0.5">play_circle</span>
               <div>
@@ -1133,7 +1315,7 @@
             </div>
 
             <!-- Lecture 5 -->
-            <div onclick="playLecture('5강. 독서·갈등 경험은 이렇게 답해요', 'https://player.vimeo.com/video/347119375')"
+            <div onclick="playLectureByIndex(4)"
                  class="lecture-item p-3 rounded-xl bg-gray-800/60 hover:bg-gray-800 border border-transparent cursor-pointer flex items-start gap-2.5 transition">
               <span class="material-symbols-outlined text-gray-400 text-base shrink-0 mt-0.5">play_circle</span>
               <div>
@@ -1143,7 +1325,7 @@
             </div>
 
             <!-- Lecture 6 -->
-            <div onclick="playLecture('6강. 어떤 질문에도 흔들리지 않는 1분 답변 공식', 'https://player.vimeo.com/video/59777392')"
+            <div onclick="playLectureByIndex(5)"
                  class="lecture-item p-3 rounded-xl bg-gray-800/60 hover:bg-gray-800 border border-transparent cursor-pointer flex items-start gap-2.5 transition">
               <span class="material-symbols-outlined text-gray-400 text-base shrink-0 mt-0.5">play_circle</span>
               <div>
@@ -1153,7 +1335,7 @@
             </div>
 
             <!-- Lecture 7 -->
-            <div onclick="playLecture('7강. 자기소개와 지원동기, 뻔하지 않게 만드는 법', 'https://player.vimeo.com/video/76979871')"
+            <div onclick="playLectureByIndex(6)"
                  class="lecture-item p-3 rounded-xl bg-gray-800/60 hover:bg-gray-800 border border-transparent cursor-pointer flex items-start gap-2.5 transition">
               <span class="material-symbols-outlined text-gray-400 text-base shrink-0 mt-0.5">play_circle</span>
               <div>
@@ -1163,7 +1345,7 @@
             </div>
 
             <!-- Lecture 8 -->
-            <div onclick="playLecture('8강. 학업·진로·공동체 역량, 어떻게 보여줄까요?', 'https://player.vimeo.com/video/347119375')"
+            <div onclick="playLectureByIndex(7)"
                  class="lecture-item p-3 rounded-xl bg-gray-800/60 hover:bg-gray-800 border border-transparent cursor-pointer flex items-start gap-2.5 transition">
               <span class="material-symbols-outlined text-gray-400 text-base shrink-0 mt-0.5">play_circle</span>
               <div>
@@ -1173,7 +1355,7 @@
             </div>
 
             <!-- Lecture 9 -->
-            <div onclick="playLecture('9강. 실패·약점·성적 하락 질문, 이렇게 답해요', 'https://player.vimeo.com/video/59777392')"
+            <div onclick="playLectureByIndex(8)"
                  class="lecture-item p-3 rounded-xl bg-gray-800/60 hover:bg-gray-800 border border-transparent cursor-pointer flex items-start gap-2.5 transition">
               <span class="material-symbols-outlined text-gray-400 text-base shrink-0 mt-0.5">play_circle</span>
               <div>
@@ -1183,7 +1365,7 @@
             </div>
 
             <!-- Lecture 10 -->
-            <div onclick="playLecture('10강. 꼬리질문·압박질문·모르는 질문에 흔들리지 않는 법', 'https://player.vimeo.com/video/76979871')"
+            <div onclick="playLectureByIndex(9)"
                  class="lecture-item p-3 rounded-xl bg-gray-800/60 hover:bg-gray-800 border border-transparent cursor-pointer flex items-start gap-2.5 transition">
               <span class="material-symbols-outlined text-gray-400 text-base shrink-0 mt-0.5">play_circle</span>
               <div>
@@ -1193,7 +1375,7 @@
             </div>
 
             <!-- Lecture 11 -->
-            <div onclick="playLecture('11강. 좋은 답변도 전달력이 약하면 아쉬워요', 'https://player.vimeo.com/video/347119375')"
+            <div onclick="playLectureByIndex(10)"
                  class="lecture-item p-3 rounded-xl bg-gray-800/60 hover:bg-gray-800 border border-transparent cursor-pointer flex items-start gap-2.5 transition">
               <span class="material-symbols-outlined text-gray-400 text-base shrink-0 mt-0.5">play_circle</span>
               <div>
@@ -1203,7 +1385,7 @@
             </div>
 
             <!-- Lecture 12 -->
-            <div onclick="playLecture('12강. 30일 훈련과 AI 면접 챗봇으로 실전 완성하기', 'https://player.vimeo.com/video/59777392')"
+            <div onclick="playLectureByIndex(11)"
                  class="lecture-item p-3 rounded-xl bg-gray-800/60 hover:bg-gray-800 border border-transparent cursor-pointer flex items-start gap-2.5 transition">
               <span class="material-symbols-outlined text-gray-400 text-base shrink-0 mt-0.5">play_circle</span>
               <div>

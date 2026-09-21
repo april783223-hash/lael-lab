@@ -105,6 +105,17 @@ function openLectureModal() {
   openModal('lectureModal');
 }
 
+// ── VOD 강의 스토어 / 상세 모달 ──────────────────────────────
+function openVodStoreModal() {
+  openModal('vodStoreModal');
+}
+
+function openVodDetail(type) {
+  closeModal('vodStoreModal');
+  // 현재는 대입면접 VOD 하나만 있으므로 vodDetailModal로 이동
+  openModal('vodDetailModal');
+}
+
 // ── AI 모의면접 챗봇 ─────────────────────────────────────────
 async function openAIChatbot() {
   const lockedEl   = document.getElementById('chatbotLockedState');
@@ -132,6 +143,28 @@ async function openAIChatbot() {
 }
 
 // ── 동영상 재생 ──────────────────────────────────────────────
+// 강의 URL 목록 (HTML 소스에서 분리하여 직접 노출 방지)
+const _LECTURE_LIST = [
+  { title: '1강. 면접이란 무엇인가?',                                    url: 'https://player.vimeo.com/video/1226882558' },
+  { title: '2강. 대입면접, 무엇부터 준비해야 할까요?',                   url: 'https://player.vimeo.com/video/347119375'  },
+  { title: '3강. 학생부에서 대표 스토리 10개 뽑는 법',                   url: 'https://player.vimeo.com/video/59777392'   },
+  { title: '4강. 직접 경험은 SERAR로 답해요',                           url: 'https://player.vimeo.com/video/76979871'   },
+  { title: '5강. 독서·갈등 경험은 이렇게 답해요',                        url: 'https://player.vimeo.com/video/347119375'  },
+  { title: '6강. 어떤 질문에도 흔들리지 않는 1분 답변 공식',             url: 'https://player.vimeo.com/video/59777392'   },
+  { title: '7강. 자기소개와 지원동기, 뻔하지 않게 만드는 법',            url: 'https://player.vimeo.com/video/76979871'   },
+  { title: '8강. 학업·진로·공동체 역량, 어떻게 보여줄까요?',             url: 'https://player.vimeo.com/video/347119375'  },
+  { title: '9강. 실패·약점·성적 하락 질문, 이렇게 답해요',               url: 'https://player.vimeo.com/video/59777392'   },
+  { title: '10강. 꼬리질문·압박질문·모르는 질문에 흔들리지 않는 법',     url: 'https://player.vimeo.com/video/76979871'   },
+  { title: '11강. 좋은 답변도 전달력이 약하면 아쉬워요',                 url: 'https://player.vimeo.com/video/347119375'  },
+  { title: '12강. 30일 훈련과 AI 면접 챗봇으로 실전 완성하기',           url: 'https://player.vimeo.com/video/59777392'   },
+];
+
+function playLectureByIndex(index) {
+  const lecture = _LECTURE_LIST[index];
+  if (!lecture) return;
+  playLecture(lecture.title, lecture.url);
+}
+
 function playLecture(title, videoUrl) {
   const titleEl  = document.getElementById('currentLectureTitle');
   const iframeEl = document.getElementById('videoIframe');
