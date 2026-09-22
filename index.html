@@ -987,11 +987,9 @@
             <h2 class="text-xl sm:text-2xl font-black text-gray-900 leading-snug">
               대입면접이 쉬워지는<br>스피치 공식
             </h2>
-            <p class="text-xs text-gray-500 mt-2 leading-relaxed">VOD 12강 · 전자책 200P · 실전 워크북 · AI 모의면접</p>
+            <p class="text-xs text-gray-500 mt-2 leading-relaxed">VOD 12강 · 최윤정 강사</p>
             <div class="mt-5 pb-5 border-b border-gray-100">
-              <p class="text-sm text-gray-400 line-through">정가 450,000원</p>
               <p class="text-4xl font-black text-primary mt-0.5">149,000<span class="text-2xl font-bold">원</span></p>
-              <p class="text-xs text-accent-coral font-bold mt-1">🔥 오픈 특가 · 한정 수량</p>
             </div>
             <div class="mt-5 space-y-3">
               <button onclick="openPurchaseModal('대입면접이 쉬워지는 스피치 공식 VOD 강의', 149000)"
@@ -999,23 +997,25 @@
                 <span class="material-symbols-outlined text-xl">shopping_cart</span>
                 구매하기 — 149,000원
               </button>
+              <button onclick="openFreeLecture()"
+                      class="w-full flex items-center justify-center gap-2 border-2 border-primary text-primary hover:bg-primary hover:text-white py-3.5 rounded-2xl font-bold text-sm transition-all active:scale-[.98]">
+                <span class="material-symbols-outlined text-lg">play_circle</span>
+                무료 강의 보기
+              </button>
               <button onclick="openLectureModal()"
                  class="w-full flex items-center justify-center gap-2 border border-gray-200 text-gray-600 hover:border-primary hover:text-primary py-3.5 rounded-2xl font-bold text-sm transition">
-                <span class="material-symbols-outlined text-lg">play_circle</span>
+                <span class="material-symbols-outlined text-lg">lock</span>
                 강의실 바로가기 (구매자 전용)
               </button>
             </div>
             <ul class="mt-5 space-y-2 text-xs text-gray-500">
-              <li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-500 text-base">check_circle</span>VOD 12강 즉시 수강</li>
-              <li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-500 text-base">check_circle</span>전자책 200P 포함</li>
-              <li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-500 text-base">check_circle</span>실전 워크북 포함</li>
-              <li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-500 text-base">check_circle</span>AI 모의면접 챗봇 이용권</li>
-              <li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-500 text-base">check_circle</span>구매 후 영구 소장</li>
+              <li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-500 text-base">check_circle</span>구매 후 5개월 수강 가능</li>
             </ul>
           </div>
         </div>
+
         <!-- 상세 소개 이미지 7장 -->
-        <div class="px-6 pb-10 mt-2">
+        <div class="px-6 pb-4 mt-2">
           <div class="border-t border-gray-100 pt-6 mb-4">
             <h3 class="text-base font-black text-gray-800">🎬 강의 상세 소개</h3>
           </div>
@@ -1028,14 +1028,123 @@
             <img src="assets/images/vod/daip-lecture-6.png" alt="강의 소개 6" class="w-full rounded-xl shadow-sm" loading="lazy">
             <img src="assets/images/vod/daip-lecture-7.png" alt="강의 소개 7" class="w-full rounded-xl shadow-sm" loading="lazy">
           </div>
-          <!-- 하단 구매 CTA -->
-          <div class="pt-6 border-t border-gray-100 mt-4">
+        </div>
+
+        <!-- 전체 목차 -->
+        <div class="px-6 pb-6 border-t border-gray-100 mt-2">
+          <div class="pt-6 mb-5">
+            <h3 class="text-xl font-black text-gray-900 flex items-center gap-2">
+              <span class="w-1 h-7 bg-primary rounded-full inline-block"></span>
+              전체목차
+            </h3>
+          </div>
+          <p class="font-bold text-gray-800 text-sm mb-3">대입면접이 쉬워지는 스피치 공식 (총 12강)</p>
+          <div class="divide-y divide-gray-100 border border-gray-100 rounded-2xl overflow-hidden">
+            <div class="flex items-center gap-4 px-4 py-3.5 bg-primary/5">
+              <span class="w-8 h-8 rounded-full bg-primary text-white text-xs font-black flex items-center justify-center shrink-0">1</span>
+              <p class="text-sm text-gray-800 font-medium flex-1">면접이란 무엇인가?</p>
+              <span class="text-xs text-primary font-bold bg-primary/10 px-2.5 py-1 rounded-full shrink-0">무료 공개</span>
+            </div>
+            <div class="flex items-center gap-4 px-4 py-3.5 bg-white"><span class="w-8 h-8 rounded-full bg-gray-100 text-gray-500 text-xs font-black flex items-center justify-center shrink-0">2</span><p class="text-sm text-gray-700 flex-1">대입면접, 무엇부터 준비해야 할까요?</p><span class="material-symbols-outlined text-gray-300 text-base shrink-0">lock</span></div>
+            <div class="flex items-center gap-4 px-4 py-3.5 bg-white"><span class="w-8 h-8 rounded-full bg-gray-100 text-gray-500 text-xs font-black flex items-center justify-center shrink-0">3</span><p class="text-sm text-gray-700 flex-1">학생부에서 대표 스토리 10개 뽑는 법</p><span class="material-symbols-outlined text-gray-300 text-base shrink-0">lock</span></div>
+            <div class="flex items-center gap-4 px-4 py-3.5 bg-white"><span class="w-8 h-8 rounded-full bg-gray-100 text-gray-500 text-xs font-black flex items-center justify-center shrink-0">4</span><p class="text-sm text-gray-700 flex-1">직접 경험은 SERAR로 답해요</p><span class="material-symbols-outlined text-gray-300 text-base shrink-0">lock</span></div>
+            <div class="flex items-center gap-4 px-4 py-3.5 bg-white"><span class="w-8 h-8 rounded-full bg-gray-100 text-gray-500 text-xs font-black flex items-center justify-center shrink-0">5</span><p class="text-sm text-gray-700 flex-1">독서·갈등 경험은 이렇게 답해요</p><span class="material-symbols-outlined text-gray-300 text-base shrink-0">lock</span></div>
+            <div class="flex items-center gap-4 px-4 py-3.5 bg-white"><span class="w-8 h-8 rounded-full bg-gray-100 text-gray-500 text-xs font-black flex items-center justify-center shrink-0">6</span><p class="text-sm text-gray-700 flex-1">어떤 질문에도 흔들리지 않는 1분 답변 공식</p><span class="material-symbols-outlined text-gray-300 text-base shrink-0">lock</span></div>
+            <div class="flex items-center gap-4 px-4 py-3.5 bg-white"><span class="w-8 h-8 rounded-full bg-gray-100 text-gray-500 text-xs font-black flex items-center justify-center shrink-0">7</span><p class="text-sm text-gray-700 flex-1">자기소개와 지원동기, 뻔하지 않게 만드는 법</p><span class="material-symbols-outlined text-gray-300 text-base shrink-0">lock</span></div>
+            <div class="flex items-center gap-4 px-4 py-3.5 bg-white"><span class="w-8 h-8 rounded-full bg-gray-100 text-gray-500 text-xs font-black flex items-center justify-center shrink-0">8</span><p class="text-sm text-gray-700 flex-1">학업·진로·공동체 역량, 어떻게 보여줄까요?</p><span class="material-symbols-outlined text-gray-300 text-base shrink-0">lock</span></div>
+            <div class="flex items-center gap-4 px-4 py-3.5 bg-white"><span class="w-8 h-8 rounded-full bg-gray-100 text-gray-500 text-xs font-black flex items-center justify-center shrink-0">9</span><p class="text-sm text-gray-700 flex-1">실패·약점·성적 하락 질문, 이렇게 답해요</p><span class="material-symbols-outlined text-gray-300 text-base shrink-0">lock</span></div>
+            <div class="flex items-center gap-4 px-4 py-3.5 bg-white"><span class="w-8 h-8 rounded-full bg-gray-100 text-gray-500 text-xs font-black flex items-center justify-center shrink-0">10</span><p class="text-sm text-gray-700 flex-1">꼬리질문·압박질문·모르는 질문에 흔들리지 않는 법</p><span class="material-symbols-outlined text-gray-300 text-base shrink-0">lock</span></div>
+            <div class="flex items-center gap-4 px-4 py-3.5 bg-white"><span class="w-8 h-8 rounded-full bg-gray-100 text-gray-500 text-xs font-black flex items-center justify-center shrink-0">11</span><p class="text-sm text-gray-700 flex-1">좋은 답변도 전달력이 약하면 아쉬워요</p><span class="material-symbols-outlined text-gray-300 text-base shrink-0">lock</span></div>
+            <div class="flex items-center gap-4 px-4 py-3.5 bg-white"><span class="w-8 h-8 rounded-full bg-gray-100 text-gray-500 text-xs font-black flex items-center justify-center shrink-0">12</span><p class="text-sm text-gray-700 flex-1">30일 훈련과 AI 면접 챗봇으로 실전 완성하기</p><span class="material-symbols-outlined text-gray-300 text-base shrink-0">lock</span></div>
+          </div>
+        </div>
+
+        <!-- 강사 소개 -->
+        <div class="px-6 pb-6 border-t border-gray-100">
+          <div class="pt-6 mb-5">
+            <h3 class="text-xl font-black text-gray-900 flex items-center gap-2">
+              <span class="w-1 h-7 bg-primary rounded-full inline-block"></span>
+              강사 소개
+            </h3>
+          </div>
+          <div class="flex flex-col sm:flex-row gap-6 bg-gray-50 rounded-2xl p-6 border border-gray-100">
+            <div class="shrink-0 flex justify-center sm:block">
+              <img src="assets/images/instructor-profile.png" alt="최윤정 강사 프로필"
+                   class="w-28 h-28 sm:w-36 sm:h-36 rounded-2xl object-cover shadow-md border-2 border-white">
+            </div>
+            <div class="flex-1">
+              <p class="font-black text-gray-900 text-xl">최윤정</p>
+              <p class="text-sm text-primary font-bold mt-1">스피치 아카데미 라엘 대표</p>
+              <p class="text-xs text-gray-500 mt-0.5 italic">저서 『대입 면접이 쉬워지는 스피치 공식』</p>
+              <div class="mt-4 space-y-2">
+                <div class="flex items-start gap-2"><span class="text-primary font-bold text-sm">—</span><p class="text-sm text-gray-700">전 SBS 기상캐스터</p></div>
+                <div class="flex items-start gap-2"><span class="text-primary font-bold text-sm">—</span><p class="text-sm text-gray-700">20년 스피치 강사</p></div>
+                <div class="flex items-start gap-2"><span class="text-primary font-bold text-sm">—</span><p class="text-sm text-gray-700">수천명 학생 면접 코칭 경험</p></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 후기 -->
+        <div class="px-6 pb-6 border-t border-gray-100">
+          <div class="pt-6 mb-4 flex items-center gap-3">
+            <h3 class="text-xl font-black text-gray-900 flex items-center gap-2">
+              <span class="w-1 h-7 bg-primary rounded-full inline-block"></span>
+              후기
+            </h3>
+            <span class="flex items-center gap-1">
+              <span class="text-yellow-400 text-lg">★</span>
+              <span class="font-black text-gray-900 text-base" id="vodAvgRating">-</span>
+            </span>
+            <span class="text-sm text-gray-400">💬 <span id="vodReviewCount">0</span></span>
+          </div>
+          <div id="vodReviewList" class="space-y-3 mb-5"></div>
+          <div class="bg-gray-50 rounded-2xl p-5 border border-gray-200">
+            <p class="text-sm font-bold text-gray-800 mb-3">후기 작성</p>
+            <div class="flex gap-1 mb-3">
+              <button onclick="setVodRating(1)" class="vod-star text-3xl text-gray-300 hover:text-yellow-400 transition leading-none">★</button>
+              <button onclick="setVodRating(2)" class="vod-star text-3xl text-gray-300 hover:text-yellow-400 transition leading-none">★</button>
+              <button onclick="setVodRating(3)" class="vod-star text-3xl text-gray-300 hover:text-yellow-400 transition leading-none">★</button>
+              <button onclick="setVodRating(4)" class="vod-star text-3xl text-gray-300 hover:text-yellow-400 transition leading-none">★</button>
+              <button onclick="setVodRating(5)" class="vod-star text-3xl text-gray-300 hover:text-yellow-400 transition leading-none">★</button>
+            </div>
+            <textarea id="vodReviewText" placeholder="강의 후기를 작성해주세요." maxlength="1000"
+                      class="w-full text-sm border border-gray-200 rounded-xl p-3 resize-none h-24 focus:outline-none focus:ring-2 focus:ring-primary bg-white"
+                      oninput="document.getElementById('vodReviewCharCount').textContent = this.value.length + '/1000'"></textarea>
+            <div class="flex items-center justify-between mt-2">
+              <p class="text-xs text-gray-400" id="vodReviewCharCount">0/1000</p>
+              <button onclick="submitVodReview()" class="bg-primary text-white px-5 py-2 rounded-xl text-sm font-bold hover:bg-primary-container transition active:scale-95">등록</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 하단 구매 CTA -->
+        <div class="px-6 border-t border-gray-100">
+          <div class="pt-6">
             <button onclick="openPurchaseModal('대입면접이 쉬워지는 스피치 공식 VOD 강의', 149000)"
                     class="w-full bg-primary hover:bg-primary-container text-white py-4 rounded-2xl font-black text-base shadow-lg hover:shadow-primary/30 transition-all active:scale-[.98] flex items-center justify-center gap-2">
               <span class="material-symbols-outlined text-xl">shopping_cart</span>
               지금 구매하기 — 149,000원
             </button>
           </div>
+        </div>
+
+        <!-- 주의사항 -->
+        <div class="px-6 pb-10 border-t border-gray-100 mt-6">
+          <div class="pt-5 mb-4">
+            <h3 class="text-sm font-black text-gray-600 flex items-center gap-2">
+              <span class="material-symbols-outlined text-gray-400 text-base">info</span>
+              주의사항
+            </h3>
+          </div>
+          <ul class="space-y-2.5 text-xs text-gray-500 leading-relaxed">
+            <li class="flex items-start gap-2"><span class="shrink-0 text-gray-400 mt-0.5">•</span><span>라엘랩의 모든 강의·전자책·PDF·워크북 등은 저작권법에 의해 보호됩니다.</span></li>
+            <li class="flex items-start gap-2"><span class="shrink-0 text-gray-400 mt-0.5">•</span><span>무단 복제, 녹화, 공유, 유출, 재가공, 판매 및 계정 공유를 금지합니다.</span></li>
+            <li class="flex items-start gap-2"><span class="shrink-0 text-gray-400 mt-0.5">•</span><span>온라인 강의는 각 상품에 안내된 정규 학습기간 동안 이용할 수 있으며, 상품에 따라 무료 복습기간이 추가될 수 있습니다.</span></li>
+            <li class="flex items-start gap-2"><span class="shrink-0 text-gray-400 mt-0.5">•</span><span>교육 품질 향상을 위해 강의가 추가·업데이트되거나 커리큘럼 및 일부 내용이 변경될 수 있습니다.</span></li>
+            <li class="flex items-start gap-2"><span class="shrink-0 text-gray-400 mt-0.5">•</span><span>구매 후 7일 이내 미이용 시 전액 환불이 가능합니다. 이용을 시작한 이후에는 이용내역 및 상품 특성에 따라 환불금액이 산정됩니다.</span></li>
+            <li class="flex items-start gap-2"><span class="shrink-0 text-gray-400 mt-0.5">•</span><span>자세한 취소·환불 기준은 <strong class="text-gray-700 font-bold">〈라엘랩 환불정책〉</strong>에서 확인해 주세요.</span></li>
+          </ul>
         </div>
       </div>
     </div>
