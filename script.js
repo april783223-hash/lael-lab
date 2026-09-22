@@ -114,7 +114,80 @@ function openVodDetail(type) {
   closeModal('vodStoreModal');
   // 현재는 대입면접 VOD 하나만 있으므로 vodDetailModal로 이동
   openModal('vodDetailModal');
+  // 후기 렌더링
+  setTimeout(renderVodReviews, 50);
 }
+
+// ── 무료 1강 보기 (비로그인/구매 전 모두 가능) ───────────────────
+function openFreeLecture() {
+  closeModal('vodDetailModal');
+  const titleEl  = document.getElementById('currentLectureTitle');
+  const iframeEl = document.getElementById('videoIframe');
+  if (titleEl)  titleEl.textContent = '🎥 1강. 면접이란 무엇인가?';
+  if (iframeEl) iframeEl.src = 'https://player.vimeo.com/video/1226882558?title=0&byline=0&portrait=0&badge=0&color=4c37ce&autoplay=1';
+  openModal('lectureModal');
+}
+
+// ── VOD 후기 시스템 ─────────────────────────────────────────────
+let _vodRating = 0;
+
+function setVodRating(n) {
+  _vodRating = n;
+  document.querySelectorAll('.vod-star').forEach((star, i) => {
+    star.classList.toggle('text-yellow-400', i < n);
+    star.classList.toggle('text-gray-300', i >= n);
+  });
+}
+
+function submitVodReview() {
+  const text = document.getElementById('vodReviewText')?.value?.trim();
+  if (!_vodRating) { alert('별점을 선택해주세요.'); return; }
+  if (!text)        { alert('후기를 입력해주세요.'); return; }
+
+  const reviews = JSON.parse(localStorage.getItem('vodReviews') || '[]');
+  reviews.unshift({
+    rating : _vodRating,
+    text,
+    date : new Date().toLocaleDateString('ko-KR'),
+    name : currentUser?.email?.split('@')[0] || '익명 수강생'
+  });
+  localStorage.setItem('vodReviews', JSON.stringify(reviews));
+
+  // 폼 초기화
+  document.getElementById('vodReviewText').value = '';
+  document.getElementById('vodReviewCharCount').textContent = '0/1000';
+  _vodRating = 0;
+  setVodRating(0);
+  renderVodReviews();
+}
+
+function renderVodReviews() {
+  const reviews  = JSON.parse(localStorage.getItem('vodReviews') || '[]');
+  const list     = document.getElementById('vodReviewList');
+  const avgEl    = document.getElementById('vodAvgRating');
+  const countEl  = document.getElementById('vodReviewCount');
+  if (!list) return;
+
+  if (countEl) countEl.textContent = reviews.length;
+  if (avgEl) {
+    avgEl.textContent = reviews.length
+      ? (reviews.reduce((s, r) => s + r.rating, 0) / reviews.length).toFixed(1)
+      : '-';
+  }
+
+  list.innerHTML = reviews.length === 0
+    ? '<p class="text-sm text-gray-400 text-center py-4">아직 후기가 없습니다. 첫 번째 후기를 남겨주세요!</p>'
+    : reviews.map(r => `
+        <div class="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="text-yellow-400 text-sm">${'★'.repeat(r.rating)}<span class="text-gray-200">${'★'.repeat(5 - r.rating)}</span></span>
+            <span class="text-xs font-bold text-gray-700">${r.name}</span>
+            <span class="text-xs text-gray-400 ml-auto">${r.date}</span>
+          </div>
+          <p class="text-sm text-gray-700 leading-relaxed">${r.text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</p>
+        </div>`).join('');
+}
+
 
 // ── AI 모의면접 챗봇 ─────────────────────────────────────────
 async function openAIChatbot() {
