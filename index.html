@@ -670,7 +670,7 @@
            class="text-sm text-gray-600 hover:text-primary transition-colors font-medium">이용약관</a>
         <a href="#" onclick="openModal('refundModal'); return false;"
            class="text-sm text-gray-600 hover:text-primary transition-colors font-medium">환불정책</a>
-        <a href="#" onclick="alert('후기정책 준비 중입니다.'); return false;"
+        <a href="#" onclick="openModal('reviewPolicyModal'); return false;"
            class="text-sm text-gray-600 hover:text-primary transition-colors font-medium">후기정책</a>
         <a href="#" onclick="alert('개인정보처리방침 준비 중입니다.'); return false;"
            class="text-sm text-gray-800 hover:text-primary transition-colors font-bold">개인정보처리방침</a>
@@ -1841,6 +1841,258 @@
     </div>
   </div>
 
+
+  <!-- ── 후기 운영정책 모달 ─────────────────────────────────── -->
+  <div id="reviewPolicyModal" class="modal-overlay fixed inset-0 z-50 flex items-start justify-center bg-black/60 backdrop-blur-sm overflow-y-auto">
+    <div class="modal-container w-full max-w-3xl min-h-screen bg-white flex flex-col shadow-2xl">
+
+      <!-- 헤더 -->
+      <div class="relative bg-[#1a2744] text-white py-10 px-8 text-center shrink-0">
+        <button onclick="closeModal('reviewPolicyModal')"
+                class="absolute top-5 right-5 text-white/60 hover:text-white p-2 rounded-full hover:bg-white/10 transition">
+          <span class="material-symbols-outlined text-2xl">close</span>
+        </button>
+        <h1 class="text-3xl font-black tracking-tight">후기 운영정책</h1>
+      </div>
+
+      <!-- 본문 -->
+      <div class="flex-1 px-8 py-10 text-sm text-gray-700 leading-relaxed space-y-6">
+
+        <div>
+          <p>라엘랩(LAEL LAB)(이하 "회사")은 이용자가 실제 구매하고 이용한 상품 및 서비스에 대한 경험을 공유할 수 있도록 후기 작성 및 게시 공간을 제공합니다.</p>
+          <p class="mt-2">본 정책은 후기의 신뢰성을 유지하고 이용자와 회사, 제3자의 권리를 보호하기 위한 기준을 정하는 것을 목적으로 합니다.</p>
+        </div>
+
+        <div>
+          <h2 class="font-black text-gray-900 text-base mb-2">제1조 후기 작성</h2>
+          <p>① 라엘랩의 후기는 해당 상품 또는 서비스를 실제 구매한 회원만 작성할 수 있습니다.</p>
+          <p>② 회사는 후기의 신뢰성을 확인하기 위하여 해당 회원의 구매이력 및 필요한 범위에서 서비스 이용 여부를 확인할 수 있습니다.</p>
+          <p>③ 후기 작성 가능 기간에는 별도의 제한을 두지 않습니다. 해당 상품의 구매이력이 확인되는 회원은 회사가 후기 서비스를 제공하는 동안 후기를 작성할 수 있습니다.</p>
+          <p>④ 회원은 자신이 실제로 경험한 내용을 바탕으로 사실에 부합하도록 후기를 작성하여야 합니다.</p>
+          <p>⑤ 후기는 해당 상품 또는 서비스와 관련된 내용으로 작성하여야 합니다.</p>
+          <p class="mt-1">⑥ 다음 각 호의 내용을 포함하여서는 안 됩니다.</p>
+          <ul class="ml-5 mt-1 space-y-0.5 list-disc text-gray-600">
+            <li>허위 또는 조작된 내용</li>
+            <li>타인의 개인정보</li>
+            <li>타인의 저작권, 상표권 기타 권리를 침해하는 내용</li>
+            <li>욕설, 모욕, 협박, 성희롱 또는 혐오 표현</li>
+            <li>음란하거나 청소년에게 부적절한 내용</li>
+            <li>범죄 또는 불법행위를 조장하는 내용</li>
+            <li>상품 또는 서비스와 명백하게 관련이 없는 내용</li>
+            <li>다른 상품이나 사업자를 홍보하기 위한 광고성 내용</li>
+            <li>외부 사이트, 상품 판매페이지 등에 접속하도록 반복적으로 유도하는 내용</li>
+            <li>기타 관계 법령 또는 본 운영정책을 위반하는 내용</li>
+          </ul>
+          <p class="mt-2">⑦ 다른 업체 또는 상품에 대한 언급 자체만으로 후기 게시를 제한하지 않습니다. 다만 다른 사업자나 상품의 광고·홍보를 주된 목적으로 작성된 경우에는 게시가 제한될 수 있습니다.</p>
+        </div>
+
+        <div>
+          <h2 class="font-black text-gray-900 text-base mb-2">제2조 별점 운영</h2>
+          <p>① 이용자는 후기를 작성할 때 1점부터 5점까지의 별점을 부여할 수 있습니다.</p>
+          <p>② 상품페이지에 표시되는 평균 별점은 정상적으로 공개되고 있는 유효한 후기의 별점을 기준으로 산정합니다.</p>
+          <p class="mt-1">③ 다음에 해당하는 후기는 평균 별점 산정에서 제외할 수 있습니다.</p>
+          <ul class="ml-5 mt-1 space-y-0.5 list-disc text-gray-600">
+            <li>회원 본인이 삭제한 후기</li>
+            <li>본 정책에 따라 삭제된 후기</li>
+            <li>허위후기로 확인된 후기</li>
+            <li>권리침해 등의 사유로 게시가 제한된 후기</li>
+            <li>관계 법령에 따라 삭제 또는 게시중단된 후기</li>
+          </ul>
+          <p class="mt-2">④ 회사는 단순히 별점이 낮거나 회사 또는 상품에 부정적인 평가가 포함되어 있다는 이유만으로 해당 후기를 삭제하거나 블라인드 처리하지 않습니다.</p>
+          <p>⑤ 긍정적 평가와 부정적 평가 모두 본 정책에 위반되지 않는 한 동일한 기준으로 관리합니다.</p>
+        </div>
+
+        <div>
+          <h2 class="font-black text-gray-900 text-base mb-2">제3조 허위 후기 및 부정한 후기 작성 금지</h2>
+          <p>① 회사는 이용자가 직접 경험하지 않은 상품 또는 서비스에 대한 허위 후기 작성을 금지합니다.</p>
+          <p class="mt-1">② 다음과 같은 경우 회사는 구매내역, 서비스 이용내역 및 후기 작성 패턴 등을 확인하여 허위 또는 부정한 후기인지 검토할 수 있습니다.</p>
+          <ul class="ml-5 mt-1 space-y-0.5 list-disc text-gray-600">
+            <li>실제 구매하지 않은 상품에 대한 후기</li>
+            <li>실제 경험과 현저하게 다른 허위 사실을 기재한 후기</li>
+            <li>다른 회원의 후기를 그대로 복제하거나 반복적으로 게시한 후기</li>
+            <li>부당한 목적으로 동일하거나 유사한 후기를 반복적으로 작성한 경우</li>
+            <li>별점이나 상품평을 인위적으로 조작하기 위해 작성한 후기</li>
+            <li>금전 등의 대가를 받고 사실과 다른 내용을 작성한 후기</li>
+            <li>타인을 사칭하여 작성한 후기</li>
+            <li>기타 정상적인 이용후기로 보기 어려운 합리적인 사유가 있는 경우</li>
+          </ul>
+          <p class="mt-2">③ 동일한 인터넷 주소(IP) 또는 동일한 네트워크에서 후기가 작성되었다는 사실만으로 허위 후기라고 판단하지 않습니다.</p>
+          <p>④ 허위 또는 부정한 후기로 판단할 합리적인 근거가 있는 경우 회사는 해당 후기를 일시적으로 비공개 처리하고 필요한 경우 작성자에게 사실 확인을 요청할 수 있습니다.</p>
+          <p>⑤ 허위 후기임이 확인된 경우 회사는 해당 후기를 삭제할 수 있습니다.</p>
+          <p>⑥ 반복적이거나 악의적인 허위 후기 작성이 확인되는 경우 회사는 서비스 이용을 제한할 수 있습니다. 다만 이용제한은 위반 정도와 반복 여부 등을 고려하여 합리적으로 적용합니다.</p>
+        </div>
+
+        <div>
+          <h2 class="font-black text-gray-900 text-base mb-2">제4조 후기 이벤트 및 혜택 제공 후기</h2>
+          <p>① 회사는 후기 작성을 활성화하기 위하여 후기 작성자에게 선물, 쿠폰, 할인, 추가 콘텐츠 기타 혜택을 제공하는 이벤트를 운영할 수 있습니다.</p>
+          <p class="mt-1">② 후기 작성으로 경제적 혜택을 제공받은 경우 회사는 소비자가 해당 사실을 쉽게 확인할 수 있도록 후기와 가까운 위치에 다음과 같은 방법으로 표시할 수 있습니다.</p>
+          <div class="ml-4 mt-2 bg-gray-50 rounded-xl p-3 text-gray-500 text-xs">
+            <p class="font-semibold text-gray-600 mb-1">표시 예시</p>
+            <p>혜택 제공 후기 / 후기 이벤트 참여 / 후기 작성 혜택 제공 / 소정의 혜택을 제공받아 작성된 후기</p>
+          </div>
+          <p class="mt-2">③ 후기 이벤트의 혜택은 원칙적으로 특정 별점이나 긍정적인 후기 작성을 조건으로 하지 않습니다.</p>
+          <p>④ 후기 이벤트 참여자는 실제 경험에 근거하여 자신의 의견을 자유롭게 작성할 수 있습니다.</p>
+          <p>⑤ 회사는 후기 이벤트에 참여했다는 이유만으로 이용자의 후기 내용을 임의로 긍정적으로 변경하거나 높은 별점을 요구하지 않습니다.</p>
+          <p>⑥ 경제적 혜택을 제공받아 작성된 후기의 경우 관련 법령 및 표시·광고 관련 기준에 따라 필요한 표시를 추가할 수 있습니다.</p>
+        </div>
+
+        <div>
+          <h2 class="font-black text-gray-900 text-base mb-2">제5조 후기의 수정 및 삭제</h2>
+          <p>① 회원은 자신이 작성한 후기를 수정하거나 삭제할 수 있습니다.</p>
+          <p>② 후기 수정 횟수에는 원칙적으로 별도의 제한을 두지 않습니다.</p>
+          <p>③ 회원이 후기를 수정하는 경우 수정된 내용 및 별점을 기준으로 서비스에 반영됩니다.</p>
+          <p>④ 회원이 후기를 삭제하면 해당 후기는 상품페이지에서 노출되지 않으며 평균 별점 산정에서도 제외됩니다.</p>
+          <p>⑤ 탈퇴 등으로 회원이 직접 후기를 수정·삭제할 수 없는 경우에는 고객센터를 통해 삭제 등을 요청할 수 있습니다.</p>
+          <p>⑥ 회사는 작성자 확인 및 권리보호를 위해 필요한 최소한의 본인 확인을 요청할 수 있습니다.</p>
+        </div>
+
+        <div>
+          <h2 class="font-black text-gray-900 text-base mb-2">제6조 닉네임 및 개인정보 보호</h2>
+          <p>① 후기에는 이용자의 실명 대신 닉네임을 기준으로 마스킹하여 표시합니다.</p>
+          <p class="mt-1">② 닉네임은 원칙적으로 첫 글자만 표시하고 나머지는 별표(＊) 등으로 마스킹합니다.</p>
+          <div class="ml-4 mt-2 bg-gray-50 rounded-xl p-3 text-gray-500 text-xs">
+            <p class="font-semibold text-gray-600 mb-1">예시</p>
+            <p>라엘맘 → 라＊＊&nbsp;&nbsp;|&nbsp;&nbsp;행복한엄마 → 행＊＊&nbsp;&nbsp;|&nbsp;&nbsp;스피치왕 → 스＊＊</p>
+          </div>
+          <p class="mt-2">③ 회원은 후기 내용에 본인 또는 타인의 전화번호, 이메일주소, 주소, 학교명 등 개인을 식별할 수 있는 개인정보가 포함되지 않도록 주의해야 합니다.</p>
+          <p>④ 개인정보가 포함된 후기가 확인되는 경우 회사는 개인정보 보호를 위해 해당 내용을 마스킹하거나 게시를 일시 제한할 수 있습니다.</p>
+          <p>⑤ 라엘랩의 후기는 텍스트 형식으로 운영하며 사진 및 영상 후기 기능은 현재 제공하지 않습니다.</p>
+        </div>
+
+        <div>
+          <h2 class="font-black text-gray-900 text-base mb-2">제7조 후기의 저작권</h2>
+          <p>① 회원이 작성한 후기의 저작권은 원칙적으로 해당 후기를 작성한 회원에게 있습니다.</p>
+          <p>② 회원은 자신이 직접 작성한 내용 또는 적법하게 사용할 권리가 있는 내용만 후기에 게시해야 합니다.</p>
+          <p>③ 회원이 타인의 저작권, 지식재산권 또는 기타 권리를 침해하여 발생한 분쟁에 대해서는 관계 법령에 따라 책임이 판단됩니다.</p>
+          <p>④ 회사는 권리침해 신고가 접수된 경우 관계 법령에 따라 게시중단, 비공개 또는 삭제 등의 조치를 할 수 있습니다.</p>
+        </div>
+
+        <div>
+          <h2 class="font-black text-gray-900 text-base mb-2">제8조 라엘랩 사이트 내 후기 활용</h2>
+          <p>① 이용자가 작성한 후기는 상품 및 서비스에 관한 정보를 다른 이용자에게 제공하기 위하여 라엘랩 홈페이지 및 해당 상품 상세페이지에 노출될 수 있습니다.</p>
+          <p>② 사이트 내 후기 노출 시 작성자의 닉네임은 제6조에 따라 마스킹하여 표시합니다.</p>
+          <p>③ 회사는 서비스 내에서 후기의 내용을 표시하기 위해 필요한 범위에서 형식, 줄바꿈 및 명백한 오탈자 등을 정리할 수 있습니다.</p>
+          <p>④ 회사는 이용자의 평가 취지나 의미가 달라지도록 후기를 임의로 변경하지 않습니다.</p>
+          <p>⑤ 후기의 일부를 강조하여 표시하는 경우에도 원래 후기의 의미를 왜곡하지 않습니다.</p>
+        </div>
+
+        <div>
+          <h2 class="font-black text-gray-900 text-base mb-2">제9조 외부 광고 및 홍보 활용</h2>
+          <p class="mt-1">① 회사는 이용자가 작성한 후기를 라엘랩 홈페이지 이외의 다음과 같은 홍보 채널에서 활용할 수 있습니다.</p>
+          <ul class="ml-5 mt-1 space-y-0.5 list-disc text-gray-600">
+            <li>라엘랩 상품 상세페이지</li>
+            <li>회사가 운영하는 SNS</li>
+            <li>온라인 광고</li>
+            <li>뉴스레터</li>
+            <li>홍보 콘텐츠</li>
+            <li>기타 라엘랩의 상품 또는 서비스를 알리기 위한 온라인 홍보매체</li>
+          </ul>
+          <p class="mt-2">② 외부 광고 또는 홍보 목적으로 후기를 활용하는 경우 후기 작성 시 별도의 선택동의를 받은 후기를 사용하는 것을 원칙으로 합니다.</p>
+          <p>③ 외부 홍보 활용에 동의하지 않더라도 후기 작성 및 라엘랩 서비스 이용에 불이익을 받지 않습니다.</p>
+          <p class="mt-1">④ 회사는 홍보매체의 형식에 맞추기 위하여 다음과 같은 최소한의 편집을 할 수 있습니다.</p>
+          <ul class="ml-5 mt-1 space-y-0.5 list-disc text-gray-600">
+            <li>명백한 오탈자 수정</li>
+            <li>개인정보 마스킹</li>
+            <li>후기 중 일부 문장의 발췌</li>
+            <li>길이 조정</li>
+            <li>디자인상 필요한 줄바꿈</li>
+          </ul>
+          <p class="mt-2">⑤ 회사는 위와 같은 편집 과정에서도 후기 작성자의 원래 경험이나 평가의 의미를 왜곡하거나 실제 후기보다 과장하여 표현하지 않습니다.</p>
+          <p>⑥ 외부 홍보에 사용되는 후기의 작성자가 후기 이벤트 등을 통해 경제적 혜택을 제공받은 경우 회사는 관계 법령 및 관련 심사지침에 따라 그 사실을 필요한 방법으로 표시합니다.</p>
+          <p>⑦ 이용자는 외부 홍보 활용에 대한 동의를 철회할 수 있으며, 회사는 철회 요청을 받은 이후 새롭게 제작되는 홍보물에 해당 후기를 사용하지 않습니다.</p>
+        </div>
+
+        <div>
+          <h2 class="font-black text-gray-900 text-base mb-2">제10조 후기의 블라인드 및 삭제</h2>
+          <p class="mt-1">① 회사는 다음 각 호에 해당하는 후기의 게시를 제한하거나 블라인드 또는 삭제 처리할 수 있습니다.</p>
+          <ul class="ml-5 mt-1 space-y-0.5 list-disc text-gray-600">
+            <li>허위 또는 조작된 후기</li>
+            <li>욕설, 비속어, 협박, 성희롱 등 타인의 권리를 침해하는 후기</li>
+            <li>타인의 개인정보가 포함된 후기</li>
+            <li>광고 또는 스팸을 목적으로 작성한 후기</li>
+            <li>외부 사이트 또는 상품 구매를 반복적으로 유도하는 후기</li>
+            <li>상품과 관련 없는 내용을 반복적으로 게시한 경우</li>
+            <li>저작권, 상표권 기타 제3자의 권리를 침해하는 후기</li>
+            <li>불법적인 내용이 포함된 후기</li>
+            <li>정상적인 서비스 운영을 현저하게 방해하기 위한 후기</li>
+            <li>기타 관계 법령에 위반되는 후기</li>
+          </ul>
+          <p class="mt-2">② 회사를 비판하거나 상품에 대해 부정적으로 평가했다는 사실 자체는 블라인드 또는 삭제 사유가 되지 않습니다.</p>
+          <p>③ 다른 업체나 다른 상품을 언급했다는 사실 자체도 블라인드 또는 삭제 사유가 되지 않습니다. 다만 광고·홍보 또는 영업을 주된 목적으로 작성한 경우에는 제한할 수 있습니다.</p>
+          <p>④ 긴급한 개인정보 침해, 권리침해 또는 위법 가능성이 있는 경우 회사는 우선 해당 후기를 임시 비공개 처리하고 이후 사실관계를 확인할 수 있습니다.</p>
+          <p>⑤ 회사가 후기를 블라인드 또는 삭제한 경우 회원은 이에 대해 이의를 제기할 수 있습니다.</p>
+        </div>
+
+        <div>
+          <h2 class="font-black text-gray-900 text-base mb-2">제11조 후기 신고 및 이의제기</h2>
+          <p>① 회원 또는 제3자는 특정 후기가 자신의 권리를 침해하거나 본 정책 또는 관계 법령에 위반된다고 판단하는 경우 회사에 신고할 수 있습니다.</p>
+          <p class="mt-1">② 후기 신고 및 게시제한에 대한 이의제기는 다음 방법으로 접수할 수 있습니다.</p>
+          <div class="ml-4 mt-2 bg-gray-50 rounded-xl p-4 text-gray-600">
+            <p class="font-semibold text-gray-700">이메일</p>
+            <p>april7743@naver.com</p>
+            <p class="font-semibold text-gray-700 mt-2">홈페이지</p>
+            <p>라엘랩 홈페이지 고객센터</p>
+          </div>
+          <p class="mt-2">③ 신고 시 회사는 필요한 경우 다음 정보를 요청할 수 있습니다.</p>
+          <ul class="ml-5 mt-1 space-y-0.5 list-disc text-gray-600">
+            <li>신고 대상 후기</li>
+            <li>신고 사유</li>
+            <li>권리침해 내용</li>
+            <li>신고인의 연락처</li>
+            <li>권리관계를 확인할 수 있는 자료</li>
+          </ul>
+          <p class="mt-2">④ 회사는 신고내용 및 관계 법령을 검토한 후 게시유지, 임시 비공개, 수정 요청 또는 삭제 등의 조치를 취할 수 있습니다.</p>
+          <p>⑤ 작성자는 회사의 조치에 이의가 있는 경우 동일한 고객센터 또는 이메일을 통해 이의를 제기할 수 있습니다.</p>
+        </div>
+
+        <div>
+          <h2 class="font-black text-gray-900 text-base mb-2">제12조 이용제한</h2>
+          <p class="mt-1">① 회원이 다음과 같은 행위를 반복하거나 중대한 위반행위를 하는 경우 회사는 사안의 정도에 따라 경고 또는 서비스 이용제한 등의 조치를 취할 수 있습니다.</p>
+          <ul class="ml-5 mt-1 space-y-0.5 list-disc text-gray-600">
+            <li>반복적인 허위후기 작성</li>
+            <li>별점 조작</li>
+            <li>다른 회원의 후기를 조직적으로 조작하는 행위</li>
+            <li>타인을 사칭하는 행위</li>
+            <li>반복적인 광고·스팸 게시</li>
+            <li>개인정보 침해</li>
+            <li>협박, 성희롱 등 중대한 권리침해</li>
+            <li>기타 관계 법령 또는 본 정책을 중대하게 위반하는 행위</li>
+          </ul>
+          <p class="mt-2">② 경미한 위반의 경우 회사는 원칙적으로 게시물 제한 또는 경고 등 필요한 범위에서 조치를 취합니다.</p>
+          <p>③ 개인정보 침해, 불법정보 게시, 협박 등 즉각적인 조치가 필요한 경우 회사는 사전 경고 없이 임시 이용제한 등의 조치를 할 수 있습니다.</p>
+          <p>④ 이용제한과 별개로 회원의 구매계약 및 환불에 관한 사항은 라엘랩 이용약관과 환불정책 및 관계 법령에 따라 처리합니다.</p>
+        </div>
+
+        <div>
+          <h2 class="font-black text-gray-900 text-base mb-2">제13조 정책의 변경</h2>
+          <p>① 회사는 관계 법령의 변경, 서비스 기능 변경 및 운영정책 변경 등의 사유로 본 후기정책을 개정할 수 있습니다.</p>
+          <p>② 중요한 내용이 변경되는 경우 회사는 변경사항과 적용일자를 이용자가 확인할 수 있도록 홈페이지 등을 통해 안내합니다.</p>
+          <p>③ 본 정책에서 정하지 않은 사항은 라엘랩 이용약관 및 관계 법령에 따릅니다.</p>
+        </div>
+
+        <!-- 부칙 -->
+        <div class="bg-[#1a2744] text-white rounded-2xl p-6 mt-4">
+          <p class="font-bold text-sm mb-1">공지일자: 2026년 9월 22일</p>
+          <p class="font-bold text-sm mb-4">적용일자: 2026년 9월 22일 · 본 후기 운영정책은 2026년 9월 22일부터 시행합니다.</p>
+          <p class="font-black text-base mb-3">문의</p>
+          <div class="space-y-1 text-sm text-white/80">
+            <p>라엘랩(LAEL LAB)</p>
+            <p>이메일: april7743@naver.com</p>
+            <p>고객센터: 라엘랩 홈페이지 고객센터</p>
+          </div>
+        </div>
+
+        <!-- 닫기 버튼 -->
+        <div class="text-center pt-4 pb-4">
+          <button onclick="closeModal('reviewPolicyModal')"
+                  class="bg-[#1a2744] text-white px-10 py-3 rounded-full font-bold hover:bg-primary transition-colors">
+            닫기
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
 
   <!-- ── 환불정책 모달 ──────────────────────────────────────── -->
   <div id="refundModal" class="modal-overlay fixed inset-0 z-50 flex items-start justify-center bg-black/60 backdrop-blur-sm overflow-y-auto">
