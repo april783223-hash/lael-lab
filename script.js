@@ -526,13 +526,85 @@ function updateAuthUI(user) {
 
 // 결제 모달 열기 (구매 버튼 클릭 시)
 function openPurchaseModal(goodsName, amount) {
-  const titleEl = document.getElementById('purchaseItemTitle');
-  const priceEl = document.getElementById('purchaseItemPrice');
-  if (titleEl) titleEl.textContent = goodsName;
-  if (priceEl) priceEl.textContent = Number(amount).toLocaleString('ko-KR') + '원';
+  const titleEl      = document.getElementById('purchaseItemTitle');
+  const priceEl      = document.getElementById('purchaseItemPrice');
+  const totalProdEl  = document.getElementById('totalProductPrice');
+  const totalPayEl   = document.getElementById('totalPayPrice');
+  const formatted    = Number(amount).toLocaleString('ko-KR') + '원';
+  if (titleEl)     titleEl.textContent     = goodsName;
+  if (priceEl)     priceEl.textContent     = formatted;
+  if (totalProdEl) totalProdEl.textContent = formatted;
+  if (totalPayEl)  totalPayEl.textContent  = formatted;
+  // 기본 결제 수단 초기화
+  selectPayment('transfer');
+  switchPayTab('general');
   openModal('purchaseModal');
 }
 
+// 일반/간편 결제 탭 전환
+function switchPayTab(tab) {
+  const btnGeneral = document.getElementById('tabGeneral');
+  const btnEasy    = document.getElementById('tabEasy');
+  if (!btnGeneral || !btnEasy) return;
+  if (tab === 'general') {
+    btnGeneral.classList.add('bg-primary', 'text-white');
+    btnGeneral.classList.remove('bg-white', 'text-gray-400');
+    btnEasy.classList.add('bg-white', 'text-gray-400');
+    btnEasy.classList.remove('bg-primary', 'text-white');
+  } else {
+    btnEasy.classList.add('bg-primary', 'text-white');
+    btnEasy.classList.remove('bg-white', 'text-gray-400');
+    btnGeneral.classList.add('bg-white', 'text-gray-400');
+    btnGeneral.classList.remove('bg-primary', 'text-white');
+  }
+}
+
+// 결제 수단 선택
+let _selectedPayMethod = 'transfer';
+function selectPayment(method) {
+  _selectedPayMethod = method;
+  ['transfer', 'card', 'kakao', 'toss'].forEach(m => {
+    const btn = document.getElementById('pay-' + m);
+    if (!btn) return;
+    if (m === method) {
+      btn.classList.add('border-primary', 'bg-primary/5');
+      btn.classList.remove('border-gray-200', 'bg-white');
+    } else {
+      btn.classList.remove('border-primary', 'bg-primary/5');
+      btn.classList.add('border-gray-200', 'bg-white');
+    }
+  });
+}
+
+// 결제하기
+async function handleCheckout() {
+  const agree = document.getElementById('agreeTerms');
+  if (agree && !agree.checked) {
+    showToast('약관 동의 필요', '결제 서비스 이용 약관에 동의해주세요.'); return;
+  }
+  const goodsName = document.getElementById('purchaseItemTitle')?.textContent || '대입면접이 쉬워지는 스피치 공식 VOD 강의';
+  const amount    = 149000;
+  closeModal('purchaseModal');
+  try {
+    const result = await requestNicePay({ goodsName, amount,
+      buyerName:  currentUser?.displayName || '',
+      buyerEmail: currentUser?.email || '',
+      buyerTel:   '',
+      payMethod:  _selectedPayMethod });
+    if (result?.success) {
+      if (currentUser) {
+        currentUser.isPaid = true;
+        localStorage.setItem('lael_user', JSON.stringify(currentUser));
+        updateAuthUI(currentUser);
+      }
+      showToast('결제 완료! 🎉', '강의 수강권이 활성화되었습니다. 강의실을 이용하세요!');
+      setTimeout(() => openLectureModal(), 1200);
+    }
+  } catch (err) {
+    console.error('[결제] 오류:', err);
+    showToast('결제 오류', '잠시 후 다시 시도해주세요.');
+  }
+}
 // 구매 폼 제출 → 나이스페이 결제 요청
 async function handlePurchaseSubmit(event) {
   event.preventDefault();

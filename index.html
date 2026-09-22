@@ -1589,6 +1589,147 @@
 
 
 
+  <!-- ── 주문/결제 모달 ─────────────────────────────────────── -->
+  <div id="purchaseModal" class="modal-overlay fixed inset-0 z-50 flex flex-col bg-gray-50 overflow-y-auto">
+    <div class="w-full flex-1 flex flex-col">
+
+      <!-- Header -->
+      <div class="bg-white border-b border-gray-200 px-5 py-4 flex items-center justify-between sticky top-0 z-10 shadow-sm">
+        <button onclick="closeModal('purchaseModal')" class="flex items-center gap-1.5 text-gray-500 hover:text-gray-800 transition text-sm font-semibold">
+          <span class="material-symbols-outlined text-xl">arrow_back</span>
+        </button>
+        <h1 class="text-base font-black text-gray-900">주문/결제</h1>
+        <div class="w-8"></div>
+      </div>
+
+      <!-- Body: 2-column on large -->
+      <div class="flex flex-col lg:flex-row gap-5 max-w-5xl mx-auto w-full px-4 py-6 pb-16">
+
+        <!-- Left Column -->
+        <div class="flex-1 space-y-4">
+
+          <!-- 상품 정보 -->
+          <div class="bg-white rounded-2xl p-5 border border-gray-200 shadow-sm">
+            <div class="flex gap-4">
+              <img src="assets/images/vod/daip-vod-thumb.png" alt="강의 썸네일"
+                   class="w-20 h-20 rounded-xl object-cover shrink-0 shadow-sm border border-gray-100">
+              <div class="flex-1 min-w-0">
+                <span class="inline-block bg-primary/10 text-primary text-[10px] font-black px-2 py-0.5 rounded-full mb-1.5">강의</span>
+                <p class="font-bold text-gray-900 text-sm leading-snug" id="purchaseItemTitle">대입면접이 쉬워지는 스피치 공식</p>
+              </div>
+            </div>
+            <!-- 수강옵션 -->
+            <div class="mt-4 border-t border-gray-100 pt-4">
+              <p class="text-xs font-bold text-gray-700 mb-3">수강옵션</p>
+              <div class="flex items-center justify-between border-2 border-primary rounded-xl px-4 py-3.5 bg-primary/5">
+                <span class="text-sm font-bold text-gray-800">[VOD 강의만]</span>
+                <span class="text-sm font-black text-primary ml-4 shrink-0" id="purchaseItemPrice">149,000원</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 쿠폰 -->
+          <div class="bg-white rounded-2xl p-5 border border-gray-200 shadow-sm">
+            <div class="flex items-center justify-between mb-3">
+              <p class="text-sm font-black text-gray-900">쿠폰</p>
+              <label class="flex items-center gap-2 cursor-pointer select-none">
+                <span class="text-xs text-gray-500">쿠폰 선택</span>
+                <div class="relative w-9 h-5">
+                  <input type="checkbox" class="sr-only peer" id="couponToggle">
+                  <div class="w-9 h-5 bg-gray-200 rounded-full peer peer-checked:bg-primary transition-colors duration-200"></div>
+                  <div class="absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform duration-200 peer-checked:translate-x-4"></div>
+                </div>
+              </label>
+            </div>
+            <div class="border border-gray-200 rounded-xl px-4 py-3 flex items-center justify-between">
+              <span class="text-sm text-gray-400">적용가능한 할인쿠폰이 없습니다.</span>
+              <span class="material-symbols-outlined text-gray-300 text-base">expand_more</span>
+            </div>
+          </div>
+
+          <!-- 결제 방법 -->
+          <div class="bg-white rounded-2xl p-5 border border-gray-200 shadow-sm">
+            <!-- 탭 -->
+            <div class="flex rounded-xl overflow-hidden border border-gray-200 mb-5">
+              <button id="tabGeneral" onclick="switchPayTab('general')"
+                      class="flex-1 py-2.5 text-sm font-bold bg-primary text-white transition-colors">일반결제</button>
+              <button id="tabEasy" onclick="switchPayTab('easy')"
+                      class="flex-1 py-2.5 text-sm font-bold bg-white text-gray-400 transition-colors">간편결제</button>
+            </div>
+            <!-- 결제 수단 -->
+            <p class="text-xs font-bold text-gray-700 mb-3">결제 방법</p>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3" id="paymentMethods">
+              <button onclick="selectPayment('transfer')" id="pay-transfer"
+                      class="pay-method-btn selected-pay border-2 border-primary bg-primary/5 rounded-xl py-4 px-2 flex flex-col items-center gap-1.5 transition-all">
+                <span class="text-[9px] font-black text-white bg-blue-500 px-1.5 py-0.5 rounded-full whitespace-nowrap">30% 소득공제</span>
+                <span class="text-xs font-bold text-gray-800">실시간 계좌이체</span>
+              </button>
+              <button onclick="selectPayment('card')" id="pay-card"
+                      class="pay-method-btn border-2 border-gray-200 bg-white rounded-xl py-4 px-2 flex items-center justify-center transition-all hover:border-primary">
+                <span class="text-xs font-bold text-gray-800 text-center">신용·체크카드</span>
+              </button>
+              <button onclick="selectPayment('kakao')" id="pay-kakao"
+                      class="pay-method-btn border-2 border-gray-200 bg-white rounded-xl py-4 px-2 flex items-center justify-center transition-all hover:border-primary">
+                <span class="font-black text-sm" style="color:#3C1E1E;">&#58947;pay</span>
+              </button>
+              <button onclick="selectPayment('toss')" id="pay-toss"
+                      class="pay-method-btn border-2 border-gray-200 bg-white rounded-xl py-4 px-2 flex items-center justify-center transition-all hover:border-primary">
+                <span class="font-black text-sm text-blue-600">toss<span class="text-gray-400 font-bold">pay</span></span>
+              </button>
+            </div>
+            <button class="mt-3 text-xs text-gray-400 hover:text-gray-600 underline flex items-center gap-0.5 transition">
+              신용카드 무이자 할부 안내 <span class="material-symbols-outlined text-sm">chevron_right</span>
+            </button>
+          </div>
+
+          <!-- 약관 동의 -->
+          <div class="bg-white rounded-2xl px-5 py-4 border border-gray-200 shadow-sm">
+            <label class="flex items-center gap-3 cursor-pointer">
+              <input type="checkbox" id="agreeTerms" class="w-4 h-4 rounded accent-primary">
+              <span class="text-xs text-gray-600 flex-1">
+                <span class="font-bold text-gray-800">[필수]</span> 결제 서비스 이용 약관, 개인정보 처리 동의
+              </span>
+              <span class="material-symbols-outlined text-gray-300 text-base">chevron_right</span>
+            </label>
+          </div>
+
+        </div>
+
+        <!-- Right Column sticky summary -->
+        <div class="lg:w-72 shrink-0">
+          <div class="bg-white rounded-2xl p-5 border border-gray-200 shadow-sm lg:sticky lg:top-20">
+            <div class="space-y-3 pb-4 border-b border-gray-100 text-sm">
+              <div class="flex items-center justify-between">
+                <span class="text-gray-500">총 상품 금액</span>
+                <span class="font-semibold text-gray-800" id="totalProductPrice">149,000원</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-gray-500">상품 할인</span>
+                <span class="font-semibold text-gray-400">0원</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-gray-500">쿠폰 할인</span>
+                <span class="font-semibold text-gray-400">0원</span>
+              </div>
+            </div>
+            <div class="flex items-center justify-between py-4">
+              <span class="font-black text-gray-900 text-sm">총 결제 금액</span>
+              <span class="font-black text-xl text-gray-900" id="totalPayPrice">149,000원</span>
+            </div>
+            <button onclick="handleCheckout()"
+                    class="w-full bg-primary hover:bg-primary-container text-white py-4 rounded-xl font-black text-base shadow-lg hover:shadow-primary/30 transition-all active:scale-[.98]">
+              결제 하기
+            </button>
+            <p class="text-[10px] text-gray-400 text-center mt-3 leading-relaxed">
+              구매 정보를 확인했으며, 이용약관 및 환불정책,<br>개인정보 처리방침에 동의합니다.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
   <div id="aiChatbotModal" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md">
     <div class="modal-container bg-[#191b29] rounded-[32px] max-w-md w-full p-8 shadow-2xl border border-accent-coral/30 relative overflow-hidden">
       <!-- Glow blob -->
