@@ -4,7 +4,8 @@ Google Stitch AI 디자인 플랫폼(`https://stitch.withgoogle.com/projects/836
 
 ---
 
-## 🌟 주요 기능 및 특징
+## 🌟 주요 기능 및 특징  <!-- Favicon -->
+
 
 1. **디자인 100% 반영 & 커스텀 스타일**:
    - Stitch의 고해상도 디자인 시스템, 색상 토큰, 글래스모피즘 및 타이포그래피 반영
