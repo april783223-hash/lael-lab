@@ -462,6 +462,7 @@ function handleKakaoCallback() {
       currentUser = user;
       updateAuthUI(currentUser);
       showToast('카카오 로그인 성공! 🟡', `${user.displayName}님 환영합니다.`);
+    }
   } catch (e) {
     console.error('[Kakao] localStorage 파싱 오류:', e);
   }
