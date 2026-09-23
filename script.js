@@ -433,82 +433,37 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ── 카카오 로그인 (authorization code flow) ──────────────────
+const KAKAO_REDIRECT_URI = 'https://www.laellab.com/oauth/kakao/callback';
+
 function handleKakaoSignIn() {
   if (!ensureKakaoInit()) {
     showToast('카카오 로딩 오류', '페이지를 새로고침 후 다시 시도해주세요.', 'error');
     return;
   }
   Kakao.Auth.authorize({
-    redirectUri: 'https://laellab.com'
+    redirectUri: KAKAO_REDIRECT_URI
   });
 }
 
-// ── 카카오 로그인 콜백 처리 (redirect 후 자동 실행) ───────────
-async function handleKakaoCallback() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const code      = urlParams.get('code');
-  const error     = urlParams.get('error');
+// ── 카카오 로그인 콜백 처리 (메인 페이지: localStorage 플래그 감지) ─
+function handleKakaoCallback() {
+  // 콜백 처리는 /oauth/kakao/callback.html 에서 수행
+  // 메인 페이지는 localStorage 플래그만 확인해 환영 토스트 표시
+  const flag = localStorage.getItem('lael_kakao_login');
+  if (!flag) return;
 
-  if (error) {
-    // 사용자가 로그인 취소
-    window.history.replaceState(null, '', window.location.pathname);
-    return;
-  }
-  if (!code) return;
-
-  // URL에서 code 파라미터 제거
-  window.history.replaceState(null, '', window.location.pathname);
+  localStorage.removeItem('lael_kakao_login');
+  const saved = localStorage.getItem('lael_user');
+  if (!saved) return;
 
   try {
-    // 카카오 토큰 교환 — 서버 API를 통해 처리 (Client Secret 보호)
-    const tokenRes = await fetch('/api/kakao-token', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        code:         code,
-        redirect_uri: 'https://laellab.com'
-      })
-    });
-    const tokenData = await tokenRes.json();
-
-    if (!tokenData.access_token) {
-      console.error('[Kakao] 토큰 오류:', tokenData);
-      showToast('카카오 오류', '로그인에 실패했습니다. 다시 시도해주세요.', 'error');
-      return;
-    }
-
-    // 토큰으로 사용자 정보 조회
-    if (!ensureKakaoInit()) return;
-    Kakao.Auth.setAccessToken(tokenData.access_token);
-
-    Kakao.API.request({
-      url: '/v2/user/me',
-      success: function(res) {
-        const kakaoAccount = res.kakao_account;
-        const profile      = kakaoAccount?.profile;
-
-        currentUser = {
-          uid:         'kakao_' + res.id,
-          displayName: profile?.nickname || '카카오 수강생',
-          email:       kakaoAccount?.email || '',
-          photoURL:    profile?.profile_image_url || null,
-          isPaid:      false,
-          provider:    'kakao'
-        };
-
-        localStorage.setItem('lael_user', JSON.stringify(currentUser));
-        updateAuthUI(currentUser);
-        showToast('카카오 로그인 성공! 🟡', `${currentUser.displayName}님 환영합니다.`);
-      },
-      fail: function(err) {
-        console.error('[Kakao] 사용자 정보 조회 실패:', err);
-        showToast('카카오 오류', '다시 시도해주세요.', 'error');
-      }
-    });
-
-  } catch (err) {
-    console.error('[Kakao] 콜백 처리 오류:', err);
-    showToast('카카오 오류', '네트워크 오류가 발생했습니다.', 'error');
+    const user = JSON.parse(saved);
+    if (user && user.provider === 'kakao') {
+      currentUser = user;
+      updateAuthUI(currentUser);
+      showToast('카카오 로그인 성공! 🟡', `${user.displayName}님 환영합니다.`);
+  } catch (e) {
+    console.error('[Kakao] localStorage 파싱 오류:', e);
   }
 }
 
