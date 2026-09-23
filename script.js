@@ -460,15 +460,13 @@ async function handleKakaoCallback() {
   window.history.replaceState(null, '', window.location.pathname);
 
   try {
-    // 카카오 토큰 교환
-    const tokenRes = await fetch('https://kauth.kakao.com/oauth/token', {
+    // 카카오 토큰 교환 — 서버 API를 통해 처리 (Client Secret 보호)
+    const tokenRes = await fetch('/api/kakao-token', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8' },
-      body: new URLSearchParams({
-        grant_type:   'authorization_code',
-        client_id:    '2392aefcf8ff5d5d09fec3d1233fc9a5',
-        redirect_uri: 'https://laellab.com',
-        code:         code
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        code:         code,
+        redirect_uri: 'https://laellab.com'
       })
     });
     const tokenData = await tokenRes.json();
