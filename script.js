@@ -42,6 +42,9 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   });
+
+  // 5. 카카오 로그인 콜백 처리 (redirect 후 URL 해시 파싱)
+  handleKakaoCallback();
 });
 
 // ── 모바일 메뉴 닫기 ────────────────────────────────────────
@@ -429,53 +432,56 @@ document.addEventListener('DOMContentLoaded', () => {
   ensureKakaoInit();
 });
 
-// ── 카카오 로그인 ─────────────────────────────────────────────
-async function handleKakaoSignIn() {
-  // SDK 초기화 재시도
+// ── 카카오 로그인 (authorize 방식) ───────────────────────────
+function handleKakaoSignIn() {
   if (!ensureKakaoInit()) {
     showToast('카카오 로딩 오류', '페이지를 새로고침 후 다시 시도해주세요.', 'error');
     return;
   }
+  // 카카오 로그인 페이지로 이동 (implicit token flow)
+  Kakao.Auth.authorize({
+    redirectUri: 'https://laellab.com',
+    responseType: 'token'
+  });
+}
 
-  Kakao.Auth.login({
-    success: function(authObj) {
-      Kakao.API.request({
-        url: '/v2/user/me',
-        success: function(res) {
-          const kakaoAccount = res.kakao_account;
-          const profile      = kakaoAccount?.profile;
+// ── 카카오 로그인 콜백 처리 (페이지 로드 시 자동 실행) ─────────
+function handleKakaoCallback() {
+  const hash = window.location.hash;
+  if (!hash || !hash.includes('access_token')) return;
 
-          currentUser = {
-            uid:         'kakao_' + res.id,
-            displayName: profile?.nickname || '카카오 수강생',
-            email:       kakaoAccount?.email || '',
-            photoURL:    profile?.profile_image_url || null,
-            isPaid:      false,
-            provider:    'kakao'
-          };
+  const params      = new URLSearchParams(hash.substring(1));
+  const accessToken = params.get('access_token');
+  if (!accessToken) return;
 
-          localStorage.setItem('lael_user', JSON.stringify(currentUser));
-          updateAuthUI(currentUser);
-          closeModal('authModal');
-          showToast('카카오 로그인 성공! 🟡', `${currentUser.displayName}님 환영합니다.`);
+  // URL 해시 제거 (뒤로가기 등 방지)
+  window.history.replaceState(null, '', window.location.pathname + window.location.search);
 
-          if (pendingAfterLogin) {
-            const cb = pendingAfterLogin;
-            pendingAfterLogin = null;
-            setTimeout(cb, 300);
-          }
-        },
-        fail: function(err) {
-          console.error('[Kakao] 사용자 정보 조회 실패:', err);
-          showToast('카카오 오류', '사용자 정보를 가져오지 못했습니다.', 'error');
-        }
-      });
+  if (!ensureKakaoInit()) return;
+  Kakao.Auth.setAccessToken(accessToken);
+
+  Kakao.API.request({
+    url: '/v2/user/me',
+    success: function(res) {
+      const kakaoAccount = res.kakao_account;
+      const profile      = kakaoAccount?.profile;
+
+      currentUser = {
+        uid:         'kakao_' + res.id,
+        displayName: profile?.nickname || '카카오 수강생',
+        email:       kakaoAccount?.email || '',
+        photoURL:    profile?.profile_image_url || null,
+        isPaid:      false,
+        provider:    'kakao'
+      };
+
+      localStorage.setItem('lael_user', JSON.stringify(currentUser));
+      updateAuthUI(currentUser);
+      showToast('카카오 로그인 성공! 🟡', `${currentUser.displayName}님 환영합니다.`);
     },
     fail: function(err) {
-      console.error('[Kakao] 로그인 실패:', err);
-      if (err.error !== 'access_denied') {
-        showToast('카카오 로그인 실패', '다시 시도해주세요.', 'error');
-      }
+      console.error('[Kakao] 사용자 정보 조회 실패:', err);
+      showToast('카카오 오류', '다시 시도해주세요.', 'error');
     }
   });
 }
