@@ -391,7 +391,6 @@ async function handleGoogleSignIn() {
       currentUser = res.user;
       closeModal('authModal');
       showToast('로그인 성공! 👋', `${currentUser.displayName || '수강생'}님 환영합니다.`);
-      // 로그인 후 대기 중인 액션 실행 (예: 챗봇 열기)
       if (pendingAfterLogin) {
         const cb = pendingAfterLogin;
         pendingAfterLogin = null;
@@ -409,6 +408,43 @@ async function handleGoogleSignIn() {
     localStorage.setItem('lael_user', JSON.stringify(currentUser));
     closeModal('authModal');
     showToast('로그인 성공 (테스트 모드)', '홍길동님 환영합니다.');
+    updateAuthUI(currentUser);
+  }
+}
+
+// ── 카카오 로그인 ─────────────────────────────────────────────
+async function handleKakaoSignIn() {
+  if (typeof auth !== 'undefined' && auth) {
+    // Firebase Custom Token + Kakao OAuth 방식
+    // Kakao REST API App Key가 설정된 경우 실제 카카오 로그인 진행
+    // 현재는 카카오 OAuthProvider (Firebase) 방식으로 시도
+    try {
+      const provider = new firebase.auth.OAuthProvider('oidc.kakao');
+      const res = await auth.signInWithPopup(provider);
+      currentUser = res.user;
+      closeModal('authModal');
+      showToast('카카오 로그인 성공! 👋', `${currentUser.displayName || '수강생'}님 환영합니다.`);
+      if (pendingAfterLogin) {
+        const cb = pendingAfterLogin;
+        pendingAfterLogin = null;
+        setTimeout(cb, 300);
+      }
+    } catch (err) {
+      console.error('[Auth] 카카오 로그인 오류:', err);
+      if (err.code === 'auth/popup-closed-by-user') return;
+      // 카카오 OIDC 미설정 시 안내
+      showToast(
+        '카카오 로그인 준비 중',
+        '카카오 로그인 설정이 완료되는 즉시 이용 가능합니다. Google 또는 이메일로 로그인해주세요.',
+        'error'
+      );
+    }
+  } else {
+    // 로컬 데모 모드
+    currentUser = { uid: 'kakao_demo', displayName: '카카오수강생', email: 'kakao@kakao.com', isPaid: true };
+    localStorage.setItem('lael_user', JSON.stringify(currentUser));
+    closeModal('authModal');
+    showToast('카카오 로그인 성공 (테스트 모드)', '카카오수강생님 환영합니다. 🟡');
     updateAuthUI(currentUser);
   }
 }
