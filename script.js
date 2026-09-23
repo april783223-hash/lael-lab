@@ -412,41 +412,64 @@ async function handleGoogleSignIn() {
   }
 }
 
+// ── 카카오 SDK 초기화 ─────────────────────────────────────────
+(function initKakao() {
+  if (typeof Kakao !== 'undefined' && !Kakao.isInitialized()) {
+    Kakao.init('2f4b3cf87f7bc8697662c427403a3d86');
+    console.log('[LAEL LAB] Kakao SDK 초기화 완료 ✅');
+  }
+})();
+
 // ── 카카오 로그인 ─────────────────────────────────────────────
 async function handleKakaoSignIn() {
-  if (typeof auth !== 'undefined' && auth) {
-    // Firebase Custom Token + Kakao OAuth 방식
-    // Kakao REST API App Key가 설정된 경우 실제 카카오 로그인 진행
-    // 현재는 카카오 OAuthProvider (Firebase) 방식으로 시도
-    try {
-      const provider = new firebase.auth.OAuthProvider('oidc.kakao');
-      const res = await auth.signInWithPopup(provider);
-      currentUser = res.user;
-      closeModal('authModal');
-      showToast('카카오 로그인 성공! 👋', `${currentUser.displayName || '수강생'}님 환영합니다.`);
-      if (pendingAfterLogin) {
-        const cb = pendingAfterLogin;
-        pendingAfterLogin = null;
-        setTimeout(cb, 300);
-      }
-    } catch (err) {
-      console.error('[Auth] 카카오 로그인 오류:', err);
-      if (err.code === 'auth/popup-closed-by-user') return;
-      // 카카오 OIDC 미설정 시 안내
-      showToast(
-        '카카오 로그인 준비 중',
-        '카카오 로그인 설정이 완료되는 즉시 이용 가능합니다. Google 또는 이메일로 로그인해주세요.',
-        'error'
-      );
-    }
-  } else {
-    // 로컬 데모 모드
-    currentUser = { uid: 'kakao_demo', displayName: '카카오수강생', email: 'kakao@kakao.com', isPaid: true };
-    localStorage.setItem('lael_user', JSON.stringify(currentUser));
-    closeModal('authModal');
-    showToast('카카오 로그인 성공 (테스트 모드)', '카카오수강생님 환영합니다. 🟡');
-    updateAuthUI(currentUser);
+  // Kakao SDK 로딩 확인
+  if (typeof Kakao === 'undefined' || !Kakao.isInitialized()) {
+    showToast('로딩 중', '잠시 후 다시 시도해주세요.', 'error');
+    return;
   }
+
+  Kakao.Auth.login({
+    success: function(authObj) {
+      // 카카오 사용자 정보 가져오기
+      Kakao.API.request({
+        url: '/v2/user/me',
+        success: function(res) {
+          const kakaoAccount = res.kakao_account;
+          const profile      = kakaoAccount?.profile;
+
+          currentUser = {
+            uid:         'kakao_' + res.id,
+            displayName: profile?.nickname || '카카오 수강생',
+            email:       kakaoAccount?.email || '',
+            photoURL:    profile?.profile_image_url || null,
+            isPaid:      false,
+            provider:    'kakao'
+          };
+
+          localStorage.setItem('lael_user', JSON.stringify(currentUser));
+          updateAuthUI(currentUser);
+          closeModal('authModal');
+          showToast('카카오 로그인 성공! 🟡', `${currentUser.displayName}님 환영합니다.`);
+
+          if (pendingAfterLogin) {
+            const cb = pendingAfterLogin;
+            pendingAfterLogin = null;
+            setTimeout(cb, 300);
+          }
+        },
+        fail: function(err) {
+          console.error('[Kakao] 사용자 정보 조회 실패:', err);
+          showToast('카카오 오류', '사용자 정보를 가져오지 못했습니다.', 'error');
+        }
+      });
+    },
+    fail: function(err) {
+      console.error('[Kakao] 로그인 실패:', err);
+      if (err.error !== 'access_denied') {
+        showToast('카카오 로그인 실패', '다시 시도해주세요.', 'error');
+      }
+    }
+  });
 }
 
 // ── 이메일/비밀번호 로그인 ────────────────────────────────────
