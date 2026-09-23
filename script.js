@@ -432,58 +432,86 @@ document.addEventListener('DOMContentLoaded', () => {
   ensureKakaoInit();
 });
 
-// ── 카카오 로그인 (authorize 방식) ───────────────────────────
+// ── 카카오 로그인 (authorization code flow) ──────────────────
 function handleKakaoSignIn() {
   if (!ensureKakaoInit()) {
     showToast('카카오 로딩 오류', '페이지를 새로고침 후 다시 시도해주세요.', 'error');
     return;
   }
-  // 카카오 로그인 페이지로 이동 (implicit token flow)
   Kakao.Auth.authorize({
-    redirectUri: 'https://laellab.com',
-    responseType: 'token'
+    redirectUri: 'https://laellab.com'
   });
 }
 
-// ── 카카오 로그인 콜백 처리 (페이지 로드 시 자동 실행) ─────────
-function handleKakaoCallback() {
-  const hash = window.location.hash;
-  if (!hash || !hash.includes('access_token')) return;
+// ── 카카오 로그인 콜백 처리 (redirect 후 자동 실행) ───────────
+async function handleKakaoCallback() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const code      = urlParams.get('code');
+  const error     = urlParams.get('error');
 
-  const params      = new URLSearchParams(hash.substring(1));
-  const accessToken = params.get('access_token');
-  if (!accessToken) return;
+  if (error) {
+    // 사용자가 로그인 취소
+    window.history.replaceState(null, '', window.location.pathname);
+    return;
+  }
+  if (!code) return;
 
-  // URL 해시 제거 (뒤로가기 등 방지)
-  window.history.replaceState(null, '', window.location.pathname + window.location.search);
+  // URL에서 code 파라미터 제거
+  window.history.replaceState(null, '', window.location.pathname);
 
-  if (!ensureKakaoInit()) return;
-  Kakao.Auth.setAccessToken(accessToken);
+  try {
+    // 카카오 토큰 교환
+    const tokenRes = await fetch('https://kauth.kakao.com/oauth/token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8' },
+      body: new URLSearchParams({
+        grant_type:   'authorization_code',
+        client_id:    '2392aefcf8ff5d5d09fec3d1233fc9a5',
+        redirect_uri: 'https://laellab.com',
+        code:         code
+      })
+    });
+    const tokenData = await tokenRes.json();
 
-  Kakao.API.request({
-    url: '/v2/user/me',
-    success: function(res) {
-      const kakaoAccount = res.kakao_account;
-      const profile      = kakaoAccount?.profile;
-
-      currentUser = {
-        uid:         'kakao_' + res.id,
-        displayName: profile?.nickname || '카카오 수강생',
-        email:       kakaoAccount?.email || '',
-        photoURL:    profile?.profile_image_url || null,
-        isPaid:      false,
-        provider:    'kakao'
-      };
-
-      localStorage.setItem('lael_user', JSON.stringify(currentUser));
-      updateAuthUI(currentUser);
-      showToast('카카오 로그인 성공! 🟡', `${currentUser.displayName}님 환영합니다.`);
-    },
-    fail: function(err) {
-      console.error('[Kakao] 사용자 정보 조회 실패:', err);
-      showToast('카카오 오류', '다시 시도해주세요.', 'error');
+    if (!tokenData.access_token) {
+      console.error('[Kakao] 토큰 오류:', tokenData);
+      showToast('카카오 오류', '로그인에 실패했습니다. 다시 시도해주세요.', 'error');
+      return;
     }
-  });
+
+    // 토큰으로 사용자 정보 조회
+    if (!ensureKakaoInit()) return;
+    Kakao.Auth.setAccessToken(tokenData.access_token);
+
+    Kakao.API.request({
+      url: '/v2/user/me',
+      success: function(res) {
+        const kakaoAccount = res.kakao_account;
+        const profile      = kakaoAccount?.profile;
+
+        currentUser = {
+          uid:         'kakao_' + res.id,
+          displayName: profile?.nickname || '카카오 수강생',
+          email:       kakaoAccount?.email || '',
+          photoURL:    profile?.profile_image_url || null,
+          isPaid:      false,
+          provider:    'kakao'
+        };
+
+        localStorage.setItem('lael_user', JSON.stringify(currentUser));
+        updateAuthUI(currentUser);
+        showToast('카카오 로그인 성공! 🟡', `${currentUser.displayName}님 환영합니다.`);
+      },
+      fail: function(err) {
+        console.error('[Kakao] 사용자 정보 조회 실패:', err);
+        showToast('카카오 오류', '다시 시도해주세요.', 'error');
+      }
+    });
+
+  } catch (err) {
+    console.error('[Kakao] 콜백 처리 오류:', err);
+    showToast('카카오 오류', '네트워크 오류가 발생했습니다.', 'error');
+  }
 }
 
 // ── 이메일/비밀번호 로그인 ────────────────────────────────────
