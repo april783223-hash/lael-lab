@@ -413,24 +413,32 @@ async function handleGoogleSignIn() {
 }
 
 // ── 카카오 SDK 초기화 ─────────────────────────────────────────
-(function initKakao() {
-  if (typeof Kakao !== 'undefined' && !Kakao.isInitialized()) {
-    Kakao.init('2f4b3cf87f7bc8697662c427403a3d86');
+const KAKAO_JS_KEY = '2f4b3cf87f7bc8697662c427403a3d86';
+
+function ensureKakaoInit() {
+  if (typeof Kakao === 'undefined') return false;
+  if (!Kakao.isInitialized()) {
+    Kakao.init(KAKAO_JS_KEY);
     console.log('[LAEL LAB] Kakao SDK 초기화 완료 ✅');
   }
-})();
+  return true;
+}
+
+// DOM 로드 후 초기화 시도
+document.addEventListener('DOMContentLoaded', () => {
+  ensureKakaoInit();
+});
 
 // ── 카카오 로그인 ─────────────────────────────────────────────
 async function handleKakaoSignIn() {
-  // Kakao SDK 로딩 확인
-  if (typeof Kakao === 'undefined' || !Kakao.isInitialized()) {
-    showToast('로딩 중', '잠시 후 다시 시도해주세요.', 'error');
+  // SDK 초기화 재시도
+  if (!ensureKakaoInit()) {
+    showToast('카카오 로딩 오류', '페이지를 새로고침 후 다시 시도해주세요.', 'error');
     return;
   }
 
   Kakao.Auth.login({
     success: function(authObj) {
-      // 카카오 사용자 정보 가져오기
       Kakao.API.request({
         url: '/v2/user/me',
         success: function(res) {
