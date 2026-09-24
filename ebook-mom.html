@@ -3,243 +3,293 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LAEL LAB 전자책 - 엄마와 함께 하는 단단한 말하기</title>
-  <meta name="description" content="LAEL LAB 엄마와 함께 하는 단단한 말하기 전자책 열람실">
-  <link rel="canonical" href="https://laellab.com/ebook-mom.html">
-
-  <!-- Favicon -->
+  <title>엄마와 아이의 단단한 말하기 — 전자책 열람 | LAEL LAB</title>
+  <meta name="robots" content="noindex">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%234c37ce'/%3E%3Cstop offset='100%25' stop-color='%23ff6748'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='8' fill='url(%23g)'/%3E%3Ctext x='16' y='22' font-family='sans-serif' font-size='18' font-weight='900' fill='white' text-anchor='middle'%3EL%3C/text%3E%3C/svg%3E">
-
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
   <script src="firebase-config.js"></script>
-
-  <!-- Google Fonts & Icons -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
-
+  <!-- PDF.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'Noto Sans KR', sans-serif;
-      background: #f4f3f1;
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      overflow: hidden;
-    }
-    .reader-header {
-      height: 56px;
-      background: #fff;
-      border-bottom: 1px solid #e5e7eb;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 20px;
-      flex-shrink: 0;
-      box-shadow: 0 1px 4px rgba(0,0,0,.06);
-      z-index: 10;
-    }
-    .reader-header .left { display: flex; align-items: center; gap: 10px; }
-    .reader-header .right { display: flex; align-items: center; gap: 8px; }
-    .back-btn {
-      display: flex; align-items: center; gap: 4px;
-      font-size: 13px; font-weight: 700; color: #555;
-      text-decoration: none;
-    }
-    .back-btn:hover { color: #ff6748; }
-    .book-title {
-      font-size: 14px; font-weight: 700; color: #111;
-      max-width: 260px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-    }
-    .divider { color: #ddd; }
-    .dot { width: 8px; height: 8px; border-radius: 50%; background: #ff6748; flex-shrink: 0; }
-    .btn-dl {
-      display: flex; align-items: center; gap: 4px;
-      background: #16a34a; color: #fff;
-      padding: 6px 14px; border-radius: 8px;
-      font-size: 12px; font-weight: 700; text-decoration: none;
-      transition: background .2s;
-    }
-    .btn-dl:hover { background: #15803d; }
-    .btn-print {
-      display: flex; align-items: center; gap: 4px;
-      background: #ff6748; color: #fff;
-      padding: 6px 14px; border-radius: 8px;
-      font-size: 12px; font-weight: 700; border: none; cursor: pointer;
-      transition: background .2s;
-    }
-    .btn-print:hover { background: #e5533a; }
-    .pdf-container { flex: 1; display: flex; flex-direction: column; }
-    .pdf-container iframe { flex: 1; width: 100%; border: none; background: #525659; }
-    #authGate {
-      position: fixed; inset: 0; z-index: 50;
-      background: #f4f3f1;
-      display: flex; align-items: center; justify-content: center; padding: 24px;
-    }
-    .gate-loading { text-align: center; }
-    .spinner {
-      width: 44px; height: 44px;
-      border: 4px solid #ff6748; border-top-color: transparent;
-      border-radius: 50%;
-      animation: spin .8s linear infinite;
-      margin: 0 auto 12px;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .gate-card {
-      background: #fff; border-radius: 24px; padding: 36px;
-      text-align: center; max-width: 360px; width: 100%;
-      box-shadow: 0 20px 60px rgba(0,0,0,.12);
-    }
-    .lock-icon {
-      width: 64px; height: 64px; border-radius: 18px;
-      background: #fff2ef;
-      display: flex; align-items: center; justify-content: center;
-      margin: 0 auto 16px; font-size: 28px;
-    }
-    .gate-card h2 { font-size: 20px; font-weight: 900; color: #111; margin-bottom: 8px; }
-    .gate-card p { font-size: 14px; color: #666; line-height: 1.6; margin-bottom: 24px; }
-    .btn-primary {
-      display: block; width: 100%;
-      background: #ff6748; color: #fff;
-      padding: 14px; border-radius: 50px;
-      font-size: 14px; font-weight: 700; text-decoration: none;
-      margin-bottom: 10px; transition: background .2s;
-    }
-    .btn-primary:hover { background: #e5533a; }
-    .btn-secondary {
-      display: block; width: 100%;
-      background: #f3f4f6; color: #444;
-      padding: 14px; border-radius: 50px;
-      font-size: 14px; font-weight: 700; text-decoration: none;
-      transition: background .2s;
-    }
-    .btn-secondary:hover { background: #e5e7eb; }
-    .login-hint { font-size: 12px; color: #999; margin-top: 14px; }
-    .login-hint a { color: #ff6748; text-decoration: underline; }
-    .hidden { display: none !important; }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Noto Sans KR',sans-serif;background:#1c2e4a;min-height:100vh}
 
-    @media (max-width: 480px) {
-      .book-title { max-width: 140px; }
-      .btn-dl span.label, .btn-print span.label { display: none; }
+    /* ── 헤더 ── */
+    .reader-header{
+      height:52px;background:#fff;border-bottom:1px solid #ececec;
+      display:flex;align-items:center;justify-content:space-between;
+      padding:0 20px;position:sticky;top:0;z-index:200;
+      box-shadow:0 1px 6px rgba(0,0,0,.1);
     }
+    .header-left{display:flex;align-items:center;gap:10px}
+    .back-btn{display:flex;align-items:center;gap:4px;font-size:13px;font-weight:700;color:#555;text-decoration:none}
+    .back-btn:hover{color:#1a4fa8}
+    .divider{color:#ddd}
+    .dot{width:8px;height:8px;border-radius:50%;background:#1a4fa8;flex-shrink:0}
+    .book-title{font-size:13px;font-weight:700;color:#111;max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .header-right{display:flex;align-items:center;gap:8px}
+    .user-info{font-size:12px;color:#666;display:flex;align-items:center;gap:4px}
+    .btn-logout{font-size:12px;color:#999;background:none;border:1px solid #e0e0e0;border-radius:6px;padding:5px 10px;cursor:pointer;font-family:inherit}
+    .btn-logout:hover{border-color:#1a4fa8;color:#1a4fa8}
+    .page-indicator{font-size:12px;color:#888;background:#f5f5f5;padding:4px 10px;border-radius:6px}
+
+    /* ── 인증 게이트 ── */
+    #authGate{
+      position:fixed;inset:0;z-index:300;
+      background:rgba(10,20,40,.93);backdrop-filter:blur(8px);
+      display:flex;align-items:center;justify-content:center;padding:24px;
+    }
+    .gate-loading{text-align:center}
+    .spinner{
+      width:48px;height:48px;border:4px solid rgba(255,255,255,.1);
+      border-top-color:#4d8eff;border-radius:50%;
+      animation:spin .8s linear infinite;margin:0 auto 16px;
+    }
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .gate-loading p{color:rgba(255,255,255,.5);font-size:13px}
+
+    .gate-card{
+      background:#fff;border-radius:24px;padding:40px 32px;
+      max-width:360px;width:100%;text-align:center;
+      box-shadow:0 30px 80px rgba(0,0,0,.5);
+    }
+    .gate-icon{
+      width:72px;height:72px;border-radius:20px;
+      display:flex;align-items:center;justify-content:center;
+      margin:0 auto 20px;font-size:32px;
+    }
+    .lock-icon{background:#eef3ff}
+    .cart-icon{background:#fff3f0}
+    .gate-card h2{font-size:20px;font-weight:900;color:#111;margin-bottom:8px}
+    .gate-card p{font-size:14px;color:#666;line-height:1.6;margin-bottom:24px}
+    .gate-card .price{font-size:24px;font-weight:900;color:#1a4fa8;margin-bottom:20px}
+
+    .btn-primary{
+      display:flex;align-items:center;justify-content:center;gap:8px;
+      width:100%;background:#1a4fa8;color:#fff;border:none;border-radius:50px;
+      padding:14px;font-size:14px;font-weight:700;cursor:pointer;
+      margin-bottom:10px;transition:.2s;text-decoration:none;font-family:inherit;
+    }
+    .btn-primary:hover{background:#153d87}
+    .btn-kakao{
+      display:flex;align-items:center;justify-content:center;gap:8px;
+      width:100%;background:#FEE500;color:#3C1E1E;border:none;border-radius:50px;
+      padding:14px;font-size:14px;font-weight:700;cursor:pointer;
+      margin-bottom:10px;transition:.2s;font-family:inherit;
+    }
+    .btn-kakao:hover{background:#f0d800}
+    .btn-secondary{
+      display:flex;align-items:center;justify-content:center;gap:8px;
+      width:100%;background:#f3f4f6;color:#555;border:none;border-radius:50px;
+      padding:14px;font-size:14px;font-weight:700;cursor:pointer;
+      transition:.2s;text-decoration:none;font-family:inherit;
+    }
+    .btn-secondary:hover{background:#e8e9eb}
+    .gate-divider{display:flex;align-items:center;gap:10px;margin:12px 0}
+    .gate-divider span{flex:1;height:1px;background:#eee}
+    .gate-divider p{font-size:11px;color:#bbb}
+    .hidden{display:none!important}
+
+    /* ── PDF 렌더 ── */
+    #pdfWrapper{
+      display:flex;flex-direction:column;align-items:center;
+      gap:12px;padding:24px 16px 60px;
+    }
+    .page-canvas{display:block;max-width:100%;box-shadow:0 4px 24px rgba(0,0,0,.5);border-radius:2px}
+    .page-num{color:rgba(255,255,255,.3);font-size:11px;text-align:center;margin-top:-4px}
+    .pdf-complete{
+      margin-top:20px;background:rgba(255,255,255,.07);border-radius:16px;
+      padding:24px;text-align:center;max-width:500px;width:100%;
+    }
+    .pdf-complete p{color:rgba(255,255,255,.55);font-size:14px}
+
+    @media(max-width:480px){.book-title{max-width:140px}.gate-card{padding:32px 20px}}
   </style>
 </head>
 <body>
 
-  <!-- 구매자 확인 오버레이 -->
-  <div id="authGate">
-    <div id="gateLoading" class="gate-loading">
-      <div class="spinner"></div>
-      <p style="color:#888; font-size:13px;">열람 권한을 확인하는 중...</p>
-    </div>
-    <div id="gateBlocked" class="gate-card hidden">
-      <div class="lock-icon">🔒</div>
-      <h2>구매자 전용 콘텐츠</h2>
-      <p>이 전자책은 <strong>엄마와 함께 하는 단단한 말하기 패키지</strong> 구매자에게만 제공됩니다.</p>
-      <a href="index.html#packageSection" class="btn-primary">패키지 구매하기</a>
-      <a href="index.html" class="btn-secondary">홈으로 돌아가기</a>
-      <p class="login-hint">이미 구매하셨나요? <a href="index.html">로그인하기</a></p>
-    </div>
+<!-- 인증 게이트 -->
+<div id="authGate">
+  <div id="gateLoading" class="gate-loading">
+    <div class="spinner"></div>
+    <p>열람 권한을 확인하는 중...</p>
   </div>
-
-  <!-- 상단 헤더 -->
-  <header class="reader-header">
-    <div class="left">
-      <a href="index.html" class="back-btn">
-        <span class="material-symbols-outlined" style="font-size:18px">arrow_back</span>
-        <span>홈으로</span>
-      </a>
-      <span class="divider">|</span>
-      <div class="dot"></div>
-      <span class="book-title">[전자책] 엄마와 함께 하는 단단한 말하기</span>
-    </div>
-    <div class="right">
-      <a id="pdfDownloadBtn"
-         href="ebooks/pdf/엄마와 아이의 단단한 말하기(스피치라엘).pdf"
-         download="엄마와 아이의 단단한 말하기.pdf"
-         class="btn-dl hidden">
-        <span class="material-symbols-outlined" style="font-size:16px">download</span>
-        <span class="label">PDF 저장</span>
-      </a>
-      <button onclick="window.print()" class="btn-print">
-        <span class="material-symbols-outlined" style="font-size:16px">print</span>
-        <span class="label">인쇄</span>
-      </button>
-    </div>
-  </header>
-
-  <!-- PDF 뷰어 -->
-  <div class="pdf-container">
-    <iframe
-      id="pdfViewer"
-      src=""
-      title="엄마와 함께 하는 단단한 말하기 전자책">
-    </iframe>
+  <div id="gateLogin" class="gate-card hidden">
+    <div class="gate-icon lock-icon">🔐</div>
+    <h2>로그인 후 열람 가능</h2>
+    <p>이 전자책은 <strong>라엘랩 회원</strong>으로 로그인 후<br>구매자에 한해 열람하실 수 있습니다.</p>
+    <button class="btn-primary" onclick="openLoginModal()">
+      <span class="material-symbols-outlined" style="font-size:18px">person</span>
+      라엘랩 로그인
+    </button>
+    <div class="gate-divider"><span></span><p>또는</p><span></span></div>
+    <button class="btn-kakao" onclick="goKakaoLogin()">
+      <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#3C1E1E" d="M9 1.5C4.86 1.5 1.5 4.08 1.5 7.26c0 2.04 1.32 3.84 3.3 4.86l-.84 3.12c-.06.24.18.42.39.3L8.1 13.2c.3.03.6.06.9.06 4.14 0 7.5-2.58 7.5-5.76S13.14 1.5 9 1.5z"/></svg>
+      카카오로 로그인
+    </button>
+    <a href="ebook-dantan-store.html" class="btn-secondary">← 상품 페이지로</a>
   </div>
+  <div id="gateBlocked" class="gate-card hidden">
+    <div class="gate-icon cart-icon">🛒</div>
+    <h2>구매자 전용 콘텐츠</h2>
+    <p>이 전자책은 구매 후 열람하실 수 있습니다.<br>구매하시면 즉시 전체 열람 가능합니다.</p>
+    <p class="price">39,000원</p>
+    <a href="ebook-dantan-store.html" class="btn-primary">
+      <span class="material-symbols-outlined" style="font-size:18px">shopping_cart</span>
+      전자책 구매하기
+    </a>
+    <button class="btn-secondary" onclick="signOut()">다른 계정으로 로그인</button>
+  </div>
+</div>
 
-  <script>
-    const PDF_PATH    = 'ebooks/pdf/엄마와 아이의 단단한 말하기(스피치라엘).pdf';
-    const ADMIN_EMAILS = ['april783223@gmail.com'];
-    // Firestore에서 이 상품 구매 여부를 확인할 필드명
-    // purchases/{uid}.paidMomSpeech === true
-    const PURCHASE_FIELD = 'paidMomSpeech';
+<!-- 헤더 -->
+<header class="reader-header" id="readerHeader" style="display:none">
+  <div class="header-left">
+    <a href="/" class="back-btn">
+      <span class="material-symbols-outlined" style="font-size:18px">arrow_back</span>
+      홈으로
+    </a>
+    <span class="divider">|</span>
+    <div class="dot"></div>
+    <span class="book-title">엄마와 아이의 단단한 말하기</span>
+  </div>
+  <div class="header-right">
+    <span class="page-indicator" id="pageIndicator">로딩 중...</span>
+    <span class="user-info">
+      <span class="material-symbols-outlined" style="font-size:15px">person</span>
+      <span id="userName"></span>
+    </span>
+    <button class="btn-logout" onclick="signOut()">로그아웃</button>
+  </div>
+</header>
 
-    const gate        = document.getElementById('authGate');
-    const gateLoading = document.getElementById('gateLoading');
-    const gateBlocked = document.getElementById('gateBlocked');
-    const pdfViewer   = document.getElementById('pdfViewer');
-    const pdfDlBtn    = document.getElementById('pdfDownloadBtn');
+<div id="pdfWrapper"></div>
 
-    function allowAccess() {
-      gate.style.display = 'none';
-      pdfViewer.src = PDF_PATH;
-      pdfDlBtn.classList.remove('hidden');
-    }
+<script>
+  pdfjsLib.GlobalWorkerOptions.workerSrc =
+    'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
-    function denyAccess() {
-      gateLoading.classList.add('hidden');
-      gateBlocked.classList.remove('hidden');
-    }
+  const PDF_PATH      = 'ebooks/pdf/엄마와 아이의 단단한 말하기(스피치라엘).pdf';
+  const ADMIN_EMAILS  = ['april783223@gmail.com'];
+  const PURCHASE_FIELD= 'paidMomSpeech';
 
-    async function checkMomPurchase(uid) {
-      if (!db || !uid) return false;
-      try {
-        const snap = await db.collection('purchases').doc(uid).get();
-        if (!snap.exists) return false;
-        const data = snap.data();
-        // paidMomSpeech 필드가 true이면 구매 완료
-        return data[PURCHASE_FIELD] === true;
-      } catch (e) {
-        console.warn('구매 확인 오류:', e.message);
-        return false;
+  const SCALE = window.innerWidth < 600 ? 1.1 : 1.6;
+
+  const authGate    = document.getElementById('authGate');
+  const gateLoading = document.getElementById('gateLoading');
+  const gateLogin   = document.getElementById('gateLogin');
+  const gateBlocked = document.getElementById('gateBlocked');
+  const readerHeader= document.getElementById('readerHeader');
+  const pdfWrapper  = document.getElementById('pdfWrapper');
+  const userNameEl  = document.getElementById('userName');
+  const pageIndicator= document.getElementById('pageIndicator');
+
+  async function signOut() {
+    localStorage.removeItem('lael_user');
+    if (typeof auth !== 'undefined' && auth) await auth.signOut();
+    location.reload();
+  }
+
+  function goKakaoLogin() {
+    localStorage.setItem('lael_redirect_after_login', location.href);
+    const CLIENT_ID = 'ee3d5b21e7a70e5af6ce93c5c0b3e219';
+    const REDIRECT  = 'https://www.laellab.com/oauth/kakao/callback';
+    location.href = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT)}`;
+  }
+
+  function openLoginModal() {
+    localStorage.setItem('lael_redirect_after_login', location.href);
+    location.href = '/?openLogin=1';
+  }
+
+  async function checkPaid(uid) {
+    if (!uid || !db) return false;
+    try {
+      const snap = await db.collection('purchases').doc(uid).get();
+      if (!snap.exists) return false;
+      const d = snap.data();
+      return d[PURCHASE_FIELD] === true || d.paid === true;
+    } catch(e) { return false; }
+  }
+
+  async function renderPDF(displayName) {
+    authGate.style.display = 'none';
+    readerHeader.style.display = 'flex';
+    userNameEl.textContent = displayName || '구매자';
+
+    try {
+      const pdf = await pdfjsLib.getDocument(PDF_PATH).promise;
+      const total = pdf.numPages;
+      pageIndicator.textContent = `전체 ${total}페이지`;
+
+      for (let i = 1; i <= total; i++) {
+        const page = await pdf.getPage(i);
+        const vp = page.getViewport({ scale: SCALE });
+        const canvas = document.createElement('canvas');
+        canvas.className = 'page-canvas';
+        canvas.width  = vp.width;
+        canvas.height = vp.height;
+        const num = document.createElement('p');
+        num.className = 'page-num';
+        num.textContent = `${i} / ${total}`;
+        pdfWrapper.appendChild(canvas);
+        pdfWrapper.appendChild(num);
+        await page.render({ canvasContext: canvas.getContext('2d'), viewport: vp }).promise;
+        pageIndicator.textContent = `${i} / ${total} 페이지`;
       }
+
+      const done = document.createElement('div');
+      done.className = 'pdf-complete';
+      done.innerHTML = '<p>📘 전자책 열람 완료! 감사합니다.</p>';
+      pdfWrapper.appendChild(done);
+      pageIndicator.textContent = `전체 ${pdf.numPages}페이지 열람 완료`;
+    } catch(err) {
+      pdfWrapper.innerHTML = `<p style="color:rgba(255,255,255,.5);padding:40px;text-align:center">PDF를 불러올 수 없습니다: ${err.message}</p>`;
+    }
+  }
+
+  function showLoginGate()  { gateLoading.classList.add('hidden'); gateLogin.classList.remove('hidden'); }
+  function showBlockedGate(){ gateLoading.classList.add('hidden'); gateBlocked.classList.remove('hidden'); }
+
+  async function initAuth() {
+    const waitForAuth = () => new Promise(res => {
+      if (typeof auth === 'undefined' || auth === null) { res(null); return; }
+      const unsub = auth.onAuthStateChanged(u => { unsub(); res(u); });
+    });
+
+    const fbUser = await waitForAuth();
+
+    if (fbUser) {
+      if (ADMIN_EMAILS.includes(fbUser.email)) { renderPDF(fbUser.displayName || fbUser.email); return; }
+      const paid = await checkPaid(fbUser.uid);
+      paid ? renderPDF(fbUser.displayName || fbUser.email) : showBlockedGate();
+      return;
     }
 
-    const timer = setInterval(() => {
-      if (typeof auth === 'undefined' || auth === null) return;
-      clearInterval(timer);
-
-      auth.onAuthStateChanged(async (user) => {
-        if (!user) { denyAccess(); return; }
-
-        // ✅ 관리자 이메일 즉시 통과
-        if (ADMIN_EMAILS.includes(user.email)) {
-          allowAccess(); return;
+    try {
+      const saved = localStorage.getItem('lael_user');
+      if (saved) {
+        const u = JSON.parse(saved);
+        if (u && u.provider === 'kakao' && u.uid) {
+          const paid = await checkPaid(String(u.uid));
+          if (paid) { renderPDF(u.displayName || u.nickname || '구매자'); return; }
         }
+      }
+    } catch(e) {}
 
-        // 이 상품 구매 여부 확인
-        const paid = await checkMomPurchase(user.uid);
-        paid ? allowAccess() : denyAccess();
-      });
-    }, 200);
+    showLoginGate();
+  }
 
-    setTimeout(() => {
-      if (gate.style.display !== 'none') denyAccess();
-    }, 6000);
-  </script>
+  const timeout = setTimeout(() => {
+    if (authGate.style.display !== 'none') showLoginGate();
+  }, 6000);
 
+  initAuth().then(() => clearTimeout(timeout));
+</script>
 </body>
 </html>
