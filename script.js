@@ -94,8 +94,10 @@ function openEbookDetail(type) {
   closeModal('ebookStoreModal');
   if (type === 'mom') {
     openModal('ebookMomDetailModal');
+    setTimeout(renderEbookMomReviews, 50);
   } else {
     openModal('ebookDetailModal');
+    setTimeout(renderEbookInterviewReviews, 50);
   }
 }
 
@@ -191,6 +193,123 @@ function renderVodReviews() {
         </div>`).join('');
 }
 
+// ── 전자책(대입면접) 후기 시스템 ──────────────────────────────────
+let _ebookInterviewRating = 0;
+
+function setEbookInterviewRating(n) {
+  _ebookInterviewRating = n;
+  document.querySelectorAll('.ebook-interview-star').forEach((star, i) => {
+    star.classList.toggle('text-yellow-400', i < n);
+    star.classList.toggle('text-gray-300', i >= n);
+  });
+}
+
+function submitEbookInterviewReview() {
+  const text = document.getElementById('ebookInterviewReviewText')?.value?.trim();
+  if (!_ebookInterviewRating) { alert('별점을 선택해주세요.'); return; }
+  if (!text) { alert('후기를 입력해주세요.'); return; }
+
+  const reviews = JSON.parse(localStorage.getItem('ebookInterviewReviews') || '[]');
+  reviews.unshift({
+    rating: _ebookInterviewRating,
+    text,
+    date: new Date().toLocaleDateString('ko-KR'),
+    name: currentUser?.email?.split('@')[0] || '익명 독자'
+  });
+  localStorage.setItem('ebookInterviewReviews', JSON.stringify(reviews));
+
+  document.getElementById('ebookInterviewReviewText').value = '';
+  document.getElementById('ebookInterviewCharCount').textContent = '0/1000';
+  _ebookInterviewRating = 0;
+  setEbookInterviewRating(0);
+  renderEbookInterviewReviews();
+}
+
+function renderEbookInterviewReviews() {
+  const reviews = JSON.parse(localStorage.getItem('ebookInterviewReviews') || '[]');
+  const list = document.getElementById('ebookInterviewReviewList');
+  const avgEl = document.getElementById('ebookInterviewAvgRating');
+  const countEl = document.getElementById('ebookInterviewReviewCount');
+  if (!list) return;
+
+  if (countEl) countEl.textContent = reviews.length;
+  if (avgEl) {
+    avgEl.textContent = reviews.length
+      ? (reviews.reduce((s, r) => s + r.rating, 0) / reviews.length).toFixed(1)
+      : '-';
+  }
+
+  list.innerHTML = reviews.length === 0
+    ? '<div class="text-center text-gray-400 text-sm py-6 border border-dashed border-gray-200 rounded-2xl">아직 후기가 없습니다. 첫 번째 후기를 남겨주세요!</div>'
+    : reviews.map(r => `
+        <div class="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="text-yellow-400 text-sm">${'★'.repeat(r.rating)}<span class="text-gray-200">${'★'.repeat(5 - r.rating)}</span></span>
+            <span class="text-xs font-bold text-gray-700">${r.name}</span>
+            <span class="text-xs text-gray-400 ml-auto">${r.date}</span>
+          </div>
+          <p class="text-sm text-gray-700 leading-relaxed">${r.text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</p>
+        </div>`).join('');
+}
+
+// ── 전자책(단단한 말하기) 후기 시스템 ─────────────────────────────
+let _ebookMomRating = 0;
+
+function setEbookMomRating(n) {
+  _ebookMomRating = n;
+  document.querySelectorAll('.ebook-mom-star').forEach((star, i) => {
+    star.classList.toggle('text-yellow-400', i < n);
+    star.classList.toggle('text-gray-300', i >= n);
+  });
+}
+
+function submitEbookMomReview() {
+  const text = document.getElementById('ebookMomReviewText')?.value?.trim();
+  if (!_ebookMomRating) { alert('별점을 선택해주세요.'); return; }
+  if (!text) { alert('후기를 입력해주세요.'); return; }
+
+  const reviews = JSON.parse(localStorage.getItem('ebookMomReviews') || '[]');
+  reviews.unshift({
+    rating: _ebookMomRating,
+    text,
+    date: new Date().toLocaleDateString('ko-KR'),
+    name: currentUser?.email?.split('@')[0] || '익명 독자'
+  });
+  localStorage.setItem('ebookMomReviews', JSON.stringify(reviews));
+
+  document.getElementById('ebookMomReviewText').value = '';
+  document.getElementById('ebookMomCharCount').textContent = '0/1000';
+  _ebookMomRating = 0;
+  setEbookMomRating(0);
+  renderEbookMomReviews();
+}
+
+function renderEbookMomReviews() {
+  const reviews = JSON.parse(localStorage.getItem('ebookMomReviews') || '[]');
+  const list = document.getElementById('ebookMomReviewList');
+  const avgEl = document.getElementById('ebookMomAvgRating');
+  const countEl = document.getElementById('ebookMomReviewCount');
+  if (!list) return;
+
+  if (countEl) countEl.textContent = reviews.length;
+  if (avgEl) {
+    avgEl.textContent = reviews.length
+      ? (reviews.reduce((s, r) => s + r.rating, 0) / reviews.length).toFixed(1)
+      : '-';
+  }
+
+  list.innerHTML = reviews.length === 0
+    ? '<div class="text-center text-gray-400 text-sm py-6 border border-dashed border-gray-200 rounded-2xl">아직 후기가 없습니다. 첫 번째 후기를 남겨주세요!</div>'
+    : reviews.map(r => `
+        <div class="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="text-yellow-400 text-sm">${'★'.repeat(r.rating)}<span class="text-gray-200">${'★'.repeat(5 - r.rating)}</span></span>
+            <span class="text-xs font-bold text-gray-700">${r.name}</span>
+            <span class="text-xs text-gray-400 ml-auto">${r.date}</span>
+          </div>
+          <p class="text-sm text-gray-700 leading-relaxed">${r.text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</p>
+        </div>`).join('');
+}
 
 // ── AI 모의면접 챗봇 ─────────────────────────────────────────
 async function openAIChatbot() {
