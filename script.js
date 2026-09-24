@@ -697,6 +697,11 @@ function updateAuthUI(user) {
     if (mobileAuthText) {
       mobileAuthText.innerHTML = `<span>${name}님 (${isPaid ? '✅ 수강중' : '⚠️ 미결제'})</span> • <span class="text-xs text-red-500 underline cursor-pointer" onclick="handleSignOut(); event.stopPropagation();">로그아웃</span>`;
     }
+    // 미리보기 버튼 표시 (로그인 상태)
+    const previewBtn1 = document.getElementById('ebookInterviewPreviewBtn');
+    const previewBtn2 = document.getElementById('ebookMomPreviewBtn');
+    if (previewBtn1) previewBtn1.style.display = 'flex';
+    if (previewBtn2) previewBtn2.style.display = 'flex';
   } else {
     if (authNav) {
       authNav.innerHTML = `
@@ -707,6 +712,11 @@ function updateAuthUI(user) {
       `;
     }
     if (mobileAuthText) mobileAuthText.textContent = '로그인 / 회원가입';
+    // 미리보기 버튼 숨김 (비로그인)
+    const previewBtn1 = document.getElementById('ebookInterviewPreviewBtn');
+    const previewBtn2 = document.getElementById('ebookMomPreviewBtn');
+    if (previewBtn1) previewBtn1.style.display = 'none';
+    if (previewBtn2) previewBtn2.style.display = 'none';
   }
 }
 
