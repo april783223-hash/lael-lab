@@ -100,14 +100,33 @@ async function checkPurchaseStatus(uid) {
 async function savePurchaseRecord(uid, paymentResult) {
   if (!db || !uid) return;
   try {
-    await db.collection('purchases').doc(uid).set({
-      paid:      true,
+    // 상품 종류에 따라 올바른 구매 필드 설정
+    const goodsName = paymentResult.goodsName || '';
+    const isEbookDantan    = goodsName.includes('단단한');
+    const isEbookInterview = goodsName.includes('스피치 공식') && !goodsName.includes('패키지') && !goodsName.includes('올인원');
+    const isPackage        = goodsName.includes('패키지') || goodsName.includes('올인원');
+
+    const purchaseData = {
       orderId:   paymentResult.orderId,
-      goodsName: paymentResult.goodsName,
+      goodsName: goodsName,
       amount:    paymentResult.amount,
       tid:       paymentResult.tid || '',
       paidAt:    firebase.firestore.FieldValue.serverTimestamp()
-    });
+    };
+
+    if (isEbookDantan) {
+      purchaseData.paidMomSpeech = true;
+    } else if (isEbookInterview) {
+      purchaseData.paid = true;
+    } else if (isPackage) {
+      // 패키지는 전자책 + VOD 모두 포함
+      purchaseData.paid = true;
+      purchaseData.paidMomSpeech = true;
+    } else {
+      purchaseData.paid = true;
+    }
+
+    await db.collection('purchases').doc(uid).set(purchaseData, { merge: true });
     console.log('[LAEL LAB] 결제 기록 저장 완료 ✅', paymentResult.orderId);
   } catch (e) {
     console.warn('[LAEL LAB] savePurchaseRecord 오류:', e.message);
