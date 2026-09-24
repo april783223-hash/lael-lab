@@ -557,12 +557,13 @@ function updateAuthUI(user) {
     const isPaid = user.isPaid === true;
 
     if (authNav) {
+      const shortName = name.length > 7 ? name.slice(0, 7) + '…' : name;
       authNav.innerHTML = `
         <div class="relative group">
-          <button class="bg-primary/10 text-primary px-3.5 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 border border-primary/30 shadow-sm cursor-pointer">
-            <span class="w-2 h-2 rounded-full ${isPaid ? 'bg-emerald-500 animate-pulse' : 'bg-yellow-400'}"></span>
-            <span>${name} 님</span>
-            <span class="text-[10px] ${isPaid ? 'bg-primary' : 'bg-yellow-500'} text-white px-1.5 py-0.5 rounded font-semibold">${isPaid ? '수강중' : '미결제'}</span>
+          <button class="bg-primary/10 text-primary px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 border border-primary/30 shadow-sm cursor-pointer whitespace-nowrap max-w-[160px]">
+            <span class="w-2 h-2 rounded-full shrink-0 ${isPaid ? 'bg-emerald-500 animate-pulse' : 'bg-yellow-400'}"></span>
+            <span class="truncate">${shortName} 님</span>
+            <span class="text-[10px] shrink-0 ${isPaid ? 'bg-primary' : 'bg-yellow-500'} text-white px-1 py-0.5 rounded font-semibold">${isPaid ? '수강생' : '미결제'}</span>
           </button>
           <div class="hidden group-hover:block absolute right-0 top-full mt-1 bg-white rounded-xl shadow-xl border border-gray-100 p-2 w-36 z-50">
             <button onclick="openEbookModal()" class="w-full text-left px-3 py-2 text-xs text-gray-700 hover:bg-gray-50 rounded-lg">📖 내 전자책</button>
