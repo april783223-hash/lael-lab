@@ -24,7 +24,15 @@ export default async function handler(req, res) {
   const CLIENT_SECRET = process.env.KAKAO_CLIENT_SECRET;
   const REDIRECT_URI  = redirect_uri || 'https://www.laellab.com/oauth/kakao/callback';
 
-  // ── 파라미터 존재 여부 디버그 로그 (실제 값은 절대 출력하지 않음) ──
+  // ── 환경변수 진단 로그 (값 절대 출력 안 함) ───────────────────
+  console.log('[Kakao] ENV 진단 ─────────────────────────────────');
+  console.log('  KAKAO_REST_API_KEY  존재:', !!REST_API_KEY,  '/ 길이:', REST_API_KEY?.length  ?? 0);
+  console.log('  KAKAO_CLIENT_SECRET 존재:', !!CLIENT_SECRET, '/ 길이:', CLIENT_SECRET?.length ?? 0);
+  // process.env에서 KAKAO_ 로 시작하는 키 목록만 출력 (값은 출력 안 함)
+  const kakaoEnvKeys = Object.keys(process.env).filter(k => k.startsWith('KAKAO'));
+  console.log('  process.env에서 KAKAO_* 키 목록:', kakaoEnvKeys.length ? kakaoEnvKeys : '(없음)');
+  console.log('─────────────────────────────────────────────────');
+
   const paramCheck = {
     grant_type:    true,                    // 항상 'authorization_code'
     client_id:     !!REST_API_KEY,          // 환경변수 존재 여부만
