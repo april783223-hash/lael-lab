@@ -339,18 +339,32 @@ async function checkUserPaid(user) {
 if (typeof auth !== 'undefined' && auth) {
   auth.onAuthStateChanged(async (user) => {
     if (user) {
-      // Firestore에 사용자 문서 생성/갱신
+      // Firebase 로그인 유저 (Google / 이메일)
       if (typeof upsertUserDoc === 'function') {
         await upsertUserDoc(user);
       }
-      // 결제 여부 확인 후 UI 업데이트
       const paid = await checkUserPaid(user);
       user.isPaid = paid;
       currentUser = user;
+      updateAuthUI(currentUser);
     } else {
+      // Firebase 유저 없음 → localStorage에서 카카오 유저 확인
+      const saved = localStorage.getItem('lael_user');
+      if (saved) {
+        try {
+          const localUser = JSON.parse(saved);
+          // 카카오 유저면 Firebase null로 덮어쓰지 않고 유지
+          if (localUser && localUser.provider === 'kakao') {
+            currentUser = localUser;
+            updateAuthUI(currentUser);
+            return; // Firebase가 null이어도 카카오 유저 유지
+          }
+        } catch(e) {}
+      }
+      // 진짜 로그아웃 상태
       currentUser = null;
+      updateAuthUI(null);
     }
-    updateAuthUI(currentUser);
   });
 } else {
   // 로컬 테스트 모드: localStorage 확인
