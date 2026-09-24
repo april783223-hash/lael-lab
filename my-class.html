@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>마이 클래스 | LAEL LAB</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%234c37ce'/%3E%3Cstop offset='100%25' stop-color='%23ff6748'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='8' fill='url(%23g)'/%3E%3Ctext x='16' y='22' font-family='sans-serif' font-size='18' font-weight='900' fill='white' text-anchor='middle'%3EL%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Noto Sans KR',sans-serif;background:#f8f9fb;color:#111;min-height:100vh}
+
+    /* ── 상단 헤더 ── */
+    .top-header{
+      background:#fff;border-bottom:1px solid #ececec;
+      position:sticky;top:0;z-index:100;
+      box-shadow:0 1px 6px rgba(0,0,0,.06);
+    }
+    .top-header-inner{
+      max-width:960px;margin:0 auto;
+      display:flex;align-items:center;justify-content:space-between;
+      height:56px;padding:0 20px;
+    }
+    .logo-link{
+      font-size:20px;font-weight:900;color:#111;text-decoration:none;
+      display:flex;align-items:center;gap:6px;
+    }
+    .logo-dot{width:8px;height:8px;border-radius:50%;background:#4c37ce}
+    .user-row{display:flex;align-items:center;gap:10px}
+    .user-name{font-size:13px;font-weight:700;color:#4c37ce}
+    .btn-logout{font-size:12px;color:#999;background:none;border:1px solid #e5e5e5;border-radius:6px;padding:5px 10px;cursor:pointer;font-family:inherit}
+    .btn-logout:hover{border-color:#4c37ce;color:#4c37ce}
+
+    /* ── 페이지 제목 ── */
+    .page-hero{background:#fff;border-bottom:1px solid #f0f0f0;padding:28px 20px 0}
+    .page-hero-inner{max-width:960px;margin:0 auto}
+    .page-hero h1{font-size:24px;font-weight:900;color:#111;margin-bottom:20px}
+
+    /* ── 탭 ── */
+    .tabs{display:flex;gap:0;border-bottom:2px solid #eee}
+    .tab-btn{
+      padding:12px 22px;font-size:14px;font-weight:700;
+      color:#aaa;background:none;border:none;cursor:pointer;
+      font-family:inherit;border-bottom:2px solid transparent;
+      margin-bottom:-2px;transition:.2s;
+    }
+    .tab-btn.active{color:#4c37ce;border-bottom-color:#4c37ce}
+    .tab-btn:hover:not(.active){color:#666}
+
+    /* ── 메인 콘텐츠 ── */
+    .main{max-width:960px;margin:0 auto;padding:28px 20px 80px}
+
+    /* 로그인 요구 화면 */
+    #loginGate{
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      min-height:60vh;gap:16px;text-align:center;
+    }
+    #loginGate .gi{font-size:56px}
+    #loginGate h2{font-size:20px;font-weight:900;color:#111}
+    #loginGate p{font-size:14px;color:#888;line-height:1.6}
+    .btn-login{
+      display:inline-flex;align-items:center;gap:8px;
+      background:#4c37ce;color:#fff;padding:13px 28px;
+      border-radius:50px;font-size:14px;font-weight:700;text-decoration:none;
+      border:none;cursor:pointer;font-family:inherit;transition:.2s;margin-top:8px;
+    }
+    .btn-login:hover{background:#3d2bb0}
+
+    /* 로딩 */
+    #loadingScreen{display:flex;align-items:center;justify-content:center;min-height:60vh}
+    .spinner{width:40px;height:40px;border:4px solid #f0eeff;border-top-color:#4c37ce;border-radius:50%;animation:spin .8s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    /* ── 콘텐츠 카드 그리드 ── */
+    .content-count{font-size:14px;font-weight:700;color:#555;margin-bottom:16px}
+    .content-count span{color:#4c37ce;font-weight:900}
+    .cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+
+    .card{
+      background:#fff;border-radius:16px;border:1px solid #eeeeee;
+      overflow:hidden;transition:.2s;
+    }
+    .card:hover{box-shadow:0 8px 32px rgba(0,0,0,.1);transform:translateY(-2px)}
+    .card-body{padding:18px}
+    .card-top{display:flex;gap:14px;align-items:flex-start;margin-bottom:14px}
+    .card-thumb{
+      width:72px;height:96px;border-radius:8px;object-fit:cover;
+      background:linear-gradient(135deg,#4c37ce,#ff6748);
+      flex-shrink:0;display:flex;align-items:center;justify-content:center;
+      font-size:28px;
+    }
+    .card-thumb img{width:100%;height:100%;object-fit:cover;border-radius:8px}
+    .card-info{flex:1;min-width:0}
+    .card-type{font-size:11px;color:#4c37ce;font-weight:700;background:#f0eeff;padding:2px 7px;border-radius:4px;display:inline-block;margin-bottom:6px}
+    .card-title{font-size:14px;font-weight:900;color:#111;line-height:1.4;margin-bottom:4px}
+
+    /* 진도 바 */
+    .progress-wrap{margin-bottom:10px}
+    .progress-bar-bg{
+      background:#f0f0f0;border-radius:50px;height:36px;
+      display:flex;align-items:center;position:relative;overflow:hidden;
+      cursor:pointer;
+    }
+    .progress-bar-fill{
+      position:absolute;left:0;top:0;bottom:0;
+      background:#4c37ce;border-radius:50px;
+      transition:width .4s ease;
+    }
+    .progress-bar-text{
+      position:relative;z-index:1;
+      display:flex;align-items:center;justify-content:space-between;
+      width:100%;padding:0 14px;
+    }
+    .progress-play{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:#fff}
+    .progress-pct{font-size:12px;font-weight:700;color:rgba(255,255,255,.85)}
+
+    /* 날짜 */
+    .card-meta{font-size:12px;color:#999;margin-bottom:12px}
+    .card-meta.lifetime{color:#4c37ce;font-weight:700}
+    .card-meta.expiring{color:#ff6748;font-weight:700}
+
+    /* 후기 버튼 */
+    .btn-review{
+      width:100%;padding:11px;border:1px solid #e0e0e0;
+      border-radius:10px;background:#fff;color:#4c37ce;
+      font-size:13px;font-weight:700;cursor:pointer;
+      font-family:inherit;transition:.2s;
+    }
+    .btn-review:hover{background:#f0eeff;border-color:#4c37ce}
+    .btn-review.done{color:#888;border-color:#eee;cursor:default;background:#fafafa}
+
+    /* 빈 상태 */
+    .empty-state{text-align:center;padding:60px 20px}
+    .empty-state .ei{font-size:48px;margin-bottom:16px}
+    .empty-state h3{font-size:18px;font-weight:900;color:#333;margin-bottom:8px}
+    .empty-state p{font-size:14px;color:#888;line-height:1.6;margin-bottom:24px}
+    .btn-go{
+      display:inline-flex;align-items:center;gap:6px;
+      background:#4c37ce;color:#fff;padding:12px 24px;border-radius:50px;
+      font-size:13px;font-weight:700;text-decoration:none;transition:.2s;
+    }
+    .btn-go:hover{background:#3d2bb0}
+
+    /* ── 후기 탭 ── */
+    .review-list{display:flex;flex-direction:column;gap:12px}
+    .review-card{
+      background:#fff;border:1px solid #eee;border-radius:14px;padding:18px;
+    }
+    .review-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+    .review-product{font-size:12px;font-weight:700;color:#4c37ce;background:#f0eeff;padding:3px 8px;border-radius:6px}
+    .review-date{font-size:11px;color:#bbb}
+    .stars{color:#f59e0b;font-size:16px;letter-spacing:1px;margin-bottom:6px}
+    .review-text{font-size:14px;color:#444;line-height:1.6}
+    .no-reviews{text-align:center;padding:60px 20px;color:#bbb;font-size:14px}
+
+    /* ── 후기 작성 모달 ── */
+    .modal-bg{
+      position:fixed;inset:0;background:rgba(0,0,0,.45);backdrop-filter:blur(4px);
+      z-index:500;display:flex;align-items:center;justify-content:center;padding:20px;
+      opacity:0;pointer-events:none;transition:.2s;
+    }
+    .modal-bg.open{opacity:1;pointer-events:auto}
+    .modal{
+      background:#fff;border-radius:20px;padding:28px;max-width:440px;width:100%;
+      box-shadow:0 20px 60px rgba(0,0,0,.2);
+    }
+    .modal h3{font-size:18px;font-weight:900;margin-bottom:4px}
+    .modal .product-name{font-size:13px;color:#4c37ce;font-weight:700;margin-bottom:20px}
+    .modal label{font-size:12px;font-weight:700;color:#555;display:block;margin-bottom:6px}
+    .star-picker{display:flex;gap:6px;margin-bottom:18px}
+    .star-picker button{font-size:28px;background:none;border:none;cursor:pointer;opacity:.3;transition:.1s;padding:0}
+    .star-picker button.on{opacity:1}
+    .modal textarea{
+      width:100%;padding:12px;border:1px solid #e0e0e0;border-radius:10px;
+      font-family:inherit;font-size:14px;color:#333;resize:vertical;
+      min-height:100px;margin-bottom:16px;outline:none;
+      transition:.2s;
+    }
+    .modal textarea:focus{border-color:#4c37ce;box-shadow:0 0 0 3px rgba(76,55,206,.1)}
+    .modal-actions{display:flex;gap:8px}
+    .btn-cancel{
+      flex:1;padding:12px;border:1px solid #e0e0e0;border-radius:10px;
+      background:#fff;color:#666;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;
+    }
+    .btn-submit{
+      flex:2;padding:12px;border:none;border-radius:10px;
+      background:#4c37ce;color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;
+      transition:.2s;
+    }
+    .btn-submit:hover{background:#3d2bb0}
+    .btn-submit:disabled{background:#ccc;cursor:not-allowed}
+    .submit-msg{font-size:12px;color:#4c37ce;font-weight:700;text-align:center;margin-top:8px}
+
+    /* 탭 패널 */
+    .tab-panel{display:none}
+    .tab-panel.active{display:block}
+
+    @media(max-width:520px){
+      .cards-grid{grid-template-columns:1fr}
+      .tab-btn{padding:10px 14px;font-size:13px}
+    }
+  </style>
+</head>
+<body>
+
+<!-- 상단 헤더 -->
+<div class="top-header">
+  <div class="top-header-inner">
+    <a href="/" class="logo-link">
+      <span class="logo-dot"></span>LAEL LAB
+    </a>
+    <div class="user-row" id="userRow" style="display:none">
+      <span class="user-name" id="headerUserName"></span>
+      <button class="btn-logout" onclick="doSignOut()">로그아웃</button>
+    </div>
+  </div>
+</div>
+
+<!-- 페이지 제목 + 탭 -->
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <h1>🎓 마이 클래스</h1>
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('contents')">My 콘텐츠</button>
+      <button class="tab-btn" onclick="switchTab('reviews')">내가 쓴 후기</button>
+    </div>
+  </div>
+</div>
+
+<!-- 메인 -->
+<div class="main">
+
+  <!-- 로딩 -->
+  <div id="loadingScreen"><div class="spinner"></div></div>
+
+  <!-- 미로그인 -->
+  <div id="loginGate" style="display:none">
+    <div class="gi">🔐</div>
+    <h2>로그인이 필요합니다</h2>
+    <p>마이 클래스는 라엘랩 회원으로 로그인 후 이용하실 수 있어요.</p>
+    <a href="/?openLogin=1" class="btn-login">
+      <span class="material-symbols-outlined" style="font-size:18px">person</span>
+      로그인하러 가기
+    </a>
+  </div>
+
+  <!-- My 콘텐츠 탭 -->
+  <div id="panel-contents" class="tab-panel active" style="display:none">
+    <p class="content-count">총 <span id="contentCount">0</span>개</p>
+    <div class="cards-grid" id="cardsGrid"></div>
+    <div class="empty-state" id="emptyState" style="display:none">
+      <div class="ei">📦</div>
+      <h3>아직 구매한 콘텐츠가 없어요</h3>
+      <p>라엘랩의 전자책과 동영상 강의를<br>구매하고 바로 학습을 시작해보세요!</p>
+      <a href="/" class="btn-go">
+        <span class="material-symbols-outlined" style="font-size:16px">storefront</span>
+        콘텐츠 둘러보기
+      </a>
+    </div>
+  </div>
+
+  <!-- 내가 쓴 후기 탭 -->
+  <div id="panel-reviews" class="tab-panel" style="display:none">
+    <div class="review-list" id="reviewList"></div>
+    <div class="no-reviews" id="noReviews" style="display:none">
+      아직 작성한 후기가 없어요 ✍️
+    </div>
+  </div>
+
+</div>
+
+<!-- 후기 작성 모달 -->
+<div class="modal-bg" id="reviewModal">
+  <div class="modal">
+    <h3>후기 작성</h3>
+    <p class="product-name" id="modalProductName"></p>
+    <label>별점</label>
+    <div class="star-picker" id="starPicker">
+      <button data-star="1" onclick="setStar(1)">⭐</button>
+      <button data-star="2" onclick="setStar(2)">⭐</button>
+      <button data-star="3" onclick="setStar(3)">⭐</button>
+      <button data-star="4" onclick="setStar(4)">⭐</button>
+      <button data-star="5" onclick="setStar(5)">⭐</button>
+    </div>
+    <label>후기 내용</label>
+    <textarea id="reviewText" placeholder="솔직한 후기를 작성해 주세요. (최소 10자)" maxlength="500"></textarea>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeReviewModal()">취소</button>
+      <button class="btn-submit" id="submitBtn" onclick="submitReview()">등록하기</button>
+    </div>
+    <p class="submit-msg" id="submitMsg" style="display:none"></p>
+  </div>
+</div>
+
+<script>
+// ── 상태 ────────────────────────────────────────────
+let currentUser  = null;
+let currentUid   = null;
+let reviewTarget = null; // { productId, productName }
+let selectedStar = 0;
+const ADMIN_EMAILS = ['april783223@gmail.com'];
+
+// ── 로그아웃 ──────────────────────────────────────
+async function doSignOut() {
+  localStorage.removeItem('lael_user');
+  if (typeof auth !== 'undefined' && auth) await auth.signOut();
+  location.href = '/';
+}
+
+// ── 탭 전환 ──────────────────────────────────────
+function switchTab(name) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => { p.style.display='none'; p.classList.remove('active'); });
+  document.querySelector(`[onclick="switchTab('${name}')"]`).classList.add('active');
+  const panel = document.getElementById(`panel-${name}`);
+  panel.style.display = 'block';
+  panel.classList.add('active');
+  if (name === 'reviews') loadReviews();
+}
+
+// ── 날짜 계산 ─────────────────────────────────────
+function calcDaysRemaining(paidAt, durationDays) {
+  if (!paidAt) return null;
+  const paid = paidAt.toDate ? paidAt.toDate() : new Date(paidAt);
+  const expires = new Date(paid.getTime() + durationDays * 86400000);
+  const now = new Date();
+  return Math.max(0, Math.ceil((expires - now) / 86400000));
+}
+
+function formatExpireDate(paidAt, durationDays) {
+  if (!paidAt) return '';
+  const paid = paidAt.toDate ? paidAt.toDate() : new Date(paidAt);
+  const expires = new Date(paid.getTime() + durationDays * 86400000);
+  const y = expires.getFullYear();
+  const m = String(expires.getMonth()+1).padStart(2,'0');
+  const d = String(expires.getDate()).padStart(2,'0');
+  return `${y}.${m}.${d}까지`;
+}
+
+// ── 진도율 읽기/쓰기 (localStorage) ─────────────
+function getProgress(productId) {
+  try {
+    const raw = localStorage.getItem('lael_progress_' + productId);
+    return raw ? Math.min(100, Math.max(0, parseInt(raw))) : 0;
+  } catch { return 0; }
+}
+
+// ── 카드 생성 ─────────────────────────────────────
+function createCard({ productId, title, type, emoji, href, lifetime, paidAt, durationDays, reviewDone }) {
+  const pct = getProgress(productId);
+  let metaHTML = '';
+  if (lifetime) {
+    metaHTML = `<p class="card-meta lifetime">✅ 평생열람 가능</p>`;
+  } else if (paidAt) {
+    const days = calcDaysRemaining(paidAt, durationDays);
+    const dateStr = formatExpireDate(paidAt, durationDays);
+    const cls = days < 30 ? 'expiring' : '';
+    metaHTML = `<p class="card-meta ${cls}">📅 ${days}일 남음 (${dateStr})</p>`;
+  }
+
+  const reviewBtnHTML = reviewDone
+    ? `<button class="btn-review done" disabled>✅ 후기 작성 완료</button>`
+    : `<button class="btn-review" onclick="openReviewModal('${productId}', '${title.replace(/'/g,"\\'")}')">✍️ 후기 작성</button>`;
+
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.innerHTML = `
+    <div class="card-body">
+      <div class="card-top">
+        <div class="card-thumb">${emoji}</div>
+        <div class="card-info">
+          <span class="card-type">${type}</span>
+          <p class="card-title">${title}</p>
+        </div>
+      </div>
+      <div class="progress-wrap">
+        <div class="progress-bar-bg" onclick="window.location.href='${href}'">
+          <div class="progress-bar-fill" style="width:${pct}%"></div>
+          <div class="progress-bar-text">
+            <span class="progress-play">
+              <span class="material-symbols-outlined" style="font-size:18px">play_circle</span>
+              이어보기
+            </span>
+            <span class="progress-pct">${pct}% 수강</span>
+          </div>
+        </div>
+      </div>
+      ${metaHTML}
+    </div>
+    <div style="border-top:1px solid #f5f5f5;padding:12px 18px">
+      ${reviewBtnHTML}
+    </div>
+  `;
+  return card;
+}
+
+// ── 구매한 콘텐츠 로드 ───────────────────────────
+async function loadContents(uid) {
+  const grid   = document.getElementById('cardsGrid');
+  const empty  = document.getElementById('emptyState');
+  const countEl= document.getElementById('contentCount');
+  grid.innerHTML = '';
+  let count = 0;
+
+  if (!db || !uid) { empty.style.display='block'; return; }
+
+  // 후기 목록 미리 로드
+  let reviewedSet = new Set();
+  try {
+    const rSnap = await db.collection('reviews')
+      .where('uid','==', uid).get();
+    rSnap.forEach(d => reviewedSet.add(d.data().productId));
+  } catch(e) {}
+
+  // 구매 정보
+  let purchaseData = {};
+  try {
+    const snap = await db.collection('purchases').doc(uid).get();
+    if (snap.exists) purchaseData = snap.data();
+  } catch(e) {}
+
+  const isAdmin = ADMIN_EMAILS.includes(currentUser?.email || '');
+
+  // ── 상품 정의 ──
+  const products = [
+    {
+      productId: 'interview_ebook',
+      check: isAdmin || purchaseData.paid === true,
+      title: '대입 면접이 쉬워지는 스피치 공식',
+      type: '📖 전자책',
+      emoji: '📖',
+      href: 'ebook.html',
+      lifetime: true,
+      paidAt: purchaseData.paidAt || null,
+      durationDays: null,
+    },
+    {
+      productId: 'dantan_ebook',
+      check: isAdmin || purchaseData.paidMomSpeech === true,
+      title: '엄마와 아이의 단단한 말하기',
+      type: '📘 전자책',
+      emoji: '📘',
+      href: 'ebook-mom.html',
+      lifetime: true,
+      paidAt: purchaseData.paidMomAt || null,
+      durationDays: null,
+    },
+    {
+      productId: 'vod',
+      check: isAdmin || purchaseData.paidVOD === true,
+      title: '대입 면접이 쉬워지는 스피치 공식 (VOD 12강)',
+      type: '🎬 동영상 강의',
+      emoji: '🎬',
+      href: 'vod.html',
+      lifetime: false,
+      paidAt: purchaseData.paidVODAt || null,
+      durationDays: 365,
+    },
+  ];
+
+  products.forEach(p => {
+    if (!p.check) return;
+    const card = createCard({ ...p, reviewDone: reviewedSet.has(p.productId) });
+    grid.appendChild(card);
+    count++;
+  });
+
+  countEl.textContent = count;
+  empty.style.display = count === 0 ? 'block' : 'none';
+}
+
+// ── 후기 목록 로드 ──────────────────────────────
+async function loadReviews() {
+  const list   = document.getElementById('reviewList');
+  const noRev  = document.getElementById('noReviews');
+  list.innerHTML = '';
+
+  if (!db || !currentUid) { noRev.style.display='block'; return; }
+
+  const PRODUCT_NAMES = {
+    interview_ebook: '대입 면접이 쉬워지는 스피치 공식',
+    dantan_ebook:    '엄마와 아이의 단단한 말하기',
+    vod:             'VOD 12강 동영상 강의',
+  };
+
+  try {
+    const snap = await db.collection('reviews')
+      .where('uid','==', currentUid)
+      .orderBy('createdAt','desc')
+      .get();
+
+    if (snap.empty) { noRev.style.display='block'; return; }
+    noRev.style.display = 'none';
+
+    snap.forEach(doc => {
+      const d = doc.data();
+      const stars = '⭐'.repeat(d.rating || 0);
+      const dateStr = d.createdAt?.toDate
+        ? d.createdAt.toDate().toLocaleDateString('ko-KR')
+        : '';
+      const el = document.createElement('div');
+      el.className = 'review-card';
+      el.innerHTML = `
+        <div class="review-card-header">
+          <span class="review-product">${PRODUCT_NAMES[d.productId] || d.productId}</span>
+          <span class="review-date">${dateStr}</span>
+        </div>
+        <div class="stars">${stars}</div>
+        <p class="review-text">${d.content || ''}</p>
+      `;
+      list.appendChild(el);
+    });
+  } catch(e) {
+    noRev.style.display='block';
+  }
+}
+
+// ── 후기 모달 ────────────────────────────────────
+function openReviewModal(productId, productName) {
+  reviewTarget = { productId, productName };
+  document.getElementById('modalProductName').textContent = productName;
+  document.getElementById('reviewText').value = '';
+  document.getElementById('submitMsg').style.display = 'none';
+  setStar(0);
+  document.getElementById('reviewModal').classList.add('open');
+}
+function closeReviewModal() {
+  document.getElementById('reviewModal').classList.remove('open');
+  reviewTarget = null;
+}
+
+function setStar(n) {
+  selectedStar = n;
+  document.querySelectorAll('#starPicker button').forEach((btn, i) => {
+    btn.classList.toggle('on', i < n);
+  });
+}
+
+async function submitReview() {
+  const text = document.getElementById('reviewText').value.trim();
+  const msg  = document.getElementById('submitMsg');
+  const btn  = document.getElementById('submitBtn');
+
+  if (!selectedStar) { alert('별점을 선택해 주세요.'); return; }
+  if (text.length < 10) { alert('후기를 10자 이상 작성해 주세요.'); return; }
+  if (!db || !currentUid) { alert('로그인 상태를 확인해 주세요.'); return; }
+
+  btn.disabled = true;
+  btn.textContent = '등록 중...';
+
+  try {
+    await db.collection('reviews').add({
+      uid:       currentUid,
+      productId: reviewTarget.productId,
+      productName: reviewTarget.productName,
+      rating:    selectedStar,
+      content:   text,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      userName:  currentUser?.displayName || '익명',
+    });
+
+    msg.textContent = '✅ 후기가 등록됐어요! 감사합니다 😊';
+    msg.style.display = 'block';
+    btn.textContent = '등록 완료';
+    setTimeout(() => { closeReviewModal(); loadContents(currentUid); }, 1500);
+  } catch(e) {
+    btn.disabled = false;
+    btn.textContent = '등록하기';
+    alert('등록 중 오류가 발생했습니다. 다시 시도해 주세요.');
+  }
+}
+
+// ── 인증 흐름 ────────────────────────────────────
+async function initPage() {
+  const loadingEl = document.getElementById('loadingScreen');
+  const loginEl   = document.getElementById('loginGate');
+  const panelEl   = document.getElementById('panel-contents');
+
+  // Firebase Auth 대기
+  const fbUser = await new Promise(res => {
+    if (typeof auth === 'undefined' || !auth) { res(null); return; }
+    const unsub = auth.onAuthStateChanged(u => { unsub(); res(u); });
+  });
+
+  if (fbUser) {
+    currentUser = fbUser;
+    currentUid  = fbUser.uid;
+  } else {
+    // Kakao 확인
+    try {
+      const saved = localStorage.getItem('lael_user');
+      if (saved) {
+        const u = JSON.parse(saved);
+        if (u?.provider === 'kakao' && u?.uid) {
+          currentUser = u;
+          currentUid  = String(u.uid);
+        }
+      }
+    } catch(e) {}
+  }
+
+  loadingEl.style.display = 'none';
+
+  if (!currentUser) {
+    loginEl.style.display = 'flex';
+    return;
+  }
+
+  // 헤더 사용자 이름
+  const name = currentUser.displayName || currentUser.nickname || currentUser.email?.split('@')[0] || '수강생';
+  document.getElementById('headerUserName').textContent = name + ' 님';
+  document.getElementById('userRow').style.display = 'flex';
+
+  // 콘텐츠 로드
+  panelEl.style.display = 'block';
+  await loadContents(currentUid);
+}
+
+// 6초 타임아웃
+const timeout = setTimeout(() => {
+  if (document.getElementById('loadingScreen').style.display !== 'none') {
+    document.getElementById('loadingScreen').style.display = 'none';
+    document.getElementById('loginGate').style.display = 'flex';
+  }
+}, 6000);
+
+initPage().then(() => clearTimeout(timeout));
+</script>
+</body>
+</html>
