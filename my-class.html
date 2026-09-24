@@ -365,9 +365,16 @@ function createCard({ productId, title, type, emoji, href, lifetime, paidAt, dur
     metaHTML = `<p class="card-meta ${cls}">📅 ${days}일 남음 (${dateStr})</p>`;
   }
 
+  // 후기 버튼 URL 매핑
+  const REVIEW_URLS = {
+    interview_ebook: 'ebook-interview-store.html?openReview=1',
+    dantan_ebook:    'ebook-dantan-store.html?openReview=1',
+    vod:             'vod-store.html?openReview=1',
+  };
+
   const reviewBtnHTML = reviewDone
     ? `<button class="btn-review done" disabled>✅ 후기 작성 완료</button>`
-    : `<button class="btn-review" onclick="openReviewModal('${productId}', '${title.replace(/'/g,"\\'")}')">✍️ 후기 작성</button>`;
+    : `<a href="${REVIEW_URLS[productId] || '#'}" class="btn-review" style="display:block;text-align:center;text-decoration:none">✍️ 후기 작성</a>`;
 
   const card = document.createElement('div');
   card.className = 'card';

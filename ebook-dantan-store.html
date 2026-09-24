@@ -280,7 +280,7 @@
   </div>
 
   <!-- 후기 -->
-  <div class="section">
+  <div class="section" id="reviewSection">
     <h2 class="section-title">후기</h2>
     <div class="review-header">
       <div class="review-rating">★ -</div>
@@ -334,6 +334,25 @@ function setRating(val) {
   const stars = document.querySelectorAll('#starInputDantan span');
   stars.forEach((s, i) => { s.style.color = i < val ? '#f59e0b' : '#ddd'; });
 }
+
+// ?openReview=1 파라미터 → 후기란 자동 스크롤 + 포커스
+(function() {
+  if (new URLSearchParams(location.search).get('openReview') !== '1') return;
+  window.addEventListener('load', function() {
+    const section  = document.getElementById('reviewSection');
+    const textarea = document.getElementById('reviewTextDantan');
+    if (section) {
+      setTimeout(function() {
+        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        section.style.transition = 'outline .1s';
+        section.style.outline = '3px solid #1a4fa8';
+        section.style.borderRadius = '12px';
+        setTimeout(function() { section.style.outline = 'none'; section.style.borderRadius = ''; }, 2200);
+      }, 400);
+    }
+    if (textarea) setTimeout(function() { textarea.focus(); }, 700);
+  });
+})();
 </script>
 </body>
 </html>
