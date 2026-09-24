@@ -720,11 +720,39 @@ function openPurchaseModal(goodsName, amount) {
   const priceEl      = document.getElementById('purchaseItemPrice');
   const totalProdEl  = document.getElementById('totalProductPrice');
   const totalPayEl   = document.getElementById('totalPayPrice');
+  const thumbEl      = document.getElementById('purchaseItemThumb');
+  const badgeEl      = document.getElementById('purchaseItemBadge');
+  const optionEl     = document.getElementById('purchaseItemOption');
   const formatted    = Number(amount).toLocaleString('ko-KR') + '원';
   if (titleEl)     titleEl.textContent     = goodsName;
   if (priceEl)     priceEl.textContent     = formatted;
   if (totalProdEl) totalProdEl.textContent = formatted;
   if (totalPayEl)  totalPayEl.textContent  = formatted;
+
+  // 상품 종류에 따라 썸네일/뱃지/옵션 텍스트 동적 변경
+  const isEbookDantan   = goodsName.includes('단단한');
+  const isEbookInterview = goodsName.includes('스피치 공식') && !goodsName.includes('패키지') && !goodsName.includes('올인원');
+  const isPackage       = goodsName.includes('패키지') || goodsName.includes('올인원');
+
+  if (isEbookDantan) {
+    if (thumbEl) thumbEl.src = 'assets/images/dandanhan/썸네일.png';
+    if (badgeEl) badgeEl.textContent = '전자책';
+    if (optionEl) optionEl.textContent = '[PDF 전자책]';
+  } else if (isEbookInterview) {
+    if (thumbEl) thumbEl.src = 'assets/images/ebook/thumbnail.png';
+    if (badgeEl) badgeEl.textContent = '전자책';
+    if (optionEl) optionEl.textContent = '[PDF 전자책]';
+  } else if (isPackage) {
+    if (thumbEl) thumbEl.src = 'assets/images/vod/daip-vod-thumb.png';
+    if (badgeEl) badgeEl.textContent = '패키지';
+    if (optionEl) optionEl.textContent = '[전자책 + VOD 12강 + AI챗봇]';
+  } else {
+    // VOD 등 기타
+    if (thumbEl) thumbEl.src = 'assets/images/vod/daip-vod-thumb.png';
+    if (badgeEl) badgeEl.textContent = '강의';
+    if (optionEl) optionEl.textContent = '[VOD 강의만]';
+  }
+
   // 기본 결제 수단 초기화
   selectPayment('transfer');
   switchPayTab('general');
