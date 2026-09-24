@@ -34,8 +34,12 @@
       border: 1px solid #fca5a5;
       border-radius: 12px;
       color: #b91c1c;
-      font-size: 13px;
-      text-align: center;
+      font-size: 12px;
+      text-align: left;
+      white-space: pre-wrap;
+      word-break: break-all;
+      max-width: 480px;
+      width: 90%;
     }
     a { color: #4c37ce; font-weight: 700; text-decoration: none; }
   </style>
@@ -80,7 +84,15 @@
         const tokenData = await tokenRes.json();
 
         if (!tokenData.access_token) {
-          showError('카카오 토큰 발급에 실패했습니다. (' + (tokenData.error || 'unknown') + ')');
+          const detail = [
+            `HTTP status      : ${tokenData.kakao_http_status ?? '(없음)'}`,
+            `error            : ${tokenData.error ?? '(없음)'}`,
+            `error_description: ${tokenData.error_description ?? '(없음)'}`,
+            `error_code       : ${tokenData.error_code ?? '(없음)'}`,
+            `paramCheck       : ${JSON.stringify(tokenData.paramCheck ?? {})}`,
+          ].join('\n');
+          console.error('[Kakao Callback] 토큰 발급 실패\n' + detail);
+          showError('카카오 토큰 발급 실패\n\n' + detail);
           return;
         }
 
