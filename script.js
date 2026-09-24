@@ -402,7 +402,8 @@ function toggleAuthMode() {
 async function handleGoogleSignIn() {
   if (typeof auth !== 'undefined' && auth) {
     const provider = new firebase.auth.GoogleAuthProvider();
-    provider.setCustomParameters({ login_hint: 'april783223@gmail.com' });
+    provider.addScope('email');
+    provider.addScope('profile');
     try {
       const res = await auth.signInWithPopup(provider);
       currentUser = res.user;
