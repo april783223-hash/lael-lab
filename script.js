@@ -801,7 +801,9 @@ async function handleCheckout() {
     showToast('약관 동의 필요', '결제 서비스 이용 약관에 동의해주세요.'); return;
   }
   const goodsName = document.getElementById('purchaseItemTitle')?.textContent || '대입면접이 쉬워지는 스피치 공식 VOD 강의';
-  const amount    = 149000;
+  // 가격을 모달에 표시된 값에서 동적으로 가져오기
+  const priceText = document.getElementById('purchaseItemPrice')?.textContent || '149,000원';
+  const amount    = parseInt(priceText.replace(/[^0-9]/g, ''), 10) || 149000;
   closeModal('purchaseModal');
   try {
     const result = await requestNicePay({ goodsName, amount,
@@ -815,8 +817,21 @@ async function handleCheckout() {
         localStorage.setItem('lael_user', JSON.stringify(currentUser));
         updateAuthUI(currentUser);
       }
-      showToast('결제 완료! 🎉', '강의 수강권이 활성화되었습니다. 강의실을 이용하세요!');
-      setTimeout(() => openLectureModal(), 1200);
+
+      // 상품 종류에 따라 결제 후 이동처 분기
+      const isEbookDantan    = goodsName.includes('단단한');
+      const isEbookInterview = goodsName.includes('스피치 공식') && !goodsName.includes('패키지') && !goodsName.includes('올인원');
+
+      if (isEbookDantan) {
+        showToast('결제 완료! 🎉', '전자책이 활성화되었습니다. PDF 뷰어로 이동합니다.');
+        setTimeout(() => { window.location.href = 'ebook-mom.html'; }, 1200);
+      } else if (isEbookInterview) {
+        showToast('결제 완료! 🎉', '전자책이 활성화되었습니다. PDF 뷰어로 이동합니다.');
+        setTimeout(() => { window.location.href = 'ebook.html'; }, 1200);
+      } else {
+        showToast('결제 완료! 🎉', '강의 수강권이 활성화되었습니다. 강의실을 이용하세요!');
+        setTimeout(() => openLectureModal(), 1200);
+      }
     }
   } catch (err) {
     console.error('[결제] 오류:', err);
@@ -832,7 +847,8 @@ async function handlePurchaseSubmit(event) {
   const note  = document.getElementById('purchaserNote')?.value || '';
 
   const goodsName = document.getElementById('purchaseItemTitle')?.textContent || '2027 대입 면접 올인원 패키지';
-  const amount    = 99000;
+  const priceText = document.getElementById('purchaseItemPrice')?.textContent || '99,000원';
+  const amount    = parseInt(priceText.replace(/[^0-9]/g, ''), 10) || 99000;
 
   closeModal('purchaseModal');
 
@@ -853,8 +869,21 @@ async function handlePurchaseSubmit(event) {
         localStorage.setItem('lael_user', JSON.stringify(currentUser));
         updateAuthUI(currentUser);
       }
-      showToast('결제 완료! 🎉', '패키지 이용권이 활성화되었습니다. AI 챗봇과 강의실을 이용하세요!');
-      setTimeout(() => openLectureModal(), 1200);
+
+      // 상품 종류에 따라 결제 후 이동처 분기
+      const isEbookDantan    = goodsName.includes('단단한');
+      const isEbookInterview = goodsName.includes('스피치 공식') && !goodsName.includes('패키지') && !goodsName.includes('올인원');
+
+      if (isEbookDantan) {
+        showToast('결제 완료! 🎉', '전자책이 활성화되었습니다. PDF 뷰어로 이동합니다.');
+        setTimeout(() => { window.location.href = 'ebook-mom.html'; }, 1200);
+      } else if (isEbookInterview) {
+        showToast('결제 완료! 🎉', '전자책이 활성화되었습니다. PDF 뷰어로 이동합니다.');
+        setTimeout(() => { window.location.href = 'ebook.html'; }, 1200);
+      } else {
+        showToast('결제 완료! 🎉', '패키지 이용권이 활성화되었습니다. AI 챗봇과 강의실을 이용하세요!');
+        setTimeout(() => openLectureModal(), 1200);
+      }
     }
   } catch (err) {
     console.error('[결제] 오류:', err);
