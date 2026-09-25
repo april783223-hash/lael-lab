@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ko" class="scroll-smooth">
 <head>
   <meta charset="utf-8">
@@ -1108,17 +1108,16 @@
         <div class="px-6 pb-10 border-t border-gray-100 mt-6">
           <div class="pt-5 mb-4">
             <h3 class="text-sm font-black text-gray-600 flex items-center gap-2">
-              <span class="material-symbols-outlined text-gray-400 text-base">info</span>
-              주의사항
+              <span class="material-symbols-outlined text-amber-500 text-base">warning</span>
+              ⚠️ 주의사항
             </h3>
           </div>
-          <ul class="space-y-2.5 text-xs text-gray-500 leading-relaxed">
-            <li class="flex items-start gap-2"><span class="shrink-0 text-gray-400 mt-0.5">•</span><span>라엘랩의 모든 강의·전자책·PDF·워크북 등은 저작권법에 의해 보호됩니다.</span></li>
-            <li class="flex items-start gap-2"><span class="shrink-0 text-gray-400 mt-0.5">•</span><span>무단 복제, 녹화, 공유, 유출, 재가공, 판매 및 계정 공유를 금지합니다.</span></li>
-            <li class="flex items-start gap-2"><span class="shrink-0 text-gray-400 mt-0.5">•</span><span>온라인 강의는 각 상품에 안내된 정규 학습기간 동안 이용할 수 있으며, 상품에 따라 무료 복습기간이 추가될 수 있습니다.</span></li>
-            <li class="flex items-start gap-2"><span class="shrink-0 text-gray-400 mt-0.5">•</span><span>교육 품질 향상을 위해 강의가 추가·업데이트되거나 커리큘럼 및 일부 내용이 변경될 수 있습니다.</span></li>
-            <li class="flex items-start gap-2"><span class="shrink-0 text-gray-400 mt-0.5">•</span><span>구매 후 7일 이내 미이용 시 전액 환불이 가능합니다. 이용을 시작한 이후에는 이용내역 및 상품 특성에 따라 환불금액이 산정됩니다.</span></li>
-            <li class="flex items-start gap-2"><span class="shrink-0 text-gray-400 mt-0.5">•</span><span>자세한 취소·환불 기준은 <strong class="text-gray-700 font-bold">〈라엘랩 환불정책〉</strong>에서 확인해 주세요.</span></li>
+          <ul class="space-y-3 text-xs text-gray-500 leading-relaxed">
+            <li class="flex items-start gap-2"><span class="shrink-0 text-amber-500 font-bold mt-0.5">1.</span><span><strong class="text-gray-700">라엘랩의 모든 콘텐츠는 저작권법의 보호를 받습니다.</strong><br>강의, 전자책, 워크북 등 콘텐츠의 무단 녹화·복제·공유·유출·재가공·판매 및 계정 공유를 금지합니다.</span></li>
+            <li class="flex items-start gap-2"><span class="shrink-0 text-amber-500 font-bold mt-0.5">2.</span><span><strong class="text-gray-700">전자책은 파일 다운로드 방식이 아닙니다.</strong><br>구매한 계정으로 로그인 후 라엘랩 전용 뷰어에서 열람할 수 있으며, 별도의 전자책 PDF 파일 다운로드 기능은 제공하지 않습니다.</span></li>
+            <li class="flex items-start gap-2"><span class="shrink-0 text-amber-500 font-bold mt-0.5">3.</span><span><strong class="text-gray-700">이용기간은 상품별로 다를 수 있습니다.</strong><br>정확한 수강 및 열람기간은 각 상품 상세페이지에서 확인해 주세요. 상품에 따라 무료 복습기간이 제공될 수 있습니다.</span></li>
+            <li class="flex items-start gap-2"><span class="shrink-0 text-amber-500 font-bold mt-0.5">4.</span><span><strong class="text-gray-700">교육 품질 향상을 위해 콘텐츠가 업데이트될 수 있습니다.</strong><br>강의나 자료가 추가·보완되거나 커리큘럼 순서 및 일부 내용이 변경될 수 있습니다.</span></li>
+            <li class="flex items-start gap-2"><span class="shrink-0 text-amber-500 font-bold mt-0.5">5.</span><span><strong class="text-gray-700">환불기준을 구매 전에 확인해 주세요.</strong><br>유료 콘텐츠를 이용하지 않은 경우 법정 청약철회 기간 내 전액 환불을 요청할 수 있습니다. 전자책 유료 본문 열람이나 VOD 재생 등 콘텐츠 이용을 시작한 후에는 관계 법령과 <strong class="text-gray-700">〈라엘랩 환불정책〉</strong>에 따라 청약철회가 제한되거나 환불조건이 달라질 수 있습니다.</span></li>
           </ul>
         </div>
       </div>
@@ -1412,6 +1411,40 @@
               <button onclick="submitEbookInterviewReview()" class="bg-primary text-white px-5 py-2 rounded-xl text-sm font-bold hover:bg-primary-container transition active:scale-95">등록</button>
             </div>
           </div>
+        </div>
+
+        <!-- 전자책 이용 안내 -->
+        <div class="px-6 border-t border-gray-100 mt-4">
+          <div class="pt-5 pb-4">
+            <div class="bg-blue-50 border border-blue-200 rounded-2xl p-5">
+              <h4 class="text-sm font-black text-blue-800 flex items-center gap-2 mb-3">
+                <span class="material-symbols-outlined text-blue-500 text-base">menu_book</span>
+                전자책 이용 안내
+              </h4>
+              <ul class="space-y-2 text-xs text-blue-700 leading-relaxed">
+                <li class="flex items-start gap-2"><span class="shrink-0 mt-0.5">•</span><span>본 전자책은 파일 다운로드 방식이 아닌 <strong>라엘랩 전용 온라인 뷰어</strong>를 통해 제공됩니다.</span></li>
+                <li class="flex items-start gap-2"><span class="shrink-0 mt-0.5">•</span><span>구매 후 라엘랩 계정으로 로그인하여 이용기간 동안 열람할 수 있습니다.</span></li>
+                <li class="flex items-start gap-2"><span class="shrink-0 mt-0.5">•</span><span>무료 미리보기를 제외한 <strong>유료 본문 열람을 시작하면</strong> 디지털콘텐츠 제공이 개시되며, 회사가 관계 법령에서 정한 사전 고지 및 필요한 조치를 한 경우 <strong>청약철회가 제한</strong>될 수 있습니다.</span></li>
+                <li class="flex items-start gap-2"><span class="shrink-0 mt-0.5">•</span><span>구매 전에 <strong>미리보기와 환불정책</strong>을 반드시 확인해 주세요.</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- 주의사항 -->
+        <div class="px-6 pb-6 mt-2">
+          <div class="mb-3">
+            <h3 class="text-sm font-black text-gray-600 flex items-center gap-2">
+              <span class="material-symbols-outlined text-amber-500 text-base">warning</span>
+              ⚠️ 주의사항
+            </h3>
+          </div>
+          <ul class="space-y-3 text-xs text-gray-500 leading-relaxed">
+            <li class="flex items-start gap-2"><span class="shrink-0 text-amber-500 font-bold mt-0.5">1.</span><span><strong class="text-gray-700">라엘랩의 모든 콘텐츠는 저작권법의 보호를 받습니다.</strong><br>강의, 전자책, 워크북 등 콘텐츠의 무단 녹화·복제·공유·유출·재가공·판매 및 계정 공유를 금지합니다.</span></li>
+            <li class="flex items-start gap-2"><span class="shrink-0 text-amber-500 font-bold mt-0.5">2.</span><span><strong class="text-gray-700">전자책은 파일 다운로드 방식이 아닙니다.</strong><br>구매한 계정으로 로그인 후 라엘랩 전용 뷰어에서 열람할 수 있으며, 별도의 전자책 PDF 파일 다운로드 기능은 제공하지 않습니다.</span></li>
+            <li class="flex items-start gap-2"><span class="shrink-0 text-amber-500 font-bold mt-0.5">3.</span><span><strong class="text-gray-700">이용기간은 상품별로 다를 수 있습니다.</strong><br>정확한 수강 및 열람기간은 각 상품 상세페이지에서 확인해 주세요.</span></li>
+            <li class="flex items-start gap-2"><span class="shrink-0 text-amber-500 font-bold mt-0.5">4.</span><span><strong class="text-gray-700">환불기준을 구매 전에 확인해 주세요.</strong><br>유료 콘텐츠를 이용하지 않은 경우 법정 청약철회 기간 내 전액 환불을 요청할 수 있습니다. 전자책 유료 본문 열람 등 콘텐츠 이용을 시작한 후에는 관계 법령과 <strong class="text-gray-700">〈라엘랩 환불정책〉</strong>에 따라 청약철회가 제한되거나 환불조건이 달라질 수 있습니다.</span></li>
+          </ul>
         </div>
 
         <!-- 하단 구매 CTA -->
@@ -1807,6 +1840,40 @@
         </div>
 
         <!-- 하단 구매 CTA -->
+        <!-- 전자책 이용 안내 -->
+        <div class="px-6 border-t border-gray-100 mt-4">
+          <div class="pt-5 pb-4">
+            <div class="bg-orange-50 border border-orange-200 rounded-2xl p-5">
+              <h4 class="text-sm font-black text-orange-800 flex items-center gap-2 mb-3">
+                <span class="material-symbols-outlined text-orange-500 text-base">menu_book</span>
+                전자책 이용 안내
+              </h4>
+              <ul class="space-y-2 text-xs text-orange-700 leading-relaxed">
+                <li class="flex items-start gap-2"><span class="shrink-0 mt-0.5">•</span><span>본 전자책은 파일 다운로드 방식이 아닌 <strong>라엘랩 전용 온라인 뷰어</strong>를 통해 제공됩니다.</span></li>
+                <li class="flex items-start gap-2"><span class="shrink-0 mt-0.5">•</span><span>구매 후 라엘랩 계정으로 로그인하여 이용기간 동안 열람할 수 있습니다.</span></li>
+                <li class="flex items-start gap-2"><span class="shrink-0 mt-0.5">•</span><span>무료 미리보기를 제외한 <strong>유료 본문 열람을 시작하면</strong> 디지털콘텐츠 제공이 개시되며, 회사가 관계 법령에서 정한 사전 고지 및 필요한 조치를 한 경우 <strong>청약철회가 제한</strong>될 수 있습니다.</span></li>
+                <li class="flex items-start gap-2"><span class="shrink-0 mt-0.5">•</span><span>구매 전에 <strong>미리보기와 환불정책</strong>을 반드시 확인해 주세요.</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- 주의사항 -->
+        <div class="px-6 pb-6 mt-2">
+          <div class="mb-3">
+            <h3 class="text-sm font-black text-gray-600 flex items-center gap-2">
+              <span class="material-symbols-outlined text-amber-500 text-base">warning</span>
+              ⚠️ 주의사항
+            </h3>
+          </div>
+          <ul class="space-y-3 text-xs text-gray-500 leading-relaxed">
+            <li class="flex items-start gap-2"><span class="shrink-0 text-amber-500 font-bold mt-0.5">1.</span><span><strong class="text-gray-700">라엘랩의 모든 콘텐츠는 저작권법의 보호를 받습니다.</strong><br>강의, 전자책, 워크북 등 콘텐츠의 무단 녹화·복제·공유·유출·재가공·판매 및 계정 공유를 금지합니다.</span></li>
+            <li class="flex items-start gap-2"><span class="shrink-0 text-amber-500 font-bold mt-0.5">2.</span><span><strong class="text-gray-700">전자책은 파일 다운로드 방식이 아닙니다.</strong><br>구매한 계정으로 로그인 후 라엘랩 전용 뷰어에서 열람할 수 있으며, 별도의 전자책 PDF 파일 다운로드 기능은 제공하지 않습니다.</span></li>
+            <li class="flex items-start gap-2"><span class="shrink-0 text-amber-500 font-bold mt-0.5">3.</span><span><strong class="text-gray-700">이용기간은 상품별로 다를 수 있습니다.</strong><br>정확한 수강 및 열람기간은 각 상품 상세페이지에서 확인해 주세요.</span></li>
+            <li class="flex items-start gap-2"><span class="shrink-0 text-amber-500 font-bold mt-0.5">4.</span><span><strong class="text-gray-700">환불기준을 구매 전에 확인해 주세요.</strong><br>유료 콘텐츠를 이용하지 않은 경우 법정 청약철회 기간 내 전액 환불을 요청할 수 있습니다. 전자책 유료 본문 열람 등 콘텐츠 이용을 시작한 후에는 관계 법령과 <strong class="text-gray-700">〈라엘랩 환불정책〉</strong>에 따라 청약철회가 제한되거나 환불조건이 달라질 수 있습니다.</span></li>
+          </ul>
+        </div>
+
         <div class="px-6 border-t border-gray-100">
           <div class="pt-6 pb-10">
             <button onclick="openPurchaseModal('친구에게 휘둘리지 않는 단단한 말하기 전자책', 39000)"
@@ -1916,14 +1983,31 @@
           </div>
 
           <!-- 약관 동의 -->
-          <div class="bg-white rounded-2xl px-5 py-4 border border-gray-200 shadow-sm">
-            <label class="flex items-center gap-3 cursor-pointer">
-              <input type="checkbox" id="agreeTerms" class="w-4 h-4 rounded accent-primary">
+          <div class="bg-white rounded-2xl px-5 py-4 border border-gray-200 shadow-sm space-y-3">
+            <!-- 필수 동의 1: 이용약관 및 환불정책 -->
+            <label class="flex items-start gap-3 cursor-pointer">
+              <input type="checkbox" id="agreeTerms" class="w-4 h-4 rounded accent-primary mt-0.5">
               <span class="text-xs text-gray-600 flex-1">
-                <span class="font-bold text-gray-800">[필수]</span> 결제 서비스 이용 약관, 개인정보 처리 동의
+                <span class="font-bold text-red-500">[필수]</span> 이용약관 및 환불정책을 확인하고 동의합니다.
               </span>
-              <span class="material-symbols-outlined text-gray-300 text-base">chevron_right</span>
             </label>
+            <div class="flex items-center gap-2 ml-7">
+              <a href="#" onclick="openModal('termsModal'); return false;" class="text-[10px] text-primary hover:underline font-semibold">[이용약관 보기]</a>
+              <a href="#" onclick="openModal('refundModal'); return false;" class="text-[10px] text-primary hover:underline font-semibold">[환불정책 보기]</a>
+            </div>
+
+            <!-- 필수 확인 2: 전자책 포함 상품용 (동적 표시) -->
+            <div id="ebookAgreeWrap" class="border-t border-gray-100 pt-3 hidden">
+              <label class="flex items-start gap-3 cursor-pointer">
+                <input type="checkbox" id="agreeEbookTerms" class="w-4 h-4 rounded accent-primary mt-0.5">
+                <span class="text-xs text-gray-600 flex-1 leading-relaxed">
+                  <span class="font-bold text-red-500">[필수]</span> 본 상품의 전자책은 파일 다운로드가 아닌 전용 뷰어를 통해 제공되며, 유료 본문 열람을 시작한 이후에는 디지털콘텐츠 제공이 개시되어 관계 법령에 따라 청약철회가 제한될 수 있음을 확인했습니다.
+                </span>
+              </label>
+              <div class="ml-7 mt-1">
+                <a id="ebookPreviewLink" href="#" class="text-[10px] text-primary hover:underline font-semibold">[전자책 미리보기]</a>
+              </div>
+            </div>
           </div>
 
         </div>
@@ -1954,7 +2038,7 @@
               결제 하기
             </button>
             <p class="text-[10px] text-gray-400 text-center mt-3 leading-relaxed">
-              구매 정보를 확인했으며, 이용약관 및 환불정책,<br>개인정보 처리방침에 동의합니다.
+              위 필수 항목에 동의 후 결제를 진행해 주세요.
             </p>
           </div>
         </div>

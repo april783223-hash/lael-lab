@@ -15,6 +15,11 @@ service cloud.firestore {
       allow write: if request.auth != null && request.auth.uid == userId;
     }
 
+    // ── ebook_views 컬렉션: 전자책 열람 기록 (본인만 읽기/쓰기) ──
+    match /ebook_views/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
     // 나머지 모든 접근 차단
     match /{document=**} {
       allow read, write: if false;

@@ -233,6 +233,60 @@
     }
   }
 
+  const EBOOK_ID = 'interview'; // 전자책 식별자
+
+  // ── Firestore 열람 기록 ──
+  async function logFirstView(uid) {
+    if (!db || !uid) return;
+    try {
+      const docRef = db.collection('ebook_views').doc(uid);
+      const snap = await docRef.get();
+      const existing = snap.exists ? snap.data() : {};
+      const key = `${EBOOK_ID}_firstViewAt`;
+      if (!existing[key]) {
+        await docRef.set({
+          [key]: new Date().toISOString(),
+          [`${EBOOK_ID}_lastViewAt`]: new Date().toISOString(),
+          uid: uid
+        }, { merge: true });
+      } else {
+        await docRef.set({
+          [`${EBOOK_ID}_lastViewAt`]: new Date().toISOString()
+        }, { merge: true });
+      }
+    } catch(e) { console.warn('열람 기록 저장 실패:', e); }
+  }
+
+  // ── "읽기 시작" 확인 화면 ──
+  function showReadConfirm(displayName, uid) {
+    authGate.innerHTML = `
+      <div class="gate-card">
+        <div class="gate-icon" style="background:#f0eeff">📖</div>
+        <h2>전자책 읽기 시작</h2>
+        <p style="font-size:13px;color:#555;line-height:1.7;margin-bottom:12px">
+          <strong>대입 면접이 쉬워지는 스피치 공식</strong>
+        </p>
+        <div style="background:#fff8f0;border:1px solid #ffe0c0;border-radius:12px;padding:14px 16px;margin-bottom:20px;text-align:left">
+          <p style="font-size:11px;color:#b45309;line-height:1.7;margin:0">
+            ⚠️ <strong>유료 본문 열람을 시작하면</strong> 디지털콘텐츠 제공이 개시됩니다.
+            관계 법령에 따라 <strong>청약철회가 제한</strong>될 수 있으니 참고해 주세요.
+          </p>
+        </div>
+        <button class="btn-primary" onclick="startReading('${displayName}', '${uid}')">
+          <span class="material-symbols-outlined" style="font-size:18px">menu_book</span>
+          읽기 시작하기
+        </button>
+        <a href="/" class="btn-secondary" style="margin-top:8px;display:block;text-align:center;font-size:13px;color:#888;text-decoration:none">← 홈으로 돌아가기</a>
+      </div>
+    `;
+  }
+
+  // ── 실제 읽기 시작 ──
+  async function startReading(displayName, uid) {
+    await logFirstView(uid);
+    renderPDF(displayName);
+  }
+
   // ── PDF 전체 렌더 ──
   async function renderPDF(displayName) {
     authGate.style.display = 'none';
@@ -298,7 +352,7 @@
         return;
       }
       const paid = await checkPaid(fbUser.uid);
-      paid ? renderPDF(fbUser.displayName || fbUser.email) : showBlockedGate();
+      paid ? showReadConfirm(fbUser.displayName || fbUser.email, fbUser.uid) : showBlockedGate();
       return;
     }
 
@@ -309,10 +363,11 @@
         const u = JSON.parse(saved);
         if (u && u.provider === 'kakao' && u.uid) {
           const paid = await checkPaid(String(u.uid));
-          if (paid) { renderPDF(u.displayName || u.nickname || '구매자'); return; }
+          if (paid) { showReadConfirm(u.displayName || u.nickname || '구매자', String(u.uid)); return; }
         }
       }
     } catch(e) {}
+
 
     // 3) 미로그인
     showLoginGate();

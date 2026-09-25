@@ -763,6 +763,33 @@ function openPurchaseModal(goodsName, amount) {
     if (optionEl) optionEl.textContent = '[VOD 강의만]';
   }
 
+  // 전자책 포함 상품일 때 전자책 동의 체크박스 표시
+  const ebookWrap = document.getElementById('ebookAgreeWrap');
+  const ebookPreviewLink = document.getElementById('ebookPreviewLink');
+  const ebookCheck = document.getElementById('agreeEbookTerms');
+  const isEbook = isEbookDantan || isEbookInterview || isPackage;
+
+  if (ebookWrap) {
+    if (isEbook) {
+      ebookWrap.classList.remove('hidden');
+      if (ebookCheck) ebookCheck.checked = false;
+      // 미리보기 링크 설정
+      if (ebookPreviewLink) {
+        if (isEbookDantan) {
+          ebookPreviewLink.href = 'ebook-dantan-preview.html';
+        } else {
+          ebookPreviewLink.href = 'ebook-interview-preview.html';
+        }
+      }
+    } else {
+      ebookWrap.classList.add('hidden');
+    }
+  }
+
+  // 약관 체크박스 초기화
+  const termsCheck = document.getElementById('agreeTerms');
+  if (termsCheck) termsCheck.checked = false;
+
   // 기본 결제 수단 초기화
   selectPayment('transfer');
   switchPayTab('general');
@@ -808,7 +835,13 @@ function selectPayment(method) {
 async function handleCheckout() {
   const agree = document.getElementById('agreeTerms');
   if (agree && !agree.checked) {
-    showToast('약관 동의 필요', '결제 서비스 이용 약관에 동의해주세요.'); return;
+    showToast('약관 동의 필요', '이용약관 및 환불정책에 동의해주세요.'); return;
+  }
+  // 전자책 포함 상품일 때 전자책 동의 체크 확인
+  const ebookWrap = document.getElementById('ebookAgreeWrap');
+  const ebookAgree = document.getElementById('agreeEbookTerms');
+  if (ebookWrap && !ebookWrap.classList.contains('hidden') && ebookAgree && !ebookAgree.checked) {
+    showToast('전자책 확인 필요', '전자책 이용 및 청약철회 제한 사항을 확인하고 동의해주세요.'); return;
   }
   const goodsName = document.getElementById('purchaseItemTitle')?.textContent || '대입면접이 쉬워지는 스피치 공식 VOD 강의';
   // 가격을 모달에 표시된 값에서 동적으로 가져오기
