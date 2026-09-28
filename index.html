@@ -183,6 +183,10 @@
           </div>
         </div>
         <a class="text-on-surface-variant hover:text-primary transition-colors duration-200 text-sm font-semibold py-2" href="#packageSection">패키지</a>
+        <button onclick="openModal('onlineLectureModal')" class="text-on-surface-variant hover:text-primary transition-colors duration-200 text-sm font-semibold py-2 flex items-center gap-1">
+          <span class="material-symbols-outlined text-base text-accent-coral">school</span>
+          온라인 특강
+        </button>
         <button onclick="openAIChatbot()" class="text-on-surface-variant hover:text-primary transition-colors duration-200 text-sm font-semibold py-2 flex items-center gap-1">
           <span class="material-symbols-outlined text-base text-accent-coral">smart_toy</span>
           AI코치
@@ -237,6 +241,9 @@
         🎬 동영상 강의실
       </button>
       <a class="block text-on-surface-variant hover:text-primary font-semibold text-base py-1" href="#packageSection" onclick="closeMobileMenu()">패키지</a>
+      <button onclick="closeMobileMenu(); openModal('onlineLectureModal')" class="block w-full text-left text-accent-coral font-bold text-base py-1 flex items-center gap-2">
+        🎓 온라인 특강
+      </button>
       <button onclick="closeMobileMenu(); openAIChatbot()" class="block w-full text-left font-bold text-base py-1 flex items-center gap-2 text-accent-coral">
         🤖 AI코치
       </button>
@@ -969,6 +976,61 @@
     </div>
   </div>
 
+
+  <!-- ========================================================= -->
+  <!-- 온라인 특강 모달                                            -->
+  <!-- ========================================================= -->
+  <div id="onlineLectureModal" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/75 backdrop-blur-md">
+    <div class="modal-container bg-white rounded-[28px] w-full max-w-5xl h-[92vh] flex flex-col shadow-2xl overflow-hidden">
+      <!-- Header -->
+      <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between shrink-0">
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined text-accent-coral text-2xl">school</span>
+          <div>
+            <p class="text-[11px] text-gray-400 font-semibold uppercase tracking-widest">LAEL LAB</p>
+            <h2 class="text-lg font-black text-gray-900">온라인 특강</h2>
+          </div>
+        </div>
+        <button onclick="closeModal('onlineLectureModal')" class="p-2 rounded-full hover:bg-gray-100 text-gray-400 hover:text-gray-700 transition">
+          <span class="material-symbols-outlined text-xl">close</span>
+        </button>
+      </div>
+      <!-- Content -->
+      <div class="flex-1 overflow-y-auto">
+        <!-- Hero: 썸네일 + 구매 사이드바 -->
+        <div class="flex flex-col lg:flex-row">
+          <!-- 왼쪽: 썸네일 -->
+          <div class="lg:w-[55%] p-6 pb-0 lg:pb-6">
+            <img src="assets/images/lecture/online-lecture-thumb.png" alt="온라인 특강 썸네일"
+                 class="w-full rounded-2xl shadow-xl">
+          </div>
+          <!-- 오른쪽: 특강 정보 + 수강 신청 -->
+          <div class="lg:w-[45%] p-6 lg:sticky lg:top-0 lg:self-start">
+            <p class="text-xs text-gray-400 font-semibold uppercase tracking-widest mb-2">LAEL LAB · 온라인 특강</p>
+            <h2 class="text-xl sm:text-2xl font-black text-gray-900 leading-snug">
+              대입면접 온라인 특강
+            </h2>
+            <p class="text-sm text-gray-500 mt-2 leading-relaxed">실시간 온라인으로 진행되는<br>대입 면접 집중 특강</p>
+            <div class="mt-5 pb-5 border-b border-gray-100">
+              <p class="text-4xl font-black text-primary mt-0.5">149,000<span class="text-2xl font-bold">원</span></p>
+            </div>
+            <div class="mt-5 space-y-3">
+              <button onclick="openPurchaseModal('대입면접 온라인 특강', 149000)"
+                      class="w-full bg-accent-coral hover:bg-red-500 text-white py-4 rounded-2xl font-black text-base shadow-lg hover:shadow-accent-coral/30 transition-all active:scale-[.98] flex items-center justify-center gap-2">
+                <span class="material-symbols-outlined text-xl">school</span>
+                수강 신청 — 149,000원
+              </button>
+            </div>
+            <ul class="mt-5 space-y-2 text-xs text-gray-500">
+              <li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-500 text-base">check_circle</span>실시간 온라인 강의</li>
+              <li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-500 text-base">check_circle</span>전문 강사 직강</li>
+              <li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-500 text-base">check_circle</span>실전 면접 대비</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- ========================================================= -->
   <!-- VOD 강의 스토어 모달 (카드 그리드) -->
