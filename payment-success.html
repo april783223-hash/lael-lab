@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>결제 완료 — LAEL LAB</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%234c37ce'/%3E%3Cstop offset='100%25' stop-color='%23ff6748'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='8' fill='url(%23g)'/%3E%3Ctext x='16' y='22' font-family='sans-serif' font-size='18' font-weight='900' fill='white' text-anchor='middle'%3EL%3C/text%3E%3C/svg%3E">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Noto Sans KR', sans-serif; background: #faf9f7; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+    .card { background: #fff; border-radius: 24px; padding: 48px 36px; max-width: 440px; width: 100%; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,.08); border: 1px solid #f0f0f0; }
+    .icon { width: 72px; height: 72px; border-radius: 50%; background: linear-gradient(135deg, #4c37ce, #6554e8); display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; font-size: 32px; }
+    .spinner { width: 32px; height: 32px; border: 3px solid rgba(255,255,255,.3); border-top: 3px solid #fff; border-radius: 50%; animation: spin 1s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    h1 { font-size: 22px; font-weight: 900; color: #111; margin-bottom: 8px; }
+    #status { font-size: 14px; color: #666; line-height: 1.7; }
+    .ok { color: #16a34a; font-weight: 700; }
+    .err { color: #dc2626; font-weight: 700; }
+    .btn { display: inline-block; margin-top: 24px; padding: 14px 32px; background: #4c37ce; color: #fff; border: none; border-radius: 50px; font-size: 14px; font-weight: 700; cursor: pointer; text-decoration: none; transition: .2s; }
+    .btn:hover { background: #3d2bb0; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="icon" id="iconBox"><div class="spinner"></div></div>
+    <h1 id="title">결제 승인 처리 중...</h1>
+    <div id="status">잠시만 기다려주세요.</div>
+    <div id="actions" style="display:none"></div>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey:            "AIzaSyAsWYeS44uDurvAzIKiED3_6i-2csumDd8",
+      authDomain:        "laellab.firebaseapp.com",
+      projectId:         "laellab",
+      storageBucket:     "laellab.firebasestorage.app",
+      messagingSenderId: "765549895319",
+      appId:             "1:765549895319:web:969c6b7cafc5a18c81d3d2",
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    const params = new URLSearchParams(window.location.search);
+    const paymentKey = params.get('paymentKey');
+    const orderId    = params.get('orderId');
+    const amount     = params.get('amount');
+
+    const iconBox  = document.getElementById('iconBox');
+    const titleEl  = document.getElementById('title');
+    const statusEl = document.getElementById('status');
+    const actionsEl = document.getElementById('actions');
+
+    function showSuccess(message) {
+      iconBox.innerHTML = '✅';
+      iconBox.style.background = 'linear-gradient(135deg, #16a34a, #22c55e)';
+      titleEl.textContent = '결제 완료!';
+      statusEl.innerHTML = `<span class="ok">${message}</span>`;
+      actionsEl.style.display = 'block';
+      actionsEl.innerHTML = '<a href="/" class="btn">메인으로 돌아가기</a>';
+    }
+
+    function showError(message) {
+      iconBox.innerHTML = '❌';
+      iconBox.style.background = 'linear-gradient(135deg, #dc2626, #ef4444)';
+      titleEl.textContent = '결제 처리 실패';
+      statusEl.innerHTML = `<span class="err">${message}</span>`;
+      actionsEl.style.display = 'block';
+      actionsEl.innerHTML = '<a href="/" class="btn" style="background:#666">메인으로 돌아가기</a>';
+    }
+
+    async function confirmPayment() {
+      if (!paymentKey || !orderId || !amount) {
+        showError('결제 정보가 올바르지 않습니다.');
+        return;
+      }
+
+      try {
+        // 서버에 결제 승인 요청 (토스 Secret Key는 서버에서만 사용)
+        const resp = await fetch('/api/payment/confirm', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ paymentKey, orderId, amount: Number(amount) }),
+        });
+
+        const result = await resp.json();
+
+        if (resp.ok && result.success) {
+          // Firestore에 결제 기록 저장 (로그인 사용자)
+          const user = auth.currentUser;
+          if (user) {
+            const pendingOrder = JSON.parse(sessionStorage.getItem('lael_pending_order') || '{}');
+            await db.collection('purchases').doc(user.uid).set({
+              paid: true,
+              orderId: orderId,
+              goodsName: pendingOrder.goodsName || '',
+              amount: Number(amount),
+              paymentKey: paymentKey,
+              paidAt: firebase.firestore.FieldValue.serverTimestamp()
+            }, { merge: true });
+          }
+          sessionStorage.removeItem('lael_pending_order');
+          showSuccess('결제가 완료되었습니다.<br>이용권이 활성화되었습니다.');
+          // 3초 후 메인으로 리다이렉트
+          setTimeout(() => { window.location.href = '/?payment=success'; }, 3000);
+        } else {
+          showError(result.message || '결제 승인 중 문제가 발생했습니다.<br>고객센터로 문의해주세요.<br>(주문번호: ' + orderId + ')');
+        }
+      } catch (e) {
+        console.error('[PAYMENT] 승인 오류:', e);
+        showError('네트워크 오류가 발생했습니다.<br>고객센터로 문의해주세요.<br>(주문번호: ' + orderId + ')');
+      }
+    }
+
+    // 로그인 상태 확인 후 승인 처리
+    auth.onAuthStateChanged((user) => {
+      confirmPayment();
+    });
+  </script>
+</body>
+</html>

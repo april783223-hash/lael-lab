@@ -1,12 +1,25 @@
 // ============================================================
-// LAEL LAB - 나이스페이먼츠 결제 연동 + Firestore 결제 기록 저장
+// LAEL LAB - 토스페이먼츠 결제 연동 + Firestore 결제 기록 저장
 // ============================================================
 
-const NICEPAY_CONFIG = {
-  clientId: "YOUR_NICEPAY_CLIENT_KEY", // 나이스페이 발급 Client Key
-  mid:      "nictest00m",              // 테스트 가맹점 ID (상용 시 실 MID로 교체)
-  mode:     "test"                     // 'test' | 'live'
+const TOSS_CONFIG = {
+  clientKey: "test_ck_D5GePWvyJnrK0W0k6q8gmeYblrqG", // 토스페이먼츠 테스트 Client Key (라이브 전환 시 교체)
+  customerKey: null, // 로그인 사용자의 UID 또는 랜덤 생성
 };
+
+// 토스페이먼츠 SDK 초기화
+let tossPayments = null;
+let tossWidgets = null;
+
+async function initTossPayments() {
+  if (tossPayments) return tossPayments;
+  if (typeof TossPayments === 'undefined') {
+    console.warn('[TOSS] SDK가 로드되지 않았습니다.');
+    return null;
+  }
+  tossPayments = TossPayments(TOSS_CONFIG.clientKey);
+  return tossPayments;
+}
 
 // ============================================================
 // 비회원(게스트) 구매 토큰 관리
@@ -23,7 +36,6 @@ function saveGuestPurchase(ebookId, paymentResult) {
     const stored = JSON.parse(localStorage.getItem(GUEST_PURCHASE_STORAGE_KEY) || '{}');
     stored[ebookId] = {
       paid: true,
-      tid: paymentResult.tid,
       orderId: paymentResult.orderId,
       amount: paymentResult.amount,
       paidAt: paymentResult.paidAt || new Date().toISOString(),
@@ -57,7 +69,7 @@ function checkGuestPurchase(ebookId) {
 }
 
 /**
- * 비회원 구매 결제 플로우 (스토어 페이지에서 호출)
+ * 비회원(게스트) 구매 플로우 (스토어 페이지에서 호출)
  * @param {Object} opts - { ebookId, goodsName, amount, readerUrl }
  */
 function requestGuestPurchase(opts) {
@@ -154,8 +166,8 @@ function showGuestCheckoutModal(opts) {
 
     overlay.remove();
 
-    // 나이스페이 결제 요청
-    requestNicePay({
+    // 토스페이먼츠 결제 요청
+    requestTossPayment({
       goodsName:  opts.goodsName,
       amount:     opts.amount,
       buyerName:  name,
@@ -164,146 +176,132 @@ function showGuestCheckoutModal(opts) {
       ebookId:    opts.ebookId,
       readerUrl:  opts.readerUrl,
       isGuest:    true
-    }).then(result => {
-      if (result && result.success) {
-        // 비회원 구매 토큰 저장
-        result.buyerName  = name;
-        result.buyerEmail = email;
-        result.buyerTel   = tel;
-        saveGuestPurchase(opts.ebookId, result);
-
-        // 결제 완료 → 열람 페이지로 이동
-        setTimeout(() => {
-          if (confirm('결제가 완료되었습니다! 🎉\n\n지금 바로 전자책을 열람하시겠습니까?')) {
-            location.href = opts.readerUrl;
-          }
-        }, 300);
-      }
-    }).catch(err => {
-      console.error('[GUEST] 결제 실패:', err);
     });
   });
 }
 
+// ============================================================
+// 토스페이먼츠 결제 요청
+// ============================================================
+
 /**
- * 나이스페이 결제 요청
+ * 토스페이먼츠 결제 요청
  * @param {Object} order - { goodsName, amount, buyerName, buyerEmail, buyerTel, ebookId, readerUrl, isGuest }
- * @returns {Promise<Object>} paymentResult
  */
-function requestNicePay(order) {
-  return new Promise((resolve, reject) => {
-    const orderId    = 'ORD_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6).toUpperCase();
-    const amount     = order.amount     || 99000;
-    const goodsName  = order.goodsName  || '2027 대입 면접 올인원 패키지';
-    const buyerName  = order.buyerName  || '수강생';
-    const buyerEmail = order.buyerEmail || 'student@example.com';
-    const buyerTel   = order.buyerTel   || '010-0000-0000';
+async function requestTossPayment(order) {
+  const orderId    = 'LAEL_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6).toUpperCase();
+  const amount     = order.amount     || 99000;
+  const goodsName  = order.goodsName  || '대입면접이 쉬워지는 스피치 공식';
+  const buyerName  = order.buyerName  || '수강생';
+  const buyerEmail = order.buyerEmail || '';
 
-    console.log('[NICEPAY] 결제 요청:', { orderId, goodsName, amount, isGuest: !!order.isGuest });
+  console.log('[TOSS] 결제 요청:', { orderId, goodsName, amount, isGuest: !!order.isGuest });
 
-    // 실제 나이스페이 SDK가 로드된 경우
-    if (typeof AUTHNICE !== 'undefined' && NICEPAY_CONFIG.clientId !== 'YOUR_NICEPAY_CLIENT_KEY') {
-      try {
-        AUTHNICE.requestPay({
-          clientId:   NICEPAY_CONFIG.clientId,
-          method:     'card',
-          orderId:    orderId,
-          amount:     amount,
-          goodsName:  goodsName,
-          buyerName:  buyerName,
-          buyerEmail: buyerEmail,
-          buyerTel:   buyerTel,
-          returnUrl:  window.location.origin + '/index.html?payment=success',
-          fnError: function(err) {
-            console.error('[NICEPAY] 결제 오류:', err);
-            if (typeof showToast === 'function') showToast('결제 실패', '다시 시도해 주세요.', 'error');
-            reject(err);
-          }
-        });
-        // returnUrl 방식이므로 resolve는 서버 콜백에서 처리
-      } catch (err) {
-        console.warn('[NICEPAY] SDK 오류 → 시뮬레이션 전환:', err);
-        simulatePayment({ orderId, goodsName, amount, buyerName, buyerEmail, buyerTel, isGuest: order.isGuest, ebookId: order.ebookId })
-          .then(resolve).catch(reject);
+  // 주문 정보를 sessionStorage에 임시 저장 (결제 성공 후 처리를 위해)
+  sessionStorage.setItem('lael_pending_order', JSON.stringify({
+    orderId,
+    goodsName,
+    amount,
+    buyerName,
+    buyerEmail,
+    buyerTel: order.buyerTel || '',
+    ebookId: order.ebookId || '',
+    readerUrl: order.readerUrl || '',
+    isGuest: !!order.isGuest
+  }));
+
+  try {
+    const tp = await initTossPayments();
+    if (!tp) {
+      // SDK 미로드 시 안내
+      alert('결제 시스템을 불러오는 중입니다. 잠시 후 다시 시도해 주세요.');
+      return;
+    }
+
+    // 토스페이먼츠 결제창 호출
+    const payment = tp.payment({ customerKey: TOSS_CONFIG.customerKey || 'GUEST_' + Date.now() });
+
+    await payment.requestPayment({
+      method: "CARD",
+      amount: {
+        currency: "KRW",
+        value: amount,
+      },
+      orderId: orderId,
+      orderName: goodsName,
+      customerName: buyerName,
+      customerEmail: buyerEmail,
+      successUrl: window.location.origin + '/payment-success.html',
+      failUrl: window.location.origin + '/payment-fail.html',
+    });
+  } catch (err) {
+    // 사용자가 결제창을 닫은 경우
+    if (err.code === 'USER_CANCEL' || err.code === 'PAY_PROCESS_CANCELED') {
+      console.log('[TOSS] 사용자가 결제를 취소했습니다.');
+      if (typeof showToast === 'function') {
+        showToast('결제가 취소되었습니다.', '다시 시도하시려면 구매 버튼을 눌러주세요.');
       }
     } else {
-      // 테스트/로컬 환경 시뮬레이션
-      simulatePayment({ orderId, goodsName, amount, buyerName, buyerEmail, buyerTel, isGuest: order.isGuest, ebookId: order.ebookId })
-        .then(resolve).catch(reject);
-    }
-  });
-}
-
-/**
- * 로컬 테스트용 결제 시뮬레이터
- */
-function simulatePayment(order) {
-  return new Promise((resolve) => {
-    if (typeof showToast === 'function') showToast('결제창 연결 중...', `${order.goodsName} 결제를 시작합니다.`);
-
-    setTimeout(() => {
-      const confirmed = confirm(
-        `[LAEL LAB × 나이스페이]\n\n` +
-        `상품: ${order.goodsName}\n` +
-        `금액: ${Number(order.amount).toLocaleString('ko-KR')}원\n` +
-        `구매자: ${order.buyerName}\n` +
-        (order.isGuest ? `구매 유형: 비회원 구매\n` : '') +
-        `\n※ 테스트 결제입니다. 실제 금액이 청구되지 않습니다.\n` +
-        `결제를 진행하시겠습니까?`
-      );
-
-      if (confirmed) {
-        const result = {
-          success:   true,
-          tid:       'NICE_' + Math.random().toString(36).slice(2, 10).toUpperCase(),
-          orderId:   order.orderId,
-          amount:    order.amount,
-          goodsName: order.goodsName,
-          paidAt:    new Date().toISOString(),
-          pg:        'NICEPAY'
-        };
-
-        if (order.isGuest) {
-          // 비회원 구매 → localStorage에 저장 (requestGuestPurchase에서 처리)
-          console.log('[NICEPAY] 비회원 결제 완료');
-        } else if (typeof currentUser !== 'undefined' && currentUser && typeof savePurchaseRecord === 'function') {
-          // Firestore에 결제 기록 저장 (로그인 상태인 경우)
-          savePurchaseRecord(currentUser.uid, result).then(() => {
-            // Firestore 저장 후 currentUser.isPaid 갱신
-            currentUser.isPaid = true;
-          });
-        } else if (typeof currentUser !== 'undefined' && currentUser) {
-          // Firebase 미연결 시 localStorage fallback
-          currentUser.isPaid = true;
-          localStorage.setItem('lael_user', JSON.stringify(currentUser));
-        }
-
-        resolve(result);
-      } else {
-        if (typeof showToast === 'function') showToast('결제가 취소되었습니다.', '다시 시도하시려면 구매 버튼을 눌러주세요.');
+      console.error('[TOSS] 결제 오류:', err);
+      if (typeof showToast === 'function') {
+        showToast('결제 오류', err.message || '잠시 후 다시 시도해주세요.', 'error');
       }
-    }, 700);
-  });
+    }
+  }
 }
 
+// ============================================================
+// 결제 성공 후 처리 (payment-success.html에서 리다이렉트 후)
+// ============================================================
+
 /**
- * URL 파라미터로 결제 성공 여부 확인 (returnUrl 방식)
+ * URL 파라미터로 결제 성공 여부 확인
  * 페이지 로드 시 자동 실행
  */
 (function checkPaymentReturn() {
   const params = new URLSearchParams(window.location.search);
+
+  // 결제 성공 콜백 처리
   if (params.get('payment') === 'success') {
-    // URL 파라미터 정리
     const url = new URL(window.location.href);
     url.searchParams.delete('payment');
+    url.searchParams.delete('orderId');
     window.history.replaceState({}, '', url.toString());
 
-    // 결제 성공 처리 (서버에서 검증 후 Firestore 업데이트 필요 - 상용 시)
+    const pendingOrder = JSON.parse(sessionStorage.getItem('lael_pending_order') || 'null');
+    sessionStorage.removeItem('lael_pending_order');
+
     setTimeout(() => {
-      if (typeof showToast === 'function') showToast('결제가 완료되었습니다! 🎉', '패키지 이용권이 활성화되었습니다.');
+      if (typeof showToast === 'function') {
+        showToast('결제가 완료되었습니다! 🎉', '이용권이 활성화되었습니다.');
+      }
+
       if (typeof currentUser !== 'undefined' && currentUser) {
         currentUser.isPaid = true;
         if (typeof updateAuthUI === 'function') updateAuthUI(currentUser);
+      }
+
+      // 비회원 구매 시 localStorage 기록
+      if (pendingOrder && pendingOrder.isGuest && pendingOrder.ebookId) {
+        saveGuestPurchase(pendingOrder.ebookId, pendingOrder);
+      }
+    }, 500);
+  }
+
+  // 결제 실패/취소 콜백 처리
+  if (params.get('payment') === 'fail') {
+    const url = new URL(window.location.href);
+    url.searchParams.delete('payment');
+    url.searchParams.delete('message');
+    url.searchParams.delete('code');
+    window.history.replaceState({}, '', url.toString());
+
+    sessionStorage.removeItem('lael_pending_order');
+
+    setTimeout(() => {
+      const message = params.get('message') || '결제가 취소되었습니다.';
+      if (typeof showToast === 'function') {
+        showToast('결제 실패', message);
       }
     }, 500);
   }

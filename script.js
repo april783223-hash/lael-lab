@@ -850,38 +850,14 @@ async function handleCheckout() {
   const priceText = document.getElementById('purchaseItemPrice')?.textContent || '149,000원';
   const amount    = parseInt(priceText.replace(/[^0-9]/g, ''), 10) || 149000;
   closeModal('purchaseModal');
-  try {
-    const result = await requestNicePay({ goodsName, amount,
-      buyerName:  currentUser?.displayName || '',
-      buyerEmail: currentUser?.email || '',
-      buyerTel:   '',
-      payMethod:  _selectedPayMethod });
-    if (result?.success) {
-      if (currentUser) {
-        currentUser.isPaid = true;
-        localStorage.setItem('lael_user', JSON.stringify(currentUser));
-        updateAuthUI(currentUser);
-      }
-
-      // 상품 종류에 따라 결제 후 이동처 분기
-      const isEbookDantan    = goodsName.includes('단단한');
-      const isEbookInterview = goodsName.includes('스피치 공식') && !goodsName.includes('패키지') && !goodsName.includes('올인원');
-
-      if (isEbookDantan) {
-        showToast('결제 완료! 🎉', '전자책이 활성화되었습니다. PDF 뷰어로 이동합니다.');
-        setTimeout(() => { window.location.href = 'ebook-mom.html'; }, 1200);
-      } else if (isEbookInterview) {
-        showToast('결제 완료! 🎉', '전자책이 활성화되었습니다. PDF 뷰어로 이동합니다.');
-        setTimeout(() => { window.location.href = 'ebook.html'; }, 1200);
-      } else {
-        showToast('결제 완료! 🎉', '강의 수강권이 활성화되었습니다. 강의실을 이용하세요!');
-        setTimeout(() => openLectureModal(), 1200);
-      }
-    }
-  } catch (err) {
-    console.error('[결제] 오류:', err);
-    showToast('결제 오류', '잠시 후 다시 시도해주세요.');
-  }
+  // 토스페이먼츠 결제 요청 (리다이렉트 방식 — 결과는 payment-success.html에서 처리)
+  requestTossPayment({
+    goodsName,
+    amount,
+    buyerName:  currentUser?.displayName || '',
+    buyerEmail: currentUser?.email || '',
+    buyerTel:   ''
+  });
 }
 // 구매 폼 제출 → 나이스페이 결제 요청
 async function handlePurchaseSubmit(event) {
@@ -897,42 +873,14 @@ async function handlePurchaseSubmit(event) {
 
   closeModal('purchaseModal');
 
-  try {
-    const result = await requestNicePay({
-      goodsName,
-      amount,
-      buyerName:  name,
-      buyerEmail: email || (currentUser?.email || ''),
-      buyerTel:   phone,
-      note
-    });
-
-    if (result?.success) {
-      // currentUser에 결제 플래그 설정
-      if (currentUser) {
-        currentUser.isPaid = true;
-        localStorage.setItem('lael_user', JSON.stringify(currentUser));
-        updateAuthUI(currentUser);
-      }
-
-      // 상품 종류에 따라 결제 후 이동처 분기
-      const isEbookDantan    = goodsName.includes('단단한');
-      const isEbookInterview = goodsName.includes('스피치 공식') && !goodsName.includes('패키지') && !goodsName.includes('올인원');
-
-      if (isEbookDantan) {
-        showToast('결제 완료! 🎉', '전자책이 활성화되었습니다. PDF 뷰어로 이동합니다.');
-        setTimeout(() => { window.location.href = 'ebook-mom.html'; }, 1200);
-      } else if (isEbookInterview) {
-        showToast('결제 완료! 🎉', '전자책이 활성화되었습니다. PDF 뷰어로 이동합니다.');
-        setTimeout(() => { window.location.href = 'ebook.html'; }, 1200);
-      } else {
-        showToast('결제 완료! 🎉', '패키지 이용권이 활성화되었습니다. AI 챗봇과 강의실을 이용하세요!');
-        setTimeout(() => openLectureModal(), 1200);
-      }
-    }
-  } catch (err) {
-    console.error('[결제] 오류:', err);
-  }
+  // 토스페이먼츠 결제 요청 (리다이렉트 방식 — 결과는 payment-success.html에서 처리)
+  requestTossPayment({
+    goodsName,
+    amount,
+    buyerName:  name,
+    buyerEmail: email || (currentUser?.email || ''),
+    buyerTel:   phone
+  });
 }
 
 // 통합 결제 플로우 (헤더 구매 버튼용)

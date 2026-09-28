@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>결제 실패 — LAEL LAB</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%234c37ce'/%3E%3Cstop offset='100%25' stop-color='%23ff6748'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='8' fill='url(%23g)'/%3E%3Ctext x='16' y='22' font-family='sans-serif' font-size='18' font-weight='900' fill='white' text-anchor='middle'%3EL%3C/text%3E%3C/svg%3E">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Noto Sans KR', sans-serif; background: #faf9f7; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+    .card { background: #fff; border-radius: 24px; padding: 48px 36px; max-width: 440px; width: 100%; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,.08); border: 1px solid #f0f0f0; }
+    .icon { width: 72px; height: 72px; border-radius: 50%; background: linear-gradient(135deg, #f97316, #ef4444); display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; font-size: 32px; }
+    h1 { font-size: 22px; font-weight: 900; color: #111; margin-bottom: 8px; }
+    .message { font-size: 14px; color: #666; line-height: 1.7; margin-bottom: 24px; }
+    .error-code { font-size: 12px; color: #999; background: #f5f5f5; border-radius: 8px; padding: 8px 12px; margin-bottom: 24px; }
+    .btn { display: inline-block; padding: 14px 32px; background: #4c37ce; color: #fff; border: none; border-radius: 50px; font-size: 14px; font-weight: 700; cursor: pointer; text-decoration: none; transition: .2s; }
+    .btn:hover { background: #3d2bb0; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="icon">😔</div>
+    <h1>결제가 완료되지 않았습니다</h1>
+    <p class="message" id="message">결제가 취소되었거나 오류가 발생했습니다.</p>
+    <div class="error-code" id="errorCode" style="display:none"></div>
+    <a href="/" class="btn">메인으로 돌아가기</a>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const message = params.get('message');
+    const code    = params.get('code');
+    const orderId = params.get('orderId');
+
+    if (message) {
+      document.getElementById('message').textContent = message;
+    }
+    if (code) {
+      const errorCodeEl = document.getElementById('errorCode');
+      errorCodeEl.style.display = 'block';
+      errorCodeEl.textContent = '오류 코드: ' + code + (orderId ? ' | 주문번호: ' + orderId : '');
+    }
+
+    // sessionStorage 정리
+    sessionStorage.removeItem('lael_pending_order');
+  </script>
+</body>
+</html>
