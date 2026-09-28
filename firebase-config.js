@@ -116,12 +116,14 @@ async function savePurchaseRecord(uid, paymentResult) {
 
     if (isEbookDantan) {
       purchaseData.paidMomSpeech = true;
+      purchaseData.paidMomAt = firebase.firestore.FieldValue.serverTimestamp();
     } else if (isEbookInterview) {
       purchaseData.paid = true;
     } else if (isPackage) {
-      // 패키지는 전자책 + VOD 모두 포함
+      // 패키지는 전자책 + VOD + 챗봇 모두 포함
       purchaseData.paid = true;
-      purchaseData.paidMomSpeech = true;
+      purchaseData.paidVOD = true;
+      purchaseData.paidVODAt = firebase.firestore.FieldValue.serverTimestamp();
     } else {
       purchaseData.paid = true;
     }

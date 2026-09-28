@@ -95,6 +95,8 @@ function openEbookDetail(type) {
   if (type === 'mom') {
     openModal('ebookMomDetailModal');
     setTimeout(renderEbookMomReviews, 50);
+  } else if (type === 'package') {
+    openModal('packageDetailModal');
   } else {
     openModal('ebookDetailModal');
     setTimeout(renderEbookInterviewReviews, 50);
@@ -753,9 +755,9 @@ function openPurchaseModal(goodsName, amount) {
     if (badgeEl) badgeEl.textContent = '전자책';
     if (optionEl) optionEl.textContent = '[PDF 전자책]';
   } else if (isPackage) {
-    if (thumbEl) thumbEl.src = 'assets/images/vod/daip-vod-thumb.png';
+    if (thumbEl) thumbEl.src = 'assets/images/package/package-thumb.png';
     if (badgeEl) badgeEl.textContent = '패키지';
-    if (optionEl) optionEl.textContent = '[전자책 + VOD 12강 + AI챗봇]';
+    if (optionEl) optionEl.textContent = '[전자책 + VOD 12강 + AI챗봇 90일]';
   } else {
     // VOD 등 기타
     if (thumbEl) thumbEl.src = 'assets/images/vod/daip-vod-thumb.png';
