@@ -3,7 +3,7 @@
 // ============================================================
 
 const TOSS_CONFIG = {
-  clientKey: "test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm", // 토스페이먼츠 테스트 Client Key (라이브 전환 시 교체)
+  clientKey: "test_ck_Z61JOxRQVEo7QmaPzEQ28W0X9bAq", // 토스페이먼츠 API 개별 연동 테스트 Client Key (라이브 전환 시 교체)
   customerKey: null, // 로그인 사용자의 UID 또는 랜덤 생성
 };
 
