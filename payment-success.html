@@ -50,6 +50,7 @@
     const paymentKey = params.get('paymentKey');
     const orderId    = params.get('orderId');
     const amount     = params.get('amount');
+    const signature  = params.get('sig'); // 서버사이드 금액 검증용 HMAC 서명
 
     const iconBox  = document.getElementById('iconBox');
     const titleEl  = document.getElementById('title');
@@ -80,12 +81,18 @@
         return;
       }
 
+      if (!signature) {
+        showError('주문 검증 정보가 없습니다. 비정상적인 접근입니다.');
+        return;
+      }
+
       try {
         // 서버에 결제 승인 요청 (토스 Secret Key는 서버에서만 사용)
+        // [Critical §2.2] signature를 함께 전달하여 서버에서 금액 위변조 검증
         const resp = await fetch('/api/payment/confirm', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ paymentKey, orderId, amount: Number(amount) }),
+          body: JSON.stringify({ paymentKey, orderId, amount: Number(amount), signature }),
         });
 
         const result = await resp.json();

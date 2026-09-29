@@ -185,17 +185,57 @@ function showGuestCheckoutModal(opts) {
 // ============================================================
 
 /**
+ * 상품명 → productId 매핑 (서버사이드 가격 검증용)
+ * create-order API에서 이 productId로 정확한 가격을 조회합니다.
+ */
+function resolveProductId(goodsName, amount) {
+  const name = (goodsName || '').toLowerCase();
+  if (name.includes('패키지') || name.includes('올인원')) return 'package';
+  if (name.includes('특강'))                              return 'class';
+  if (name.includes('단단한') || name.includes('엄마'))    return 'ebook-mom';
+  if (name.includes('vod') || name.includes('VOD') || name.includes('강의')) return 'vod';
+  if (name.includes('전자책') || name.includes('ebook'))   return 'ebook';
+  // amount 기반 fallback
+  if (amount === 299000) return 'package';
+  if (amount === 149000) return 'vod';
+  if (amount === 79000)  return 'ebook';
+  return 'ebook'; // 기본값
+}
+
+/**
  * 토스페이먼츠 결제 요청
+ * [Critical §2.2] 서버에서 주문을 생성하여 금액 위변조를 방지합니다.
  * @param {Object} order - { goodsName, amount, buyerName, buyerEmail, buyerTel, ebookId, readerUrl, isGuest }
  */
 async function requestTossPayment(order) {
-  const orderId    = 'LAEL_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6).toUpperCase();
-  const amount     = order.amount     || 99000;
   const goodsName  = order.goodsName  || '대입면접이 쉬워지는 스피치 공식';
   const buyerName  = order.buyerName  || '수강생';
   const buyerEmail = order.buyerEmail || '';
+  const productId  = order.productId  || resolveProductId(goodsName, order.amount);
 
-  console.log('[TOSS] 결제 요청:', { orderId, goodsName, amount, isGuest: !!order.isGuest });
+  // ─── Step 1: 서버에서 주문 생성 (금액 서명 발급) ───
+  let serverOrder;
+  try {
+    const resp = await fetch('/api/payment/create-order', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ productId }),
+    });
+    serverOrder = await resp.json();
+    if (!resp.ok) {
+      console.error('[TOSS] 주문 생성 실패:', serverOrder);
+      alert('주문 생성 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+      return;
+    }
+  } catch (e) {
+    console.error('[TOSS] 주문 생성 네트워크 오류:', e);
+    alert('네트워크 오류가 발생했습니다. 인터넷 연결을 확인해 주세요.');
+    return;
+  }
+
+  const { orderId, amount, signature } = serverOrder;
+
+  console.log('[TOSS] 결제 요청:', { orderId, productId, goodsName, amount, isGuest: !!order.isGuest });
 
   // 주문 정보를 sessionStorage에 임시 저장 (결제 성공 후 처리를 위해)
   sessionStorage.setItem('lael_pending_order', JSON.stringify({
@@ -213,13 +253,24 @@ async function requestTossPayment(order) {
   try {
     const tp = await initTossPayments();
     if (!tp) {
-      // SDK 미로드 시 안내
       alert('결제 시스템을 불러오는 중입니다. 잠시 후 다시 시도해 주세요.');
       return;
     }
 
-    // 토스페이먼츠 결제창 호출
-    const payment = tp.payment({ customerKey: TOSS_CONFIG.customerKey || 'GUEST_' + Date.now() });
+    // ─── Step 2: customerKey 설정 (§8 규격 준수) ───
+    // 비회원: 'ANONYMOUS' (토스 공식 지원값)
+    // 회원: uid + 특수문자 포함 (2~300자, 특수문자 최소 1개)
+    let customerKey = 'ANONYMOUS';
+    if (typeof currentUser !== 'undefined' && currentUser && currentUser.uid) {
+      customerKey = currentUser.uid + '_@lael';
+    }
+
+    // ─── Step 3: 토스페이먼츠 결제창 호출 ───
+    const payment = tp.payment({ customerKey });
+
+    // 서명을 successUrl에 포함 → payment-success.html에서 confirm 시 전달
+    const successUrl = window.location.origin + '/payment-success.html?sig=' + encodeURIComponent(signature);
+    const failUrl    = window.location.origin + '/payment-fail.html';
 
     await payment.requestPayment({
       method: "CARD",
@@ -231,8 +282,8 @@ async function requestTossPayment(order) {
       orderName: goodsName,
       customerName: buyerName,
       customerEmail: buyerEmail,
-      successUrl: window.location.origin + '/payment-success.html',
-      failUrl: window.location.origin + '/payment-fail.html',
+      successUrl: successUrl,
+      failUrl: failUrl,
     });
   } catch (err) {
     // 사용자가 결제창을 닫은 경우
