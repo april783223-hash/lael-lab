@@ -696,13 +696,20 @@ window.send = async function () {
       buffer = lines.pop();
       for (const line of lines) {
         if (!line.startsWith('data: ')) continue;
-        const payload = JSON.parse(line.slice(6));
-        if (payload.delta) {
-          full += payload.delta;
-          thinkingBubble.textContent = full;
-          document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
+        try {
+          const payload = JSON.parse(line.slice(6));
+          if (payload.delta) {
+            full += payload.delta;
+            thinkingBubble.textContent = full;
+            document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
+          }
+          if (payload.error) throw new Error(payload.error);
+        } catch (parseErr) {
+          if (parseErr.message === 'upstream_error' || parseErr.message === 'server_error') {
+            throw parseErr;
+          }
+          // 조각난 JSON 패킷 등은 다음 턴 버퍼에서 처리되므로 스트리밍을 중단하지 않음
         }
-        if (payload.error) throw new Error(payload.error);
       }
     }
     turns.push({ role: 'assistant', content: full });
@@ -737,12 +744,17 @@ document.getElementById('input').addEventListener('input', function () {
   this.style.height = Math.min(this.scrollHeight, 140) + 'px';
 });
 
-/* ===================== 마이크 음성 인식 (STT) & 음성 읽기 (TTS) ===================== */
+/* ==========================================================================
+   1. 마이크 음성 인식 (STT: 무중단 Keep-Alive 엔진)
+   - 1분 이상 장시간 발화 시 숨 고르기/침묵으로 인한 자동 끊김 방지
+   - onend 시 브라우저 오디오 해제 대기 후 안전한 자동 재시작
+   - 텍스트 누적 버퍼 꼬임 방지
+   ========================================================================== */
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 let recognition = null;
 let isRecording = false;
-let ttsEnabled = true;
-let speechBaseText = '';
+let committedText = ''; // 확정되어 textarea에 기록된 텍스트
+let restartTimer = null;
 
 function initSpeechRecognition() {
   if (!SpeechRecognition) return null;
@@ -755,53 +767,61 @@ function initSpeechRecognition() {
   recog.onstart = function () {
     isRecording = true;
     updateMicUI(true);
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-    }
+    stopTTSPlayback(); // AI 질문 음성이 재생 중이면 즉시 중단
   };
 
   recog.onresult = function (event) {
     const input = document.getElementById('input');
-    let interimTranscript = '';
-    let finalTranscript = '';
+    let sessionFinal = '';
+    let sessionInterim = '';
 
-    for (let i = event.resultIndex; i < event.results.length; ++i) {
+    for (let i = 0; i < event.results.length; ++i) {
       if (event.results[i].isFinal) {
-        finalTranscript += event.results[i][0].transcript;
+        sessionFinal += event.results[i][0].transcript + ' ';
       } else {
-        interimTranscript += event.results[i][0].transcript;
+        sessionInterim += event.results[i][0].transcript;
       }
     }
 
-    if (finalTranscript) {
-      speechBaseText = (speechBaseText ? speechBaseText + ' ' : '') + finalTranscript.trim();
-    }
-
-    const currentText = (speechBaseText ? speechBaseText + ' ' : '') + interimTranscript.trim();
-    input.value = currentText;
+    const base = committedText ? (committedText.trim() + ' ') : '';
+    const fullText = (base + sessionFinal + sessionInterim).trim();
+    input.value = fullText;
     input.style.height = 'auto';
     input.style.height = Math.min(input.scrollHeight, 140) + 'px';
   };
 
   recog.onerror = function (event) {
-    console.warn('Speech recognition error:', event.error);
-    if (event.error === 'not-allowed') {
+    console.warn('Speech recognition warning:', event.error);
+    if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
       alert('마이크 접근 권한이 필요합니다. 브라우저 주소창 왼쪽의 자물쇠/설정 아이콘을 눌러 마이크 권한을 허용해주세요.');
       stopVoiceInput();
-    } else if (event.error === 'no-speech') {
-      // 무음 상태는 인식 세션을 유지
-    } else {
-      stopVoiceInput();
+      return;
     }
+    // no-speech, network, audio-capture 등은 일시적 현상이므로 세션을 끊지 않고 유지
   };
 
   recog.onend = function () {
+    // 세션이 끝났을 때 현재까지의 텍스트를 committedText로 확정
+    const input = document.getElementById('input');
+    committedText = input.value.trim();
+
     if (isRecording) {
-      try {
-        recog.start();
-      } catch (e) {
-        stopVoiceInput();
-      }
+      // 1분 답변 중 침묵/타임아웃으로 끊기더라도 150ms 후 무중단 자동 재시작
+      clearTimeout(restartTimer);
+      restartTimer = setTimeout(() => {
+        if (isRecording) {
+          try {
+            recog.start();
+          } catch (e) {
+            // 브라우저가 아직 busy 상태인 경우 2차 재시도
+            setTimeout(() => {
+              if (isRecording) {
+                try { recog.start(); } catch (err) {}
+              }
+            }, 300);
+          }
+        }
+      }, 150);
     } else {
       updateMicUI(false);
     }
@@ -829,18 +849,22 @@ window.startVoiceInput = function () {
   if (!recognition) return;
 
   const input = document.getElementById('input');
-  speechBaseText = input.value.trim();
+  committedText = input.value.trim();
   isRecording = true;
 
   try {
     recognition.start();
   } catch (e) {
-    console.error('Failed to start recognition:', e);
+    // 이미 실행 중이거나 초기화 중인 경우
+    setTimeout(() => {
+      if (isRecording) try { recognition.start(); } catch (err) {}
+    }, 200);
   }
 };
 
 window.stopVoiceInput = function () {
   isRecording = false;
+  clearTimeout(restartTimer);
   if (recognition) {
     try {
       recognition.stop();
@@ -848,7 +872,7 @@ window.stopVoiceInput = function () {
   }
   updateMicUI(false);
   const input = document.getElementById('input');
-  speechBaseText = input.value.trim();
+  committedText = input.value.trim();
   input.focus();
 };
 
@@ -861,12 +885,22 @@ function updateMicUI(recording) {
     statusBar?.classList.add('active');
   } else {
     micBtn?.classList.remove('recording');
-    micBtn?.setAttribute('title', '마이크로 말하며 답변 연습하기');
+    micBtn?.setAttribute('title', '마이크로 말하기 (음성 인식)');
     statusBar?.classList.remove('active');
   }
 }
 
-// ── 음성 읽어주기 (TTS) ──
+/* ==========================================================================
+   2. 음성 읽어주기 (TTS: 문장 분할 큐 & 15초 버그 방지 Keep-Alive)
+   - 크롬 브라우저의 긴 텍스트(15초 초과) 음성 먹통/끊김 완벽 해결
+   - 문장 단위 큐 순차 재생 및 가비지 컬렉션(GC) 방지 참조 보관
+   ========================================================================== */
+let ttsEnabled = true;
+let ttsQueue = [];
+let isPlayingTTS = false;
+let ttsKeepAliveTimer = null;
+window._activeUtterances = []; // 브라우저 GC로 인한 음성 중단 방지용 전역 참조
+
 window.toggleTTS = function () {
   ttsEnabled = !ttsEnabled;
   const btn = document.getElementById('ttsToggleBtn');
@@ -877,26 +911,73 @@ window.toggleTTS = function () {
   } else {
     btn?.classList.remove('active');
     if (text) text.textContent = '질문 음성 OFF';
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-    }
+    stopTTSPlayback();
   }
 };
 
+function stopTTSPlayback() {
+  ttsQueue = [];
+  isPlayingTTS = false;
+  window._activeUtterances = [];
+  if (ttsKeepAliveTimer) {
+    clearInterval(ttsKeepAliveTimer);
+    ttsKeepAliveTimer = null;
+  }
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
+  }
+}
+
 window.speakText = function (text) {
   if (!('speechSynthesis' in window)) return;
-  window.speechSynthesis.cancel();
+  stopTTSPlayback();
   if (!text) return;
 
-  // 기호, 마크다운 등 읽기에 불필요한 서식 정제
+  // 기호, 마크다운, 이모지 등 발음에 불필요한 서식 정제
   const clean = text
     .replace(/[#*_`~>\[\]]/g, '')
-    .replace(/\n+/g, ' ')
+    .replace(/💡|🔵|🟢|🎙️|🔊|👉/g, '')
     .trim();
 
   if (!clean) return;
 
-  const utterance = new SpeechSynthesisUtterance(clean);
+  // 긴 1분 코칭 답변을 문장 단위(마침표, 물음표, 느낌표, 줄바꿈)로 분할
+  const sentences = clean
+    .split(/(?<=[.?!])\s+|\n+/)
+    .map(s => s.trim())
+    .filter(s => s.length > 0);
+
+  if (sentences.length === 0) return;
+
+  ttsQueue = sentences;
+  isPlayingTTS = true;
+
+  // 크롬 15초 오디오 엔진 일시정지 버그 방지 Keep-Alive
+  if (!ttsKeepAliveTimer) {
+    ttsKeepAliveTimer = setInterval(() => {
+      if ('speechSynthesis' in window && window.speechSynthesis.speaking) {
+        window.speechSynthesis.pause();
+        window.speechSynthesis.resume();
+      }
+    }, 8000);
+  }
+
+  playNextSentence();
+};
+
+function playNextSentence() {
+  if (!isPlayingTTS || ttsQueue.length === 0) {
+    stopTTSPlayback();
+    return;
+  }
+
+  const sentence = ttsQueue.shift();
+  if (!sentence) {
+    playNextSentence();
+    return;
+  }
+
+  const utterance = new SpeechSynthesisUtterance(sentence);
   utterance.lang = 'ko-KR';
   utterance.rate = 1.0;
   utterance.pitch = 1.0;
@@ -904,6 +985,24 @@ window.speakText = function (text) {
   const voices = window.speechSynthesis.getVoices();
   const koVoice = voices.find(v => v.lang.startsWith('ko') || v.lang.startsWith('ko-KR')) || null;
   if (koVoice) utterance.voice = koVoice;
+
+  utterance.onend = function () {
+    setTimeout(() => {
+      if (isPlayingTTS) playNextSentence();
+    }, 40);
+  };
+
+  utterance.onerror = function (e) {
+    console.warn('TTS playback chunk error:', e);
+    setTimeout(() => {
+      if (isPlayingTTS) playNextSentence();
+    }, 40);
+  };
+
+  window._activeUtterances.push(utterance);
+  if (window._activeUtterances.length > 20) {
+    window._activeUtterances.shift();
+  }
 
   window.speechSynthesis.speak(utterance);
 };
