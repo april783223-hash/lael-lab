@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>라엘랩 면접 연습</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://js.tosspayments.com/v1/payment"></script>
+<style>
+  :root {
+    --bg: #EEEDE4;
+    --surface: #FBFAF6;
+    --surface-2: #F3F1E9;
+    --ink: #262220;
+    --ink-soft: #5C564E;
+    --border: #D9D3C3;
+    --coach: #6E2A34;
+    --coach-soft: #F3E3E1;
+    --coach-ink: #FBFAF6;
+    --examiner: #2F5750;
+    --examiner-soft: #E1EAE6;
+    --examiner-ink: #FBFAF6;
+    --danger: #A23B2E;
+    --accent: #6E2A34;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #1B1917; --surface: #242220; --surface-2: #2C2A26;
+      --ink: #EDE8DE; --ink-soft: #B4AC9E; --border: #3A362F;
+      --coach: #D98E96; --coach-soft: #3A2427; --coach-ink: #221213;
+      --examiner: #8FC3B7; --examiner-soft: #1F2E2A; --examiner-ink: #12201C;
+      --danger: #E08871; --accent: #D98E96;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #1B1917; --surface: #242220; --surface-2: #2C2A26;
+    --ink: #EDE8DE; --ink-soft: #B4AC9E; --border: #3A362F;
+    --coach: #D98E96; --coach-soft: #3A2427; --coach-ink: #221213;
+    --examiner: #8FC3B7; --examiner-soft: #1F2E2A; --examiner-ink: #12201C;
+    --danger: #E08871; --accent: #D98E96;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: "Noto Sans KR", sans-serif; -webkit-font-smoothing: antialiased;
+    min-height: 100vh; display: flex; flex-direction: column;
+  }
+  .wrap {
+    max-width: 720px; width: 100%; margin: 0 auto; padding: 20px 16px 0;
+    flex: 1; display: flex; flex-direction: column; min-height: 100vh;
+  }
+  .mark {
+    font-family: "Noto Serif KR", serif; font-weight: 700; font-size: 15px;
+    letter-spacing: 0.02em; color: var(--ink-soft); margin-bottom: 18px;
+  }
+  .mark b { color: var(--ink); }
+
+  /* ---------- Login screen ---------- */
+  #login { flex: 1; display: flex; flex-direction: column; justify-content: center; max-width: 360px; margin: 0 auto; }
+  .login-title { font-family: "Noto Serif KR", serif; font-weight: 700; font-size: 22px; margin-bottom: 6px; }
+  .login-sub { color: var(--ink-soft); font-size: 13.5px; margin-bottom: 24px; line-height: 1.6; }
+  .google-btn {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 4px;
+    background: var(--surface); color: var(--ink); font-family: inherit; font-size: 14px;
+    font-weight: 700; cursor: pointer; margin-bottom: 16px;
+  }
+  .divider { display: flex; align-items: center; gap: 10px; color: var(--ink-soft); font-size: 12px; margin: 8px 0 16px; }
+  .divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: var(--border); }
+  .login-form input {
+    width: 100%; padding: 11px 12px; border: 1px solid var(--border); border-radius: 4px;
+    background: var(--surface); color: var(--ink); font-family: inherit; font-size: 14px; margin-bottom: 10px;
+  }
+  .login-submit {
+    width: 100%; padding: 12px; border: none; border-radius: 4px; background: var(--accent);
+    color: var(--coach-ink); font-family: inherit; font-weight: 700; font-size: 14px; cursor: pointer;
+  }
+  .login-error { color: var(--danger); font-size: 13px; margin-top: 10px; min-height: 1em; }
+  .login-loading { color: var(--ink-soft); font-size: 13px; text-align: center; padding: 60px 0; }
+
+  /* ---------- Start screen ---------- */
+  #start { flex: 1; display: none; flex-direction: column; }
+  .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+  .signout-btn { background: none; border: none; color: var(--ink-soft); font-family: inherit; font-size: 12px; cursor: pointer; text-decoration: underline; }
+  .lede {
+    font-family: "Noto Serif KR", serif; font-weight: 700; font-size: 26px; line-height: 1.45;
+    max-width: 22ch; margin: 4px 0 8px;
+  }
+  .lede-sub { color: var(--ink-soft); font-size: 14.5px; line-height: 1.6; max-width: 46ch; margin: 0 0 20px; }
+
+  .usage-line { font-size: 12.5px; color: var(--ink-soft); margin-bottom: 16px; }
+
+  .modes { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px; }
+  @media (max-width: 560px) { .modes { grid-template-columns: 1fr; } }
+  .mode-card {
+    background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--card-accent);
+    border-radius: 3px; padding: 20px 18px; text-align: left; cursor: pointer; font-family: inherit;
+    color: inherit; display: flex; flex-direction: column; gap: 10px;
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+  }
+  .mode-card:hover, .mode-card:focus-visible { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(0,0,0,0.08); outline: none; }
+  .mode-card:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+  .mode-card.coach { --card-accent: var(--coach); }
+  .mode-card.examiner { --card-accent: var(--examiner); }
+  .mode-tag { font-size: 12px; color: var(--card-accent); font-weight: 700; }
+  .mode-title { font-family: "Noto Serif KR", serif; font-weight: 700; font-size: 18px; }
+  .mode-desc { font-size: 13px; color: var(--ink-soft); line-height: 1.55; }
+  .mode-cta { margin-top: auto; font-size: 13px; font-weight: 700; color: var(--card-accent); }
+
+  .plans { display: flex; gap: 10px; flex-wrap: wrap; border-top: 1px solid var(--border); padding: 20px 0; }
+  .plan-card {
+    flex: 1; min-width: 140px; border: 1px solid var(--border); border-radius: 4px; padding: 14px;
+    text-align: center; background: var(--surface);
+  }
+  .plan-name { font-size: 12.5px; color: var(--ink-soft); margin-bottom: 4px; }
+  .plan-price { font-family: "Noto Serif KR", serif; font-weight: 700; font-size: 18px; margin-bottom: 10px; }
+  .plan-buy {
+    width: 100%; padding: 9px; border: 1px solid var(--accent); border-radius: 4px; background: none;
+    color: var(--accent); font-family: inherit; font-weight: 700; font-size: 13px; cursor: pointer;
+  }
+
+  /* ---------- Chat screen ---------- */
+  #chat { flex: 1; display: none; flex-direction: column; min-height: 100vh; }
+  #chat.active { display: flex; }
+  .chat-header { display: flex; align-items: center; justify-content: space-between; padding: 4px 0 14px; border-bottom: 1px solid var(--border); margin-bottom: 12px; }
+  .chat-header-left { display: flex; align-items: center; gap: 9px; }
+  .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--mode-color); flex-shrink: 0; }
+  .chat-title { font-family: "Noto Serif KR", serif; font-weight: 700; font-size: 15.5px; }
+  .chat-sub { font-size: 12px; color: var(--ink-soft); }
+  .reset-btn { background: none; border: none; color: var(--ink-soft); font-family: inherit; font-size: 12.5px; cursor: pointer; text-decoration: underline; text-underline-offset: 2px; padding: 4px; }
+  .reset-btn:hover { color: var(--ink); }
+
+  .messages { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; padding-bottom: 16px; }
+  .msg { display: flex; }
+  .msg.user { justify-content: flex-end; }
+  .msg.assistant { justify-content: flex-start; }
+  .bubble { max-width: 86%; padding: 12px 14px; border-radius: 4px; font-size: 14.5px; line-height: 1.65; white-space: pre-wrap; word-break: break-word; }
+  .msg.user .bubble { background: var(--mode-color); color: var(--mode-ink); border-radius: 4px 4px 2px 4px; }
+  .msg.assistant .bubble { background: var(--surface); border: 1px solid var(--border); border-radius: 4px 4px 4px 2px; }
+  .thinking { color: var(--ink-soft); font-size: 13px; font-style: italic; }
+  .err-bubble { background: var(--surface); border: 1px solid var(--danger); color: var(--danger); font-size: 13px; }
+
+  .composer { border-top: 1px solid var(--border); padding: 12px 0 18px; display: flex; gap: 8px; align-items: flex-end; position: sticky; bottom: 0; background: var(--bg); }
+  textarea { flex: 1; resize: none; border: 1px solid var(--border); border-radius: 4px; background: var(--surface); color: var(--ink); font-family: inherit; font-size: 14.5px; padding: 11px 12px; line-height: 1.5; max-height: 140px; }
+  textarea:focus { outline: 2px solid var(--mode-color); outline-offset: -1px; }
+  .send-btn { background: var(--mode-color); color: var(--mode-ink); border: none; border-radius: 4px; padding: 0 18px; height: 42px; font-family: inherit; font-weight: 700; font-size: 14px; cursor: pointer; flex-shrink: 0; }
+  .send-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .stop-btn { background: none; border: 1px solid var(--border); color: var(--ink-soft); border-radius: 4px; padding: 0 14px; height: 42px; font-family: inherit; font-size: 13px; cursor: pointer; flex-shrink: 0; }
+
+  /* ---------- 마이크(STT) & 음성(TTS) 스타일 ---------- */
+  .mic-btn {
+    background: var(--surface); border: 1.5px solid var(--border); color: var(--ink);
+    border-radius: 4px; width: 44px; height: 42px; display: flex; align-items: center; justify-content: center;
+    cursor: pointer; flex-shrink: 0; transition: all 0.2s ease;
+  }
+  .mic-btn:hover { background: var(--surface-2); border-color: var(--mode-color, #6E2A34); color: var(--mode-color, #6E2A34); }
+  .mic-btn.recording {
+    background: #dc2626 !important; border-color: #dc2626 !important; color: #ffffff !important;
+    animation: mic-pulse 1.3s infinite;
+  }
+  @keyframes mic-pulse {
+    0% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.6); }
+    70% { box-shadow: 0 0 0 8px rgba(220, 38, 38, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
+  }
+
+  .voice-status-bar {
+    display: none; align-items: center; justify-content: space-between;
+    background: #fef2f2; border: 1px solid #fecaca; color: #991b1b;
+    padding: 8px 12px; border-radius: 4px; font-size: 12.5px; margin-bottom: 8px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .voice-status-bar {
+      background: #3c1e22; border-color: #632a30; color: #fca5a5;
+    }
+  }
+  :root[data-theme="dark"] .voice-status-bar {
+    background: #3c1e22; border-color: #632a30; color: #fca5a5;
+  }
+  .voice-status-bar.active { display: flex; }
+  .voice-pulse-dot {
+    width: 8px; height: 8px; background: #dc2626; border-radius: 50%;
+    display: inline-block; animation: mic-pulse 1.2s infinite; margin-right: 6px;
+  }
+  .voice-close-btn {
+    background: none; border: none; color: inherit; font-size: 12px;
+    cursor: pointer; text-decoration: underline; padding: 2px 4px;
+  }
+
+  .tts-toggle-btn {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: var(--surface); border: 1px solid var(--border); color: var(--ink-soft);
+    border-radius: 20px; padding: 4px 10px; font-size: 11.5px; font-family: inherit; font-weight: 500;
+    cursor: pointer; transition: all 0.15s ease;
+  }
+  .tts-toggle-btn:hover { color: var(--ink); border-color: var(--ink-soft); }
+  .tts-toggle-btn.active {
+    background: var(--surface-2); color: var(--mode-color, var(--accent));
+    border-color: var(--mode-color, var(--accent)); font-weight: 700;
+  }
+
+  .bubble-actions {
+    display: flex; justify-content: flex-end; margin-top: 6px; padding-top: 4px;
+    border-top: 1px dashed rgba(0,0,0,0.06);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .bubble-actions { border-top-color: rgba(255,255,255,0.08); }
+  }
+  :root[data-theme="dark"] .bubble-actions { border-top-color: rgba(255,255,255,0.08); }
+  .speak-btn {
+    background: none; border: none; color: var(--ink-soft); cursor: pointer;
+    font-size: 11px; display: inline-flex; align-items: center; gap: 4px;
+    padding: 2px 6px; border-radius: 3px; opacity: 0.8; transition: opacity 0.15s ease;
+  }
+  .speak-btn:hover { opacity: 1; background: var(--surface-2); color: var(--ink); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="mark">라엘랩 <b>면접 연습</b></div>
+
+  <!-- ============ 로그인 화면 ============ -->
+  <div id="login">
+    <div class="login-loading" id="loginLoading">확인 중...</div>
+    <div id="loginForm" style="display:none">
+      <div class="login-title">로그인</div>
+      <div class="login-sub">laellab.com 계정으로 로그인하세요. 아직 계정이 없다면 laellab.com에서 먼저 가입해주세요.</div>
+      <button class="google-btn" onclick="handleGoogleLogin()">Google 계정으로 계속하기</button>
+      <div class="divider">또는</div>
+      <div class="login-form">
+        <input type="email" id="loginEmail" placeholder="이메일 주소">
+        <input type="password" id="loginPassword" placeholder="비밀번호">
+        <button class="login-submit" onclick="handleEmailLogin()">로그인</button>
+      </div>
+      <div class="login-error" id="loginError"></div>
+    </div>
+  </div>
+
+  <!-- ============ 모드 선택 화면 ============ -->
+  <div id="start">
+    <div class="top-bar">
+      <span></span>
+      <button class="signout-btn" onclick="handleSignOut()">로그아웃</button>
+    </div>
+    <div class="lede">경험을 정리하고,<br>실전처럼 질문받아보세요.</div>
+    <div class="lede-sub">두 가지 모드로 대입 면접을 연습합니다. 답변을 대신 써주지 않고, 실제 경험을 확인하는 질문을 먼저 던집니다.</div>
+    <div class="usage-line" id="usageLine"></div>
+
+    <div class="modes">
+      <button class="mode-card coach" id="coachCard" onclick="startMode('coach')">
+        <div class="mode-tag">1분 면접 코치</div>
+        <div class="mode-title">경험을 구조화한다</div>
+        <div class="mode-desc">학생부 활동이나 경험을 하나씩 확인하며 SERAR·SIRC·SPSR 구조로 답변을 함께 만듭니다.</div>
+        <div class="mode-cta" id="coachCta">코치 모드 시작 →</div>
+      </button>
+      <button class="mode-card examiner" id="examinerCard" onclick="startMode('examiner')">
+        <div class="mode-tag">실전 모의면접</div>
+        <div class="mode-title">질문받고 답한다</div>
+        <div class="mode-desc">실제 면접처럼 질문을 하나씩 받고, 답변에 따라 꼬리질문·압박질문이 이어집니다.</div>
+        <div class="mode-cta" id="examinerCta">면접관 모드 시작 →</div>
+      </button>
+    </div>
+
+    <div class="plans">
+      <div class="plan-card">
+        <div class="plan-name">1개월</div>
+        <div class="plan-price">79,000원</div>
+        <button class="plan-buy" onclick="startPurchase('1m')">구매</button>
+      </div>
+      <div class="plan-card">
+        <div class="plan-name">2개월</div>
+        <div class="plan-price">139,000원</div>
+        <button class="plan-buy" onclick="startPurchase('2m')">구매</button>
+      </div>
+      <div class="plan-card">
+        <div class="plan-name">3개월</div>
+        <div class="plan-price">189,000원</div>
+        <button class="plan-buy" onclick="startPurchase('3m')">구매</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 채팅 화면 ============ -->
+  <div id="chat">
+    <div class="chat-header">
+      <div class="chat-header-left">
+        <span class="dot" id="modeDot"></span>
+        <div>
+          <div class="chat-title" id="modeTitle"></div>
+          <div class="chat-sub" id="modeSub"></div>
+        </div>
+      </div>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <button class="tts-toggle-btn active" id="ttsToggleBtn" type="button" onclick="toggleTTS()" title="면접관 질문 음성 켜기/끄기">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+          <span id="ttsToggleText">질문 음성 ON</span>
+        </button>
+        <button class="reset-btn" onclick="goHome()">다른 모드로</button>
+      </div>
+    </div>
+    <div class="messages" id="messages"></div>
+
+    <!-- 마이크 음성 인식 상태 안내 바 -->
+    <div class="voice-status-bar" id="voiceStatusBar">
+      <div style="display:flex; align-items:center;">
+        <span class="voice-pulse-dot"></span>
+        <span><strong>답변을 듣고 있습니다...</strong> 말씀이 끝나면 마이크를 끄거나 전송하세요.</span>
+      </div>
+      <button class="voice-close-btn" type="button" onclick="stopVoiceInput()">마이크 끄기</button>
+    </div>
+
+    <div class="composer">
+      <textarea id="input" rows="1" placeholder="답변을 입력하거나 마이크로 말씀하세요..." onkeydown="handleKey(event)"></textarea>
+      <button class="mic-btn" id="micBtn" type="button" onclick="toggleVoiceInput()" title="마이크로 말하기 (음성 인식)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+          <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+          <line x1="12" y1="19" x2="12" y2="23"></line>
+          <line x1="8" y1="23" x2="16" y2="23"></line>
+        </svg>
+      </button>
+      <button class="send-btn" id="sendBtn" onclick="send()">전송</button>
+      <button class="stop-btn" id="stopBtn" style="display:none" onclick="stopSampling()">중지</button>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+/* ===================== Firebase 초기화 ===================== */
+// TODO: laellab.com이 이미 쓰고 있는 것과 "같은" firebaseConfig 값을 그대로 넣으세요.
+// (라엘랩 사이트 소스코드에서 firebaseConfig 객체를 찾아 복사하면 됩니다. 같은 프로젝트를
+// 가리켜야 같은 사용자 계정이 여기서도 그대로 로그인됩니다.)
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+import {
+  getAuth, GoogleAuthProvider, signInWithPopup,
+  signInWithEmailAndPassword, onAuthStateChanged, signOut
+} from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAsWYeS44uDurvAzIKiED3_6i-2csumDd8",
+  authDomain: "laellab.firebaseapp.com",
+  projectId: "laellab",
+  storageBucket: "laellab.firebasestorage.app",
+  messagingSenderId: "765549895319",
+  appId: "1:765549895319:web:969c6b7cafc5a18c81d3d2",
+};
+
+const firebaseApp = initializeApp(firebaseConfig);
+const auth = getAuth(firebaseApp);
+
+/* ===================== 설정 ===================== */
+const API_BASE = ""; // 같은 서버에서 HTML과 API를 서빙하므로 상대경로 사용
+const TOSS_CLIENT_KEY = "test_ck_Z61JOxRQVEo7QmaPzEQ28W0X9bAq"; // 실거래 전환 시 live_ck_로 교체
+
+/* ===================== 로그인 ===================== */
+window.handleGoogleLogin = async function () {
+  document.getElementById('loginError').textContent = '';
+  try {
+    await signInWithPopup(auth, new GoogleAuthProvider());
+  } catch (e) {
+    document.getElementById('loginError').textContent = '로그인에 실패했습니다: ' + e.message;
+  }
+};
+
+window.handleEmailLogin = async function () {
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value;
+  document.getElementById('loginError').textContent = '';
+  if (!email || !password) {
+    document.getElementById('loginError').textContent = '이메일과 비밀번호를 입력하세요.';
+    return;
+  }
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+  } catch (e) {
+    document.getElementById('loginError').textContent = '이메일 또는 비밀번호가 올바르지 않습니다.';
+  }
+};
+
+window.handleSignOut = async function () {
+  await signOut(auth);
+};
+
+async function getIdToken() {
+  const user = auth.currentUser;
+  if (!user) return null;
+  return await user.getIdToken();
+}
+
+onAuthStateChanged(auth, async (user) => {
+  document.getElementById('loginLoading').style.display = 'none';
+  if (user) {
+    document.getElementById('login').style.display = 'none';
+    document.getElementById('start').style.display = 'flex';
+    await refreshUsageDisplay();
+  } else {
+    document.getElementById('login').style.display = 'flex';
+    document.getElementById('loginForm').style.display = 'block';
+    document.getElementById('start').style.display = 'none';
+    document.getElementById('chat').classList.remove('active');
+  }
+});
+
+/* ===================== 무료체험/구독 상태 표시 ===================== */
+async function refreshUsageDisplay() {
+  const token = await getIdToken();
+  if (!token) return;
+  try {
+    const resp = await fetch(`${API_BASE}/api/usage`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const status = await resp.json();
+    const line = document.getElementById('usageLine');
+    const coachCta = document.getElementById('coachCta');
+    const examinerCta = document.getElementById('examinerCta');
+    const coachCard = document.getElementById('coachCard');
+    const examinerCard = document.getElementById('examinerCard');
+
+    if (status.subscribed) {
+      line.textContent = `이용권 사용 중 · 오늘 남은 연습 ${status.dailyRemaining}회`;
+    } else {
+      line.textContent = '무료체험: 코치 1회 + 면접관 1회';
+      if (!status.coachAvailable) {
+        coachCard.disabled = true;
+        coachCta.textContent = '무료체험 사용함 (이용권 필요)';
+      }
+      if (!status.examinerAvailable) {
+        examinerCard.disabled = true;
+        examinerCta.textContent = '무료체험 사용함 (이용권 필요)';
+      }
+    }
+  } catch (e) {
+    // 사용량 조회 실패는 치명적이지 않음 — 표시만 못 할 뿐, 시작 시도는 서버가 다시 판단한다
+  }
+}
+
+/* ===================== 결제 ===================== */
+window.startPurchase = async function (plan) {
+  const token = await getIdToken();
+  if (!token) return alert('먼저 로그인해주세요.');
+
+  const resp = await fetch(`${API_BASE}/api/payment/create-order`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+    body: JSON.stringify({ plan }),
+  });
+  if (!resp.ok) return alert('주문 생성에 실패했습니다. 잠시 후 다시 시도해주세요.');
+  const { orderId, amount, orderName } = await resp.json();
+
+  const tossPayments = TossPayments(TOSS_CLIENT_KEY);
+  tossPayments.requestPayment('카드', {
+    amount, orderId, orderName,
+    successUrl: `${window.location.origin}/payment-success.html`,
+    failUrl: `${window.location.origin}/payment-fail.html`,
+  });
+};
+
+/* ===================== 모드/채팅 (서버 API 기반) ===================== */
+const MODES = {
+  coach: {
+    label: '1분 면접 코치', sub: '경험을 정리하고 구조화합니다',
+    color: 'var(--coach)', colorInk: 'var(--coach-ink)',
+    greeting: `안녕하세요. 라엘 1분 면접 코치입니다.
+저는 답변을 대신 만들어주는 것보다
+학생의 실제 경험을 먼저 찾고
+그 경험을 면접에서 말할 수 있도록 구조화해드립니다.
+
+무엇부터 준비할까요?
+1. 학생부 활동 분석
+2. 기억이 잘 안 나는 활동 복원
+3. SERAR 직접 경험 답변
+4. SIRC 독서 답변
+5. SPSR 갈등·문제 해결 답변
+6. 자기소개
+7. 지원동기
+8. 학업·진로·공동체 역량 답변
+9. 실패·약점·성적 하락·진로 변화
+10. 긴 답변을 1분으로 줄이기
+11. 답변을 키워드 카드로 만들기
+12. 내 답변 피드백 받기
+
+번호나 원하는 내용을 말씀해주세요.`
+  },
+  examiner: {
+    label: '실전 모의면접', sub: '질문을 받고 답변하는 훈련입니다',
+    color: 'var(--examiner)', colorInk: 'var(--examiner-ink)',
+    greeting: `안녕하세요. 라엘 실전 면접관입니다.
+실제 면접처럼 질문을 한 번에 하나씩 드리고, 답변에 따라 꼬리질문까지 이어가겠습니다.
+
+어떤 면접을 연습할까요?
+1. 기본 모의면접
+2. 학생부 기반 면접
+3. 꼬리질문 집중 면접
+4. 압박면접
+5. 전공·인성 혼합 면접
+6. 모르는 질문 대응 훈련
+7. 최종 실전 면접
+
+번호를 선택해주세요.`
+  }
+};
+
+let currentMode = null;
+let currentSessionId = null;
+let turns = [];
+let currentController = null;
+
+window.startMode = async function (key) {
+  const m = MODES[key];
+  const token = await getIdToken();
+  if (!token) return alert('먼저 로그인해주세요.');
+
+  let sessionResult;
+  try {
+    const resp = await fetch(`${API_BASE}/api/session/start`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ mode: key }),
+    });
+    sessionResult = await resp.json();
+    if (!resp.ok) return showStartError(key, sessionResult.reason);
+  } catch (e) {
+    return alert('서버에 연결할 수 없습니다. 잠시 후 다시 시도해주세요.');
+  }
+
+  currentSessionId = sessionResult.sessionId;
+  currentMode = key;
+  turns = [];
+
+  document.getElementById('start').style.display = 'none';
+  const chat = document.getElementById('chat');
+  chat.classList.add('active');
+  chat.style.setProperty('--mode-color', m.color);
+  chat.style.setProperty('--mode-ink', m.colorInk);
+  document.getElementById('modeDot').style.background = m.color;
+  document.getElementById('modeTitle').textContent = m.label;
+  document.getElementById('modeSub').textContent = m.sub;
+  document.getElementById('messages').innerHTML = '';
+  addBubble('assistant', m.greeting);
+  turns.push({ role: 'assistant', content: m.greeting });
+  if (ttsEnabled) {
+    speakText(m.greeting);
+  }
+  document.getElementById('input').focus();
+};
+
+function showStartError(mode, reason) {
+  const label = mode === 'coach' ? '코치 모드' : '면접관 모드';
+  const messages = {
+    trial_exhausted: `${label} 무료체험을 이미 사용하셨습니다. 이용권을 구매하시면 계속 연습할 수 있습니다.`,
+    daily_cap_reached: '오늘 사용 가능한 연습 횟수를 모두 사용했습니다. 내일 다시 시도해주세요.',
+  };
+  alert(messages[reason] || '지금은 이용할 수 없습니다.');
+}
+
+window.goHome = async function () {
+  if (isRecording) stopVoiceInput();
+  if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+  if (currentController) currentController.abort();
+  document.getElementById('chat').classList.remove('active');
+  document.getElementById('start').style.display = 'flex';
+  currentMode = null;
+  currentSessionId = null;
+  turns = [];
+  await refreshUsageDisplay();
+};
+
+function addBubble(role, text) {
+  const box = document.getElementById('messages');
+  const row = document.createElement('div');
+  row.className = 'msg ' + role;
+  const bubble = document.createElement('div');
+  bubble.className = 'bubble';
+  bubble.textContent = text;
+
+  // AI 어시스턴트 메시지에는 '다시 듣기' 버튼 추가
+  if (role === 'assistant' && text) {
+    const actions = document.createElement('div');
+    actions.className = 'bubble-actions';
+    const speakBtn = document.createElement('button');
+    speakBtn.type = 'button';
+    speakBtn.className = 'speak-btn';
+    speakBtn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg> 다시 듣기';
+    speakBtn.onclick = () => speakText(text);
+    actions.appendChild(speakBtn);
+    bubble.appendChild(actions);
+  }
+
+  row.appendChild(bubble);
+  box.appendChild(row);
+  box.scrollTop = box.scrollHeight;
+  return bubble;
+}
+
+function addThinking() {
+  const box = document.getElementById('messages');
+  const row = document.createElement('div');
+  row.className = 'msg assistant';
+  row.id = 'thinkingRow';
+  const bubble = document.createElement('div');
+  bubble.className = 'bubble thinking';
+  bubble.textContent = '생각하는 중...';
+  row.appendChild(bubble);
+  box.appendChild(row);
+  box.scrollTop = box.scrollHeight;
+  return bubble;
+}
+
+function removeThinking() {
+  const row = document.getElementById('thinkingRow');
+  if (row) row.remove();
+}
+
+window.handleKey = function (e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    send();
+  }
+};
+
+function trimTurnsIfNeeded() {
+  const MAX_TURNS = 24;
+  if (turns.length > MAX_TURNS) {
+    const head = turns.slice(0, 1);
+    const tail = turns.slice(turns.length - (MAX_TURNS - 1));
+    turns = head.concat(tail);
+  }
+}
+
+window.stopSampling = function () {
+  if (currentController) currentController.abort();
+};
+
+window.send = async function () {
+  if (isRecording) {
+    stopVoiceInput();
+  }
+
+  const input = document.getElementById('input');
+  const text = input.value.trim();
+  if (!text || !currentMode || !currentSessionId) return;
+
+  const token = await getIdToken();
+  if (!token) return alert('로그인이 만료되었습니다. 다시 로그인해주세요.');
+
+  addBubble('user', text);
+  turns.push({ role: 'user', content: text });
+  trimTurnsIfNeeded();
+  input.value = '';
+  input.style.height = 'auto';
+  speechBaseText = '';
+
+  const sendBtn = document.getElementById('sendBtn');
+  const stopBtn = document.getElementById('stopBtn');
+  sendBtn.disabled = true;
+  stopBtn.style.display = 'inline-block';
+
+  const thinkingBubble = addThinking();
+  currentController = new AbortController();
+
+  try {
+    const resp = await fetch(`${API_BASE}/api/chat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      signal: currentController.signal,
+      body: JSON.stringify({ mode: currentMode, turns, sessionId: currentSessionId }),
+    });
+
+    if (resp.status === 401) {
+      removeThinking();
+      addBubble('assistant', '로그인이 만료되었습니다. 다시 로그인 후 이어가주세요.').classList.add('err-bubble');
+      return;
+    }
+    if (resp.status === 403) {
+      removeThinking();
+      addBubble('assistant', '세션이 만료되었습니다. "다른 모드로"를 눌러 다시 시작해주세요.').classList.add('err-bubble');
+      return;
+    }
+    if (!resp.ok) throw new Error('http_' + resp.status);
+
+    const reader = resp.body.getReader();
+    const decoder = new TextDecoder();
+    let full = '', buffer = '';
+    thinkingBubble.classList.remove('thinking');
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\n\n');
+      buffer = lines.pop();
+      for (const line of lines) {
+        if (!line.startsWith('data: ')) continue;
+        const payload = JSON.parse(line.slice(6));
+        if (payload.delta) {
+          full += payload.delta;
+          thinkingBubble.textContent = full;
+          document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
+        }
+        if (payload.error) throw new Error(payload.error);
+      }
+    }
+    turns.push({ role: 'assistant', content: full });
+
+    // 스트리밍 완료 후 다시 듣기 버튼 추가
+    const actions = document.createElement('div');
+    actions.className = 'bubble-actions';
+    const speakBtn = document.createElement('button');
+    speakBtn.type = 'button';
+    speakBtn.className = 'speak-btn';
+    speakBtn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg> 다시 듣기';
+    speakBtn.onclick = () => speakText(full);
+    actions.appendChild(speakBtn);
+    thinkingBubble.appendChild(actions);
+
+    if (ttsEnabled) {
+      speakText(full);
+    }
+  } catch (e) {
+    removeThinking();
+    const msg = e && e.name === 'AbortError' ? '응답을 중지했습니다.' : '일시적인 오류가 발생했습니다. 다시 시도해주세요.';
+    addBubble('assistant', msg).classList.add('err-bubble');
+  } finally {
+    sendBtn.disabled = false;
+    stopBtn.style.display = 'none';
+    currentController = null;
+  }
+};
+
+document.getElementById('input').addEventListener('input', function () {
+  this.style.height = 'auto';
+  this.style.height = Math.min(this.scrollHeight, 140) + 'px';
+});
+
+/* ===================== 마이크 음성 인식 (STT) & 음성 읽기 (TTS) ===================== */
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+let recognition = null;
+let isRecording = false;
+let ttsEnabled = true;
+let speechBaseText = '';
+
+function initSpeechRecognition() {
+  if (!SpeechRecognition) return null;
+  const recog = new SpeechRecognition();
+  recog.lang = 'ko-KR';
+  recog.continuous = true;
+  recog.interimResults = true;
+  recog.maxAlternatives = 1;
+
+  recog.onstart = function () {
+    isRecording = true;
+    updateMicUI(true);
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+    }
+  };
+
+  recog.onresult = function (event) {
+    const input = document.getElementById('input');
+    let interimTranscript = '';
+    let finalTranscript = '';
+
+    for (let i = event.resultIndex; i < event.results.length; ++i) {
+      if (event.results[i].isFinal) {
+        finalTranscript += event.results[i][0].transcript;
+      } else {
+        interimTranscript += event.results[i][0].transcript;
+      }
+    }
+
+    if (finalTranscript) {
+      speechBaseText = (speechBaseText ? speechBaseText + ' ' : '') + finalTranscript.trim();
+    }
+
+    const currentText = (speechBaseText ? speechBaseText + ' ' : '') + interimTranscript.trim();
+    input.value = currentText;
+    input.style.height = 'auto';
+    input.style.height = Math.min(input.scrollHeight, 140) + 'px';
+  };
+
+  recog.onerror = function (event) {
+    console.warn('Speech recognition error:', event.error);
+    if (event.error === 'not-allowed') {
+      alert('마이크 접근 권한이 필요합니다. 브라우저 주소창 왼쪽의 자물쇠/설정 아이콘을 눌러 마이크 권한을 허용해주세요.');
+      stopVoiceInput();
+    } else if (event.error === 'no-speech') {
+      // 무음 상태는 인식 세션을 유지
+    } else {
+      stopVoiceInput();
+    }
+  };
+
+  recog.onend = function () {
+    if (isRecording) {
+      try {
+        recog.start();
+      } catch (e) {
+        stopVoiceInput();
+      }
+    } else {
+      updateMicUI(false);
+    }
+  };
+
+  return recog;
+}
+
+window.toggleVoiceInput = function () {
+  if (!SpeechRecognition) {
+    alert('현재 브라우저는 마이크 음성 인식을 지원하지 않습니다.\nGoogle Chrome, Safari, Edge 브라우저를 이용해 주세요.');
+    return;
+  }
+  if (isRecording) {
+    stopVoiceInput();
+  } else {
+    startVoiceInput();
+  }
+};
+
+window.startVoiceInput = function () {
+  if (!recognition) {
+    recognition = initSpeechRecognition();
+  }
+  if (!recognition) return;
+
+  const input = document.getElementById('input');
+  speechBaseText = input.value.trim();
+  isRecording = true;
+
+  try {
+    recognition.start();
+  } catch (e) {
+    console.error('Failed to start recognition:', e);
+  }
+};
+
+window.stopVoiceInput = function () {
+  isRecording = false;
+  if (recognition) {
+    try {
+      recognition.stop();
+    } catch (e) {}
+  }
+  updateMicUI(false);
+  const input = document.getElementById('input');
+  speechBaseText = input.value.trim();
+  input.focus();
+};
+
+function updateMicUI(recording) {
+  const micBtn = document.getElementById('micBtn');
+  const statusBar = document.getElementById('voiceStatusBar');
+  if (recording) {
+    micBtn?.classList.add('recording');
+    micBtn?.setAttribute('title', '마이크 끄기');
+    statusBar?.classList.add('active');
+  } else {
+    micBtn?.classList.remove('recording');
+    micBtn?.setAttribute('title', '마이크로 말하며 답변 연습하기');
+    statusBar?.classList.remove('active');
+  }
+}
+
+// ── 음성 읽어주기 (TTS) ──
+window.toggleTTS = function () {
+  ttsEnabled = !ttsEnabled;
+  const btn = document.getElementById('ttsToggleBtn');
+  const text = document.getElementById('ttsToggleText');
+  if (ttsEnabled) {
+    btn?.classList.add('active');
+    if (text) text.textContent = '질문 음성 ON';
+  } else {
+    btn?.classList.remove('active');
+    if (text) text.textContent = '질문 음성 OFF';
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+    }
+  }
+};
+
+window.speakText = function (text) {
+  if (!('speechSynthesis' in window)) return;
+  window.speechSynthesis.cancel();
+  if (!text) return;
+
+  // 기호, 마크다운 등 읽기에 불필요한 서식 정제
+  const clean = text
+    .replace(/[#*_`~>\[\]]/g, '')
+    .replace(/\n+/g, ' ')
+    .trim();
+
+  if (!clean) return;
+
+  const utterance = new SpeechSynthesisUtterance(clean);
+  utterance.lang = 'ko-KR';
+  utterance.rate = 1.0;
+  utterance.pitch = 1.0;
+
+  const voices = window.speechSynthesis.getVoices();
+  const koVoice = voices.find(v => v.lang.startsWith('ko') || v.lang.startsWith('ko-KR')) || null;
+  if (koVoice) utterance.voice = koVoice;
+
+  window.speechSynthesis.speak(utterance);
+};
+</script>
+</body>
+</html>

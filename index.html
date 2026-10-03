@@ -187,10 +187,45 @@
           <span class="material-symbols-outlined text-base text-accent-coral">school</span>
           온라인 특강
         </button>
-        <button onclick="openAIChatbot()" class="text-on-surface-variant hover:text-primary transition-colors duration-200 text-sm font-semibold py-2 flex items-center gap-1">
-          <span class="material-symbols-outlined text-base text-accent-coral">smart_toy</span>
-          AI코치
-        </button>
+        <!-- AI코치 드롭다운 -->
+        <div class="relative group">
+          <button class="text-on-surface-variant hover:text-primary transition-colors duration-200 text-sm font-semibold py-2 flex items-center gap-1">
+            <span class="material-symbols-outlined text-base text-accent-coral">smart_toy</span>
+            AI코치
+            <span class="material-symbols-outlined text-sm">expand_more</span>
+          </button>
+          <div class="absolute top-full right-0 mt-1 w-80 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+            <!-- 썸네일 -->
+            <a href="ai-interview-store.html" class="block" style="text-decoration:none">
+              <img src="assets/images/ai-interview/chatbot-thumb.png" alt="대입 면접 AI 챗봇" class="w-full aspect-video object-cover">
+            </a>
+            <div class="p-4">
+              <p class="text-xs text-gray-400 font-semibold">LAEL LAB · AI 서비스</p>
+              <p class="text-sm font-black text-gray-900 mt-1">대입 면접 AI 챗봇</p>
+              <p class="text-[11px] text-gray-500 mt-1">코치 모드 + 실전 모의면접 무제한</p>
+              <!-- 개월 선택 -->
+              <div class="flex gap-2 mt-3">
+                <a href="ai-interview-store.html" class="flex-1 text-center py-2 rounded-lg border border-primary/20 hover:border-primary hover:bg-primary/5 transition-all" style="text-decoration:none">
+                  <div class="text-xs font-bold text-gray-700">1개월</div>
+                  <div class="text-sm font-black text-primary">79,000원</div>
+                </a>
+                <a href="ai-interview-store.html" class="flex-1 text-center py-2 rounded-lg border-2 border-primary bg-primary/5 relative" style="text-decoration:none">
+                  <span class="absolute -top-2 left-1/2 -translate-x-1/2 bg-primary text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full">인기</span>
+                  <div class="text-xs font-bold text-gray-700">2개월</div>
+                  <div class="text-sm font-black text-primary">139,000원</div>
+                </a>
+                <a href="ai-interview-store.html" class="flex-1 text-center py-2 rounded-lg border border-primary/20 hover:border-primary hover:bg-primary/5 transition-all" style="text-decoration:none">
+                  <div class="text-xs font-bold text-gray-700">3개월</div>
+                  <div class="text-sm font-black text-primary">189,000원</div>
+                </a>
+              </div>
+              <a href="ai-interview-store.html" class="mt-3 w-full flex items-center justify-center gap-1 bg-primary text-white py-2.5 rounded-xl font-bold text-sm hover:bg-primary-container transition-colors" style="text-decoration:none">
+                <span class="material-symbols-outlined text-base">open_in_new</span>
+                상세 보기
+              </a>
+            </div>
+          </div>
+        </div>
         <button onclick="openModal('freeResourceModal')" class="text-primary font-bold border-b-2 border-primary pb-0.5 text-sm hover:text-primary-container transition-all">
           무료 자료
         </button>
@@ -244,9 +279,9 @@
       <button onclick="closeMobileMenu(); window.open('https://docs.google.com/forms/d/e/1FAIpQLScAt5LTNbVbikA7URgQ9ynz7BwRa4KAWZmqtzcwK00RYFmCHQ/viewform','_blank')" class="block w-full text-left text-accent-coral font-bold text-base py-1 flex items-center gap-2">
         🎓 온라인 특강
       </button>
-      <button onclick="closeMobileMenu(); openAIChatbot()" class="block w-full text-left font-bold text-base py-1 flex items-center gap-2 text-accent-coral">
-        🤖 AI코치
-      </button>
+      <a href="ai-interview-store.html" onclick="closeMobileMenu()" class="block w-full text-left font-bold text-base py-1 flex items-center gap-2 text-accent-coral" style="text-decoration:none">
+        🤖 AI코치 · 대입 면접 챗봇
+      </a>
       <button onclick="closeMobileMenu(); openModal('freeResourceModal')" class="block w-full text-left text-primary font-bold text-base py-1">
         🎁 무료 비법 자료 신청
       </button>
@@ -1293,7 +1328,7 @@
           <ul class="space-y-3 text-xs text-gray-500 leading-relaxed">
             <li class="flex items-start gap-2"><span class="shrink-0 text-amber-500 font-bold mt-0.5">1.</span><span><strong class="text-gray-700">라엘랩의 모든 콘텐츠는 저작권법의 보호를 받습니다.</strong><br>강의, 전자책, 워크북 등 콘텐츠의 무단 녹화·복제·공유·유출·재가공·판매 및 계정 공유를 금지합니다.</span></li>
             <li class="flex items-start gap-2"><span class="shrink-0 text-amber-500 font-bold mt-0.5">2.</span><span><strong class="text-gray-700">전자책은 파일 다운로드 방식이 아닙니다.</strong><br>구매한 계정으로 로그인 후 라엘랩 전용 뷰어에서 열람할 수 있으며, 별도의 전자책 PDF 파일 다운로드 기능은 제공하지 않습니다.</span></li>
-            <li class="flex items-start gap-2"><span class="shrink-0 text-amber-500 font-bold mt-0.5">3.</span><span><strong class="text-gray-700">이용기간은 상품별로 다릅니다.</strong><br>전자책은 <strong class="text-gray-700">평생 이용</strong> 가능하며, VOD 동영상 강의는 <strong class="text-gray-700">구매일로부터 90일간</strong> 수강 가능합니다.</span></li>
+            <li class="flex items-start gap-2"><span class="shrink-0 text-amber-500 font-bold mt-0.5">3.</span><span><strong class="text-gray-700">이용기간은 상품별로 다릅니다.</strong><br>전자책은 <strong class="text-gray-700">구매일로부터 1년(365일)간 이용</strong> 가능하며, VOD 동영상 강의는 <strong class="text-gray-700">구매일로부터 90일간</strong> 수강 가능합니다.</span></li>
             <li class="flex items-start gap-2"><span class="shrink-0 text-amber-500 font-bold mt-0.5">4.</span><span><strong class="text-gray-700">교육 품질 향상을 위해 콘텐츠가 업데이트될 수 있습니다.</strong><br>강의나 자료가 추가·보완되거나 커리큘럼 순서 및 일부 내용이 변경될 수 있습니다.</span></li>
             <li class="flex items-start gap-2"><span class="shrink-0 text-amber-500 font-bold mt-0.5">5.</span><span><strong class="text-gray-700">환불기준을 구매 전에 확인해 주세요.</strong><br>유료 콘텐츠를 이용하지 않은 경우 법정 청약철회 기간 내 전액 환불을 요청할 수 있습니다. 전자책 유료 본문 열람이나 VOD 재생 등 콘텐츠 이용을 시작한 후에는 관계 법령과 <strong class="text-gray-700">〈라엘랩 환불정책〉</strong>에 따라 청약철회가 제한되거나 환불조건이 달라질 수 있습니다.</span></li>
           </ul>
@@ -1383,7 +1418,33 @@
               </div>
             </div>
           </div>
+          <!-- Card 4: AI 면접 연습 -->
+          <div onclick="window.location.href='ai-interview-store.html'" class="cursor-pointer group">
+            <div class="relative rounded-2xl overflow-hidden aspect-video shadow-sm" style="background:linear-gradient(135deg,#4c37ce 0%,#6c5ce7 50%,#a29bfe 100%)">
+              <div class="absolute inset-0 flex items-center justify-center">
+                <div class="text-white text-center px-4">
+                  <span class="material-symbols-outlined text-4xl mb-2 block">smart_toy</span>
+                  <p class="text-base font-black leading-snug">라엘 AI<br>면접 연습</p>
+                  <p class="text-[11px] opacity-80 mt-1">코치 모드 + 모의면접 모드</p>
+                </div>
+              </div>
+              <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors"></div>
+              <div class="absolute top-2 left-2 flex items-center gap-1">
+                <span class="bg-gradient-to-r from-primary to-accent-coral text-white text-[10px] font-bold px-2 py-0.5 rounded-full">AI 서비스</span>
+              </div>
+            </div>
+            <div class="mt-3 px-1">
+              <p class="text-[11px] text-gray-400 font-medium">LAEL LAB</p>
+              <p class="font-bold text-gray-900 text-sm leading-snug mt-0.5 group-hover:text-primary transition-colors">AI 면접 연습 이용권<br><span class="text-[11px] text-gray-400 font-normal">(코치 모드 + 실전 모의면접)</span></p>
+              <p class="text-primary font-black text-base mt-1.5">79,000원 ~</p>
+              <div class="flex items-center gap-1.5 mt-1.5">
+                <span class="bg-gradient-to-r from-primary/10 to-accent-coral/10 text-primary text-[10px] font-bold px-2 py-0.5 rounded-full">AI 서비스</span>
+                <span class="bg-accent-coral/10 text-accent-coral text-[10px] font-bold px-2 py-0.5 rounded-full">NEW</span>
+              </div>
+            </div>
+          </div>
         </div>
+
       </div>
     </div>
   </div>
@@ -1437,7 +1498,7 @@
             </div>
             <ul class="mt-5 space-y-2 text-xs text-gray-500">
               <li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-500 text-base">check_circle</span>구매 후 즉시 온라인 열람</li>
-              <li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-500 text-base">check_circle</span>전자책 평생 이용 가능</li>
+              <li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-500 text-base">check_circle</span>전자책 구매일로부터 1년간 이용 가능</li>
             </ul>
 
             <!-- 무료 자료 -->
@@ -1632,7 +1693,7 @@
           <ul class="space-y-3 text-xs text-gray-500 leading-relaxed">
             <li class="flex items-start gap-2"><span class="shrink-0 text-amber-500 font-bold mt-0.5">1.</span><span><strong class="text-gray-700">라엘랩의 모든 콘텐츠는 저작권법의 보호를 받습니다.</strong><br>강의, 전자책, 워크북 등 콘텐츠의 무단 녹화·복제·공유·유출·재가공·판매 및 계정 공유를 금지합니다.</span></li>
             <li class="flex items-start gap-2"><span class="shrink-0 text-amber-500 font-bold mt-0.5">2.</span><span><strong class="text-gray-700">전자책은 파일 다운로드 방식이 아닙니다.</strong><br>구매한 계정으로 로그인 후 라엘랩 전용 뷰어에서 열람할 수 있으며, 별도의 전자책 PDF 파일 다운로드 기능은 제공하지 않습니다.</span></li>
-            <li class="flex items-start gap-2"><span class="shrink-0 text-amber-500 font-bold mt-0.5">3.</span><span><strong class="text-gray-700">이용기간은 상품별로 다릅니다.</strong><br>전자책은 <strong class="text-gray-700">평생 이용</strong> 가능하며, VOD 동영상 강의는 <strong class="text-gray-700">구매일로부터 90일간</strong> 수강 가능합니다.</span></li>
+            <li class="flex items-start gap-2"><span class="shrink-0 text-amber-500 font-bold mt-0.5">3.</span><span><strong class="text-gray-700">이용기간은 상품별로 다릅니다.</strong><br>전자책은 <strong class="text-gray-700">구매일로부터 1년(365일)간 이용</strong> 가능하며, VOD 동영상 강의는 <strong class="text-gray-700">구매일로부터 90일간</strong> 수강 가능합니다.</span></li>
             <li class="flex items-start gap-2"><span class="shrink-0 text-amber-500 font-bold mt-0.5">4.</span><span><strong class="text-gray-700">환불기준을 구매 전에 확인해 주세요.</strong><br>유료 콘텐츠를 이용하지 않은 경우 법정 청약철회 기간 내 전액 환불을 요청할 수 있습니다. 전자책 유료 본문 열람 등 콘텐츠 이용을 시작한 후에는 관계 법령과 <strong class="text-gray-700">〈라엘랩 환불정책〉</strong>에 따라 청약철회가 제한되거나 환불조건이 달라질 수 있습니다.</span></li>
           </ul>
         </div>
@@ -1697,7 +1758,7 @@
               </button>
             </div>
             <ul class="mt-5 space-y-2 text-xs text-gray-500">
-              <li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-500 text-base">check_circle</span>전자책 평생 이용 가능</li>
+              <li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-500 text-base">check_circle</span>전자책 구매일로부터 1년간 이용 가능</li>
               <li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-500 text-base">check_circle</span>VOD 12강 동영상 강의 90일 수강</li>
               <li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-500 text-base">check_circle</span>AI 모의면접 챗봇 90일 이용</li>
               <li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-500 text-base">check_circle</span>실전 워크북 포함</li>
@@ -1715,7 +1776,7 @@
               <span class="material-symbols-outlined text-primary text-3xl">auto_stories</span>
               <p class="font-black text-gray-900 text-sm mt-2">전자책</p>
               <p class="text-xs text-gray-500 mt-1">대입면접이 쉬워지는<br>스피치 공식 200P</p>
-              <p class="text-[10px] text-primary font-bold mt-2">평생 이용</p>
+              <p class="text-[10px] text-primary font-bold mt-2">1년 이용</p>
             </div>
             <div class="bg-primary/5 border border-primary/20 rounded-2xl p-5 text-center">
               <span class="material-symbols-outlined text-primary text-3xl">play_circle</span>
@@ -1783,7 +1844,7 @@
           </div>
           <ul class="space-y-3 text-xs text-gray-500 leading-relaxed">
             <li class="flex items-start gap-2"><span class="shrink-0 text-amber-500 font-bold mt-0.5">1.</span><span><strong class="text-gray-700">라엘랩의 모든 콘텐츠는 저작권법의 보호를 받습니다.</strong><br>강의, 전자책, 워크북 등 콘텐츠의 무단 녹화·복제·공유·유출·재가공·판매 및 계정 공유를 금지합니다.</span></li>
-            <li class="flex items-start gap-2"><span class="shrink-0 text-amber-500 font-bold mt-0.5">2.</span><span><strong class="text-gray-700">이용기간은 상품별로 다릅니다.</strong><br>전자책은 <strong class="text-gray-700">평생 이용</strong> 가능하며, VOD 동영상 강의와 AI 챗봇은 <strong class="text-gray-700">구매일로부터 90일간</strong> 이용 가능합니다.</span></li>
+            <li class="flex items-start gap-2"><span class="shrink-0 text-amber-500 font-bold mt-0.5">2.</span><span><strong class="text-gray-700">이용기간은 상품별로 다릅니다.</strong><br>전자책은 <strong class="text-gray-700">구매일로부터 1년(365일)간 이용</strong> 가능하며, VOD 동영상 강의와 AI 챗봇은 <strong class="text-gray-700">구매일로부터 90일간</strong> 이용 가능합니다.</span></li>
             <li class="flex items-start gap-2"><span class="shrink-0 text-amber-500 font-bold mt-0.5">3.</span><span><strong class="text-gray-700">환불기준을 구매 전에 확인해 주세요.</strong><br>유료 콘텐츠를 이용하지 않은 경우 법정 청약철회 기간 내 전액 환불을 요청할 수 있습니다. 콘텐츠 이용을 시작한 후에는 관계 법령과 <strong class="text-gray-700">〈라엘랩 환불정책〉</strong>에 따라 청약철회가 제한되거나 환불조건이 달라질 수 있습니다.</span></li>
           </ul>
         </div>
@@ -1796,6 +1857,18 @@
               <span class="material-symbols-outlined text-xl">shopping_cart</span>
               지금 구매하기 — 299,000원
             </button>
+            <!-- AI 면접 연습 배너 -->
+            <a href="ai-interview-store.html" class="mt-3 w-full flex items-center gap-4 p-4 rounded-2xl border-2 border-primary/20 bg-primary/5 hover:bg-primary/10 transition-colors" style="text-decoration:none">
+              <div class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style="background:linear-gradient(135deg,#4c37ce,#a29bfe)">
+                <span class="material-symbols-outlined text-white text-2xl">smart_toy</span>
+              </div>
+              <div class="flex-1">
+                <p class="text-xs font-bold text-primary">NEW · AI 서비스</p>
+                <p class="text-sm font-black text-gray-900">AI 면접 연습 이용권</p>
+                <p class="text-[11px] text-gray-500">코치 모드 + 실전 모의면접 · 79,000원~</p>
+              </div>
+              <span class="material-symbols-outlined text-primary">arrow_forward</span>
+            </a>
           </div>
         </div>
       </div>
@@ -2052,7 +2125,7 @@
             </div>
             <ul class="mt-5 space-y-2 text-xs text-gray-500">
               <li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-500 text-base">check_circle</span>구매 후 즉시 온라인 열람</li>
-              <li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-500 text-base">check_circle</span>전자책 평생 이용 가능</li>
+              <li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-500 text-base">check_circle</span>전자책 구매일로부터 1년간 이용 가능</li>
               <li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-500 text-base">check_circle</span>아이와 함께 읽는 스피치 가이드</li>
             </ul>
           </div>
@@ -2210,7 +2283,7 @@
           <ul class="space-y-3 text-xs text-gray-500 leading-relaxed">
             <li class="flex items-start gap-2"><span class="shrink-0 text-amber-500 font-bold mt-0.5">1.</span><span><strong class="text-gray-700">라엘랩의 모든 콘텐츠는 저작권법의 보호를 받습니다.</strong><br>강의, 전자책, 워크북 등 콘텐츠의 무단 녹화·복제·공유·유출·재가공·판매 및 계정 공유를 금지합니다.</span></li>
             <li class="flex items-start gap-2"><span class="shrink-0 text-amber-500 font-bold mt-0.5">2.</span><span><strong class="text-gray-700">전자책은 파일 다운로드 방식이 아닙니다.</strong><br>구매한 계정으로 로그인 후 라엘랩 전용 뷰어에서 열람할 수 있으며, 별도의 전자책 PDF 파일 다운로드 기능은 제공하지 않습니다.</span></li>
-            <li class="flex items-start gap-2"><span class="shrink-0 text-amber-500 font-bold mt-0.5">3.</span><span><strong class="text-gray-700">이용기간은 상품별로 다릅니다.</strong><br>전자책은 <strong class="text-gray-700">평생 이용</strong> 가능하며, VOD 동영상 강의는 <strong class="text-gray-700">구매일로부터 90일간</strong> 수강 가능합니다.</span></li>
+            <li class="flex items-start gap-2"><span class="shrink-0 text-amber-500 font-bold mt-0.5">3.</span><span><strong class="text-gray-700">이용기간은 상품별로 다릅니다.</strong><br>전자책은 <strong class="text-gray-700">구매일로부터 1년(365일)간 이용</strong> 가능하며, VOD 동영상 강의는 <strong class="text-gray-700">구매일로부터 90일간</strong> 수강 가능합니다.</span></li>
             <li class="flex items-start gap-2"><span class="shrink-0 text-amber-500 font-bold mt-0.5">4.</span><span><strong class="text-gray-700">환불기준을 구매 전에 확인해 주세요.</strong><br>유료 콘텐츠를 이용하지 않은 경우 법정 청약철회 기간 내 전액 환불을 요청할 수 있습니다. 전자책 유료 본문 열람 등 콘텐츠 이용을 시작한 후에는 관계 법령과 <strong class="text-gray-700">〈라엘랩 환불정책〉</strong>에 따라 청약철회가 제한되거나 환불조건이 달라질 수 있습니다.</span></li>
           </ul>
         </div>
@@ -2408,14 +2481,14 @@
             구매자 전용 콘텐츠
           </span>
           <h3 class="text-2xl font-black text-white mt-1">라엘 AI 면접 연습</h3>
-          <p class="text-sm text-gray-400 mt-2 leading-relaxed">AI 코치와 함께 실전처럼 면접을 연습하세요. 코칭 모드와 모의면접 모드를 선택할 수 있습니다.</p>
+          <p class="text-sm text-gray-400 mt-2 leading-relaxed">AI 코치와 함께 실전처럼 면접을 연습하세요. 마이크 음성 답변과 면접관 질문 음성 듣기를 지원합니다.</p>
         </div>
 
         <div class="mt-6 p-4 rounded-2xl border border-white/10 bg-white/5 space-y-2.5 text-xs text-gray-300">
-          <div class="flex items-center gap-2"><span class="material-symbols-outlined text-accent-coral text-base">check_circle</span> 실제 대입면접처럼 진행해줘</div>
-          <div class="flex items-center gap-2"><span class="material-symbols-outlined text-accent-coral text-base">check_circle</span> 압박 면접으로 진행해줘</div>
-          <div class="flex items-center gap-2"><span class="material-symbols-outlined text-accent-coral text-base">check_circle</span> 전공 인성 질문 섞어서 질문해줘</div>
-          <div class="flex items-center gap-2"><span class="material-symbols-outlined text-accent-coral text-base">check_circle</span> 꼬리 질문으로 이어가줘</div>
+          <div class="flex items-center gap-2"><span class="material-symbols-outlined text-accent-coral text-base">mic</span> 마이크로 실전처럼 말하면서 연습</div>
+          <div class="flex items-center gap-2"><span class="material-symbols-outlined text-accent-coral text-base">volume_up</span> 면접관 음성 질문 실시간 듣기</div>
+          <div class="flex items-center gap-2"><span class="material-symbols-outlined text-accent-coral text-base">check_circle</span> 학생부 기반 꼬리 질문 & 압박 면접</div>
+          <div class="flex items-center gap-2"><span class="material-symbols-outlined text-accent-coral text-base">check_circle</span> 1분 면접 공식 구조화 피드백</div>
         </div>
 
         <div class="mt-6 flex flex-col gap-3">
@@ -2440,7 +2513,7 @@
             이용 가능
           </span>
           <h3 class="text-2xl font-black text-white mt-1">라엘 AI 면접 연습</h3>
-          <p class="text-sm text-gray-400 mt-2 leading-relaxed">AI 코치와 함께 실전처럼 면접을 연습하세요. 코칭 모드와 모의면접 모드를 선택할 수 있습니다.</p>
+          <p class="text-sm text-gray-400 mt-2 leading-relaxed">AI 코치와 함께 실전처럼 면접을 연습하세요. 마이크 음성 답변과 질문 듣기를 지원합니다.</p>
         </div>
 
         <div class="mt-6 p-4 rounded-2xl border border-emerald-500/20 bg-emerald-500/5 space-y-2.5 text-xs text-gray-300">
@@ -2452,7 +2525,7 @@
 
         <div class="mt-6 flex flex-col gap-3">
           <!-- 배포 시: href="https://app.laellab.com/lael-interview-app.html" -->
-          <a href="http://localhost:3000/lael-interview-app.html" target="_blank" rel="noopener noreferrer"
+          <a href="https://app.laellab.com/lael-interview-app.html" target="_blank" rel="noopener noreferrer"
              onclick="closeModal('aiChatbotModal')"
              class="w-full py-3.5 rounded-full font-black text-sm shadow-lg transition-all active:scale-95 flex items-center justify-center gap-2 text-white"
              style="background: linear-gradient(135deg, #ff6748, #4c37ce)">
@@ -3256,7 +3329,7 @@
           <h2 class="font-black text-gray-900 text-base mb-2">제10조 이용기간</h2>
           <p>① 각 상품의 이용기간은 다음과 같습니다.</p>
           <ul class="ml-5 mt-1 space-y-0.5 list-disc text-gray-600">
-            <li>전자책: <strong>평생 이용</strong> 가능 (별도 이용기간 제한 없음)</li>
+            <li>전자책: <strong>구매일로부터 1년(365일)간 이용</strong> 가능</li>
             <li>VOD 동영상 강의: <strong>구매일로부터 90일간</strong> 수강 가능</li>
             <li>그 외 상품: 각 상품 상세페이지에 표시된 기간에 따릅니다.</li>
           </ul>
