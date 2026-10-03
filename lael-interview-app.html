@@ -739,16 +739,54 @@ window.send = async function () {
   }
 };
 
-document.getElementById('input').addEventListener('input', function () {
+// 입력창 키보드 타이핑 감지: 사용자가 키보드로 오타를 수정하기 시작하면 마이크가 덮어쓰지 못하도록 자동 일시정지
+const inputEl = document.getElementById('input');
+
+inputEl.addEventListener('keydown', function (e) {
+  // 엔터(전송)가 아닌 수정 키(문자, 백스페이스, Delete 등)를 누르면 마이크를 일시 중지하여 덮어쓰기 방지
+  if (e.key !== 'Enter' && isRecording) {
+    pauseVoiceForTyping();
+  }
+});
+
+inputEl.addEventListener('input', function () {
   this.style.height = 'auto';
   this.style.height = Math.min(this.scrollHeight, 140) + 'px';
+  // 사용자가 키보드로 수정한 텍스트를 즉시 기준 텍스트로 동기화
+  committedText = this.value;
 });
+
+function pauseVoiceForTyping() {
+  if (!isRecording) return;
+  isRecording = false;
+  clearTimeout(restartTimer);
+  if (recognition) {
+    try { recognition.stop(); } catch (e) {}
+  }
+  updateMicUI(false);
+  const input = document.getElementById('input');
+  committedText = input.value;
+
+  const statusBar = document.getElementById('voiceStatusBar');
+  if (statusBar) {
+    statusBar.classList.add('active');
+    statusBar.innerHTML = `
+      <div style="display:flex; align-items:center;">
+        <span>⌨️ <strong>키보드로 수정 중</strong>입니다. 수정 후 다시 마이크 버튼을 누르면 이어서 녹음됩니다.</span>
+      </div>
+      <button class="voice-close-btn" type="button" onclick="document.getElementById('voiceStatusBar').classList.remove('active')">닫기</button>
+    `;
+    setTimeout(() => {
+      statusBar.classList.remove('active');
+    }, 3500);
+  }
+}
 
 /* ==========================================================================
    1. 마이크 음성 인식 (STT: 무중단 Keep-Alive 엔진)
    - 1분 이상 장시간 발화 시 숨 고르기/침묵으로 인한 자동 끊김 방지
    - onend 시 브라우저 오디오 해제 대기 후 안전한 자동 재시작
-   - 텍스트 누적 버퍼 꼬임 방지
+   - 텍스트 누적 버퍼 꼬임 방지 & 키보드 수동 편집 완벽 호환
    ========================================================================== */
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 let recognition = null;
@@ -771,6 +809,9 @@ function initSpeechRecognition() {
   };
 
   recog.onresult = function (event) {
+    // 키보드 수정 중 등으로 마이크가 꺼졌다면 덮어쓰기 방지
+    if (!isRecording) return;
+
     const input = document.getElementById('input');
     let sessionFinal = '';
     let sessionInterim = '';
@@ -849,13 +890,24 @@ window.startVoiceInput = function () {
   if (!recognition) return;
 
   const input = document.getElementById('input');
-  committedText = input.value.trim();
+  committedText = input.value.trim(); // 키보드로 수정한 텍스트를 기준점으로 채택
   isRecording = true;
+
+  // 상태 바를 원래 듣기 상태로 복원
+  const statusBar = document.getElementById('voiceStatusBar');
+  if (statusBar) {
+    statusBar.innerHTML = `
+      <div style="display:flex; align-items:center;">
+        <span class="voice-pulse-dot"></span>
+        <span><strong>답변을 듣고 있습니다...</strong> 말씀이 끝나면 마이크를 끄거나 전송하세요.</span>
+      </div>
+      <button class="voice-close-btn" type="button" onclick="stopVoiceInput()">마이크 끄기</button>
+    `;
+  }
 
   try {
     recognition.start();
   } catch (e) {
-    // 이미 실행 중이거나 초기화 중인 경우
     setTimeout(() => {
       if (isRecording) try { recognition.start(); } catch (err) {}
     }, 200);
