@@ -182,7 +182,46 @@
             </button>
           </div>
         </div>
-        <a class="text-on-surface-variant hover:text-primary transition-colors duration-200 text-sm font-semibold py-2" href="#packageSection">패키지</a>
+        <!-- 패키지 드롭다운 -->
+        <div class="relative group">
+          <button class="text-on-surface-variant hover:text-primary transition-colors duration-200 text-sm font-semibold py-2 flex items-center gap-1">
+            <span class="material-symbols-outlined text-base text-primary">inventory_2</span>
+            패키지
+            <span class="material-symbols-outlined text-sm">expand_more</span>
+          </button>
+          <!-- 드롭다운 메뉴 -->
+          <div class="absolute top-full left-0 mt-1 w-80 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+            <!-- 썸네일 & 모달 열기 -->
+            <button onclick="openModal('packageDetailModal')" class="w-full text-left p-0 block group/pkg hover:bg-gray-50 transition">
+              <div class="relative aspect-video w-full overflow-hidden bg-gray-100">
+                <img src="assets/images/package/package-thumb.png" alt="대입 면접 패키지 썸네일" class="w-full h-full object-cover group-hover/pkg:scale-105 transition-transform duration-300">
+                <div class="absolute top-2 left-2 flex items-center gap-1">
+                  <span class="bg-gradient-to-r from-primary to-accent-coral text-white text-[10px] font-bold px-2 py-0.5 rounded-full">패키지</span>
+                  <span class="bg-accent-coral text-white text-[10px] font-bold px-2 py-0.5 rounded-full">BEST</span>
+                </div>
+              </div>
+              <div class="p-4">
+                <p class="text-xs text-gray-400 font-semibold">LAEL LAB · 올인원 패키지</p>
+                <div class="text-sm font-black text-gray-900 mt-1">대입 면접 패키지</div>
+                <div class="text-[11px] text-gray-500 mt-0.5">(전자책 + VOD/챗봇 90일 이용권)</div>
+                <div class="flex items-baseline gap-2 mt-2">
+                  <span class="text-xs text-gray-400 line-through">467,000원</span>
+                  <span class="text-base font-black text-primary">299,000원</span>
+                  <span class="text-[10px] text-accent-coral font-bold">🔥 10월 한달 특가</span>
+                </div>
+              </div>
+            </button>
+            <div class="px-4 pb-4 pt-1 flex gap-2">
+              <button onclick="openModal('packageDetailModal')" class="flex-1 flex items-center justify-center gap-1 bg-primary text-white py-2.5 rounded-xl font-bold text-xs hover:bg-primary-container transition-colors">
+                <span class="material-symbols-outlined text-sm">visibility</span>
+                패키지 상세 보기
+              </button>
+              <a href="#packageSection" class="px-3 flex items-center justify-center border border-gray-200 text-gray-700 py-2.5 rounded-xl font-bold text-xs hover:bg-gray-50 transition-colors" style="text-decoration:none">
+                안내
+              </a>
+            </div>
+          </div>
+        </div>
         <button onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLScAt5LTNbVbikA7URgQ9ynz7BwRa4KAWZmqtzcwK00RYFmCHQ/viewform','_blank')" class="text-on-surface-variant hover:text-primary transition-colors duration-200 text-sm font-semibold py-2 flex items-center gap-1">
           <span class="material-symbols-outlined text-base text-accent-coral">school</span>
           온라인 특강
@@ -196,12 +235,25 @@
           </button>
           <div class="absolute top-full right-0 mt-1 w-80 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
             <!-- 썸네일 -->
-            <a href="ai-interview-store.html" class="block" style="text-decoration:none">
-              <img src="assets/images/ai-interview/chatbot-thumb.png" alt="대입 면접 AI 챗봇" class="w-full aspect-video object-cover">
+            <a href="ai-interview-store.html" class="block group/ai" style="text-decoration:none">
+              <div class="relative overflow-hidden aspect-video shadow-sm" style="background:linear-gradient(135deg,#4c37ce 0%,#6c5ce7 50%,#a29bfe 100%)">
+                <div class="absolute inset-0 flex items-center justify-center">
+                  <div class="text-white text-center px-4">
+                    <span class="material-symbols-outlined text-4xl mb-1 block">smart_toy</span>
+                    <p class="text-base font-black leading-snug">라엘 AI<br>면접 연습</p>
+                    <p class="text-[11px] opacity-80 mt-1">코치 모드 + 모의면접 모드</p>
+                  </div>
+                </div>
+                <div class="absolute inset-0 bg-black/0 group-hover/ai:bg-black/10 transition-colors"></div>
+                <div class="absolute top-2 left-2 flex items-center gap-1">
+                  <span class="bg-gradient-to-r from-primary to-accent-coral text-white text-[10px] font-bold px-2 py-0.5 rounded-full">AI 서비스</span>
+                  <span class="bg-accent-coral text-white text-[10px] font-bold px-2 py-0.5 rounded-full">NEW</span>
+                </div>
+              </div>
             </a>
             <div class="p-4">
               <p class="text-xs text-gray-400 font-semibold">LAEL LAB · AI 서비스</p>
-              <p class="text-sm font-black text-gray-900 mt-1">대입 면접 AI 챗봇</p>
+              <p class="text-sm font-black text-gray-900 mt-1">AI 면접 연습 이용권</p>
               <p class="text-[11px] text-gray-500 mt-1">코치 모드 + 실전 모의면접 무제한</p>
               <!-- 개월 선택 -->
               <div class="flex gap-2 mt-3">
@@ -221,7 +273,7 @@
               </div>
               <a href="ai-interview-store.html" class="mt-3 w-full flex items-center justify-center gap-1 bg-primary text-white py-2.5 rounded-xl font-bold text-sm hover:bg-primary-container transition-colors" style="text-decoration:none">
                 <span class="material-symbols-outlined text-base">open_in_new</span>
-                상세 보기
+                AI 면접 연습 바로가기
               </a>
             </div>
           </div>
@@ -275,12 +327,15 @@
         <span class="material-symbols-outlined text-xl">play_circle</span>
         🎬 동영상 강의실
       </button>
-      <a class="block text-on-surface-variant hover:text-primary font-semibold text-base py-1" href="#packageSection" onclick="closeMobileMenu()">패키지</a>
+      <button onclick="closeMobileMenu(); openModal('packageDetailModal')" class="block w-full text-left text-primary font-bold text-base py-1 flex items-center gap-2">
+        <span class="material-symbols-outlined text-xl">inventory_2</span>
+        📦 대입 면접 패키지
+      </button>
       <button onclick="closeMobileMenu(); window.open('https://docs.google.com/forms/d/e/1FAIpQLScAt5LTNbVbikA7URgQ9ynz7BwRa4KAWZmqtzcwK00RYFmCHQ/viewform','_blank')" class="block w-full text-left text-accent-coral font-bold text-base py-1 flex items-center gap-2">
         🎓 온라인 특강
       </button>
       <a href="ai-interview-store.html" onclick="closeMobileMenu()" class="block w-full text-left font-bold text-base py-1 flex items-center gap-2 text-accent-coral" style="text-decoration:none">
-        🤖 AI코치 · 대입 면접 챗봇
+        🤖 AI코치 · AI 면접 연습 이용권
       </a>
       <button onclick="closeMobileMenu(); openModal('freeResourceModal')" class="block w-full text-left text-primary font-bold text-base py-1">
         🎁 무료 비법 자료 신청
@@ -1361,7 +1416,7 @@
       </div>
       <!-- Ebook Grid -->
       <div class="flex-1 overflow-y-auto p-6">
-        <div class="grid grid-cols-2 sm:grid-cols-3 gap-6">
+        <div class="max-w-2xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-6">
           <!-- Card 1: 대입면접 스피치 공식 -->
           <div onclick="openEbookDetail('interview')" class="cursor-pointer group">
             <div class="relative rounded-2xl overflow-hidden bg-gray-100 aspect-video shadow-sm">
@@ -1396,55 +1451,7 @@
               </div>
             </div>
           </div>
-          <!-- Card 3: 대입 면접 패키지 -->
-          <div onclick="openEbookDetail('package')" class="cursor-pointer group">
-            <div class="relative rounded-2xl overflow-hidden bg-gray-100 aspect-video shadow-sm">
-              <img src="assets/images/package/package-thumb.png" alt="대입 면접 패키지 썸네일"
-                   class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-              <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-              <div class="absolute top-2 left-2 flex items-center gap-1">
-                <span class="bg-gradient-to-r from-primary to-accent-coral text-white text-[10px] font-bold px-2 py-0.5 rounded-full">패키지</span>
-              </div>
-            </div>
-            <div class="mt-3 px-1">
-              <p class="text-[11px] text-gray-400 font-medium">LAEL LAB</p>
-              <p class="font-bold text-gray-900 text-sm leading-snug mt-0.5 group-hover:text-primary transition-colors">대입 면접 패키지<br><span class="text-[11px] text-gray-400 font-normal">(전자책 + VOD/챗봇 90일 이용권)</span></p>
-              <p class="text-xs text-gray-400 line-through mt-1.5">467,000원</p>
-              <p class="text-primary font-black text-base mt-0.5">299,000원</p>
-              <p class="text-[10px] text-accent-coral font-bold mt-1">🔥 10월 한달 특가</p>
-              <div class="flex items-center gap-1.5 mt-1.5">
-                <span class="bg-gradient-to-r from-primary/10 to-accent-coral/10 text-primary text-[10px] font-bold px-2 py-0.5 rounded-full">패키지</span>
-                <span class="bg-accent-coral/10 text-accent-coral text-[10px] font-bold px-2 py-0.5 rounded-full">BEST</span>
-              </div>
-            </div>
-          </div>
-          <!-- Card 4: AI 면접 연습 -->
-          <div onclick="window.location.href='ai-interview-store.html'" class="cursor-pointer group">
-            <div class="relative rounded-2xl overflow-hidden aspect-video shadow-sm" style="background:linear-gradient(135deg,#4c37ce 0%,#6c5ce7 50%,#a29bfe 100%)">
-              <div class="absolute inset-0 flex items-center justify-center">
-                <div class="text-white text-center px-4">
-                  <span class="material-symbols-outlined text-4xl mb-2 block">smart_toy</span>
-                  <p class="text-base font-black leading-snug">라엘 AI<br>면접 연습</p>
-                  <p class="text-[11px] opacity-80 mt-1">코치 모드 + 모의면접 모드</p>
-                </div>
-              </div>
-              <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors"></div>
-              <div class="absolute top-2 left-2 flex items-center gap-1">
-                <span class="bg-gradient-to-r from-primary to-accent-coral text-white text-[10px] font-bold px-2 py-0.5 rounded-full">AI 서비스</span>
-              </div>
-            </div>
-            <div class="mt-3 px-1">
-              <p class="text-[11px] text-gray-400 font-medium">LAEL LAB</p>
-              <p class="font-bold text-gray-900 text-sm leading-snug mt-0.5 group-hover:text-primary transition-colors">AI 면접 연습 이용권<br><span class="text-[11px] text-gray-400 font-normal">(코치 모드 + 실전 모의면접)</span></p>
-              <p class="text-primary font-black text-base mt-1.5">79,000원 ~</p>
-              <div class="flex items-center gap-1.5 mt-1.5">
-                <span class="bg-gradient-to-r from-primary/10 to-accent-coral/10 text-primary text-[10px] font-bold px-2 py-0.5 rounded-full">AI 서비스</span>
-                <span class="bg-accent-coral/10 text-accent-coral text-[10px] font-bold px-2 py-0.5 rounded-full">NEW</span>
-              </div>
-            </div>
-          </div>
         </div>
-
       </div>
     </div>
   </div>
@@ -1718,13 +1725,11 @@
   <div id="packageDetailModal" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/75 backdrop-blur-md">
     <div class="modal-container bg-white rounded-[28px] w-full max-w-5xl h-[92vh] flex flex-col shadow-2xl overflow-hidden">
       <!-- Header -->
-      <div class="px-5 py-3.5 border-b border-gray-100 flex items-center gap-3 shrink-0">
-        <button onclick="closeModal('packageDetailModal'); openModal('ebookStoreModal')"
-                class="flex items-center gap-1 text-sm font-semibold text-gray-500 hover:text-primary transition px-2 py-1 rounded-lg hover:bg-gray-100">
-          <span class="material-symbols-outlined text-lg">arrow_back</span>
-          <span class="hidden sm:inline">전자책 목록</span>
-        </button>
-        <div class="flex-1"></div>
+      <div class="px-5 py-3.5 border-b border-gray-100 flex items-center justify-between shrink-0">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-primary text-xl">inventory_2</span>
+          <span class="font-bold text-gray-900 text-sm">대입 면접 패키지</span>
+        </div>
         <button onclick="closeModal('packageDetailModal')" class="p-2 rounded-full hover:bg-gray-100 text-gray-400 hover:text-gray-700 transition">
           <span class="material-symbols-outlined text-xl">close</span>
         </button>
