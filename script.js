@@ -131,7 +131,7 @@ function openFreeLecture() {
   const titleEl  = document.getElementById('currentLectureTitle');
   const iframeEl = document.getElementById('videoIframe');
   if (titleEl)  titleEl.textContent = '🎥 1강. 면접이란 무엇인가?';
-  if (iframeEl) iframeEl.src = 'https://player.vimeo.com/video/1226882558?title=0&byline=0&portrait=0&badge=0&color=4c37ce&autoplay=1';
+  if (iframeEl) iframeEl.src = 'https://player.vimeo.com/video/1232680530?fl=ip&fe=ec&share=copy&title=0&byline=0&portrait=0&badge=0&color=4c37ce&autoplay=1';
   openModal('lectureModal');
 }
 
@@ -342,10 +342,10 @@ async function openAIChatbot() {
 // ── 동영상 재생 ──────────────────────────────────────────────
 // 강의 URL 목록 (HTML 소스에서 분리하여 직접 노출 방지)
 const _LECTURE_LIST = [
-  { title: '1강. 면접이란 무엇인가?',                                    url: 'https://player.vimeo.com/video/1226882558' },
-  { title: '2강. 대입면접, 무엇부터 준비해야 할까요?',                   url: 'https://player.vimeo.com/video/347119375'  },
-  { title: '3강. 학생부에서 대표 스토리 10개 뽑는 법',                   url: 'https://player.vimeo.com/video/59777392'   },
-  { title: '4강. 직접 경험은 SERAR로 답해요',                           url: 'https://player.vimeo.com/video/76979871'   },
+  { title: '1강. 면접이란 무엇인가?',                                    url: 'https://player.vimeo.com/video/1232680530?fl=ip&fe=ec&share=copy' },
+  { title: '2강. 대입면접, 무엇부터 준비해야 할까요?',                   url: 'https://player.vimeo.com/video/1232681554?fl=ip&fe=ec&share=copy' },
+  { title: '3강. 학생부에서 대표 스토리 10개 뽑는 법',                   url: 'https://player.vimeo.com/video/1232681917?fl=ip&fe=ec&share=copy' },
+  { title: '4강. 직접 경험은 SERAR로 답해요',                           url: 'https://player.vimeo.com/video/1232682162?fl=ip&fe=ec&share=copy' },
   { title: '5강. 독서·갈등 경험은 이렇게 답해요',                        url: 'https://player.vimeo.com/video/347119375'  },
   { title: '6강. 어떤 질문에도 흔들리지 않는 1분 답변 공식',             url: 'https://player.vimeo.com/video/59777392'   },
   { title: '7강. 자기소개와 지원동기, 뻔하지 않게 만드는 법',            url: 'https://player.vimeo.com/video/76979871'   },
@@ -367,11 +367,15 @@ function playLecture(title, videoUrl) {
   const iframeEl = document.getElementById('videoIframe');
   if (titleEl) titleEl.textContent = '🎥 ' + title;
   if (iframeEl) {
-    const sep = videoUrl.includes('?') ? '&' : '?';
-    if (videoUrl.includes('vimeo.com')) {
-      iframeEl.src = videoUrl + sep + 'title=0&byline=0&portrait=0&badge=0&color=4c37ce&autoplay=1';
+    let cleanUrl = videoUrl;
+    if (cleanUrl.includes('vimeo.com/') && !cleanUrl.includes('player.vimeo.com')) {
+      cleanUrl = cleanUrl.replace('vimeo.com/', 'player.vimeo.com/video/');
+    }
+    const sep = cleanUrl.includes('?') ? '&' : '?';
+    if (cleanUrl.includes('vimeo.com')) {
+      iframeEl.src = cleanUrl + sep + 'title=0&byline=0&portrait=0&badge=0&color=4c37ce&autoplay=1';
     } else {
-      iframeEl.src = videoUrl + (videoUrl.includes('?') ? '' : '?rel=0&modestbranding=1&autoplay=1');
+      iframeEl.src = cleanUrl + (cleanUrl.includes('?') ? '' : '?rel=0&modestbranding=1&autoplay=1');
     }
   }
   document.querySelectorAll('.lecture-item').forEach(item => {
