@@ -346,7 +346,7 @@ const _LECTURE_LIST = [
   { title: '2강. 대입면접, 무엇부터 준비해야 할까요?',                   url: 'https://player.vimeo.com/video/1232681554?fl=ip&fe=ec&share=copy' },
   { title: '3강. 학생부에서 대표 스토리 10개 뽑는 법',                   url: 'https://player.vimeo.com/video/1232681917?fl=ip&fe=ec&share=copy' },
   { title: '4강. 직접 경험은 SERAR로 답해요',                           url: 'https://player.vimeo.com/video/1232682162?fl=ip&fe=ec&share=copy' },
-  { title: '5강. 독서·갈등 경험은 이렇게 답해요',                        url: 'https://player.vimeo.com/video/347119375'  },
+  { title: '5강. 독서·갈등 경험은 이렇게 답해요',                        url: 'https://player.vimeo.com/video/1234279360?share=copy&fl=sv&fe=ci' },
   { title: '6강. 어떤 질문에도 흔들리지 않는 1분 답변 공식',             url: 'https://player.vimeo.com/video/59777392'   },
   { title: '7강. 자기소개와 지원동기, 뻔하지 않게 만드는 법',            url: 'https://player.vimeo.com/video/76979871'   },
   { title: '8강. 학업·진로·공동체 역량, 어떻게 보여줄까요?',             url: 'https://player.vimeo.com/video/347119375'  },

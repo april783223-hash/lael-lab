@@ -142,7 +142,7 @@
     <span class="info-tag">15일 실전 스피치 워크북 전자책</span>
     <p class="info-sub">PDF 전자책 · 최윤정 강사</p>
     <p class="info-price">39,000원</p>
-    <button class="btn-buy" onclick="alert('구매 기능 연동 예정입니다.')">
+    <button class="btn-buy" onclick="handleDantanBuy()">
       <span class="material-symbols-outlined">shopping_cart</span>
       구매하기 — 39,000원
     </button>
@@ -308,7 +308,7 @@
   </div>
 
   <!-- 하단 CTA -->
-  <div class="bottom-cta" onclick="alert('구매 기능 연동 예정입니다.')">
+  <div class="bottom-cta" onclick="handleDantanBuy()">
     <span class="material-symbols-outlined" style="color:#fff">shopping_cart</span>
     <span>지금 구매하기 — 39,000원</span>
   </div>
@@ -321,18 +321,28 @@
     <ul class="notes-list">
       <li>라엘랩의 모든 강의·전자책·PDF·워크북 등은 저작권법에 의해 보호됩니다.</li>
       <li>무단 복제, 녹화, 공유, 유출, 재가공, 판매 및 계정 공유를 금지합니다.</li>
-      <li>전자책은 구매 후 마이페이지에서 즉시 열람 가능합니다.</li>
+      <li><strong>[서비스 제공 기간]</strong> 전자책은 구매 후 즉시 열람 가능하며, <strong>구매일로부터 1년(365일)간</strong> 이용할 수 있습니다. 기간 만료 후 재구매 시 동일 기간이 새로 부여됩니다.</li>
       <li>교육 품질 향상을 위해 내용이 업데이트되거나 일부 변경될 수 있습니다.</li>
-      <li>구매 후 7일 이내 미이용 시 전액 환불이 가능합니다. 이용을 시작한 이후에는 이용내역 및 상품 특성에 따라 환불금액이 산정됩니다.</li>
-      <li>자세한 취소·환불 기준은 <a href="/" style="color:#1a4fa8;font-weight:700">《라엘랩 환불정책》</a>에서 확인해 주세요.</li>
+      <li><strong>[환불 조건]</strong> 구매 후 <strong>7일 이내 미이용 시 전액 환불</strong>이 가능합니다. 이용(열람)을 시작한 이후에는 「전자상거래법」 제17조 및 「콘텐츠산업진흥법」에 따라 청약철회가 제한될 수 있으며, 이용내역 및 상품 특성에 따라 환불금액이 산정됩니다.</li>
+      <li>자세한 취소·환불 기준은 <a href="/refund-policy.html" style="color:#1a4fa8;font-weight:700">《라엘랩 환불정책》</a>에서 확인해 주세요.</li>
     </ul>
   </div>
 </div>
 
+<script src="payments.js"></script>
 <script>
 function setRating(val) {
   const stars = document.querySelectorAll('#starInputDantan span');
   stars.forEach((s, i) => { s.style.color = i < val ? '#f59e0b' : '#ddd'; });
+}
+
+function handleDantanBuy() {
+  requestGuestPurchase({
+    ebookId:   'dandanhan',
+    goodsName: '엄마와 아이의 단단한 말하기 — 15일 실전 워크북',
+    amount:    39000,
+    readerUrl: 'ebook-mom.html'
+  });
 }
 
 // ?openReview=1 파라미터 → 후기란 자동 스크롤 + 포커스
